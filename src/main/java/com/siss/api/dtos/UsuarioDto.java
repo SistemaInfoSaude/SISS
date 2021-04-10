@@ -11,6 +11,8 @@ public class UsuarioDto {
 	@NotEmpty(message = "Usuario não pode ser vazio.")
 	@Length(min = 5, max = 100, message = "Usuario deve conter entre 5 e 100 caracteres.")
 	private String usuario;
+	
+	private String senha;
 
 	private List<RegraDto> regras;
 
@@ -28,6 +30,14 @@ public class UsuarioDto {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public List<RegraDto> getRegras() {

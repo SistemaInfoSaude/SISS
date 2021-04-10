@@ -5,16 +5,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 //DTOS
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.dtos.RegraDto;
 
 //Entities
 import com.siss.api.entities.Usuario;
+import com.siss.api.security.utils.JwtTokenUtil;
 import com.siss.api.entities.Regra;
 
 public class ConversaoUtils {
 
+	/* INICIO CONVERSÃO USUÁRIO */
+	
 	public static Usuario Converter(UsuarioDto usuarioDto) {
 		Usuario usuario = new Usuario();
 		
@@ -30,6 +35,10 @@ public class ConversaoUtils {
 				regra.setNome(regraDto.getNome());
 				usuario.getRegras().add(regra);
 			}
+		}
+		
+		if(usuarioDto.getSenha() != null) {
+			usuario.setSenha(usuarioDto.getSenha());
 		}
 		
 		return usuario;
@@ -54,4 +63,5 @@ public class ConversaoUtils {
 		}
 		return usuarioDto;
 	}
+	/* FIM CONVERSÃO USUÁRIO */
 }
