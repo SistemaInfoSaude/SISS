@@ -32,13 +32,97 @@ public class PessoaFisicaController {
 	private PessoaFisicaService pessoaFisicaService;
 
 	/**
+	 * Retorna os dados de uma pessoa fisica a partir do seu id
+	 *
+	 * @param Id da PessoaFisica
+	 * @return Dados da Pessoa Fisica
+	 */
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorId(@PathVariable("id") int id) {
+		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+		try {
+			log.info("Controller: buscando a PF com id: {}", id);
+			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorId(id);
+			
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	/**
+	 * Retorna os dados de uma pessoa fisica a partir de seu CPF
+	 *
+	 * @param CPF da PessoaFisica
+	 * @return Dados da Pessoa Fisica
+	 */
+	@GetMapping(value = "/cpf/{cpf}")
+	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
+		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+		try {
+			log.info("Controller: buscando a PF com CPF: {}", cpf);
+			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorCpf(cpf);
+			
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	/**
+	 * Retorna os dados de uma pessoa fisica a partir de seu usuarioId
+	 *
+	 * @param usuarioId da PessoaFisica
+	 * @return Dados da Pessoa Fisica
+	 */
+	@GetMapping(value = "/usuarioId/{usuarioId}")
+	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("usuarioId") int usuarioId) {
+		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+		try {
+			log.info("Controller: buscando a PF com usuarioId: {}", usuarioId);
+			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorUsuarioId(usuarioId);
+			
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+
+	/**
 	 * Persiste uma entidade Pessoa Fisica na base.
 	 *
 	 * @param Dados de entrada da Pessoa Fisica
 	 * @return Dados da entidade pessoa fisica persistida
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
-	@PostMapping(value = "/registrar")
+	@PostMapping
 	public ResponseEntity<Response<PessoaFisicaDto>> salvar(@Valid @RequestBody PessoaFisicaDto pessoaFisicaDto,
 			BindingResult result) {
 		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
@@ -54,11 +138,10 @@ public class PessoaFisicaController {
 				return ResponseEntity.badRequest().body(response);
 			}
 
-
 			// Converte o objeto pessoaFisicaDto para um objeto do tipo
 			// Pessoa Fisica(entidade)
 			PessoaFisica pessoaFisica = ConversaoUtils.Converter(pessoaFisicaDto);
-			
+
 			// Salvando a pessoa fisica
 			response.setDados(ConversaoUtils.Converter(this.pessoaFisicaService.salvar(pessoaFisica)));
 

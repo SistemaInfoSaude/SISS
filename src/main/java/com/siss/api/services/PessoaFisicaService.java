@@ -27,7 +27,7 @@ public class PessoaFisicaService {
 
 		if (!pessoaFisica.isPresent()) {
 			log.info("Service: Nenhuma pessoa fisica com id: {} foi encontrado", id);
-			throw new ConsistenciaException("Nenhum pessoa fisica com id: {} foi encontrado", id);
+			throw new ConsistenciaException("Nenhuma pessoa fisica com id: {} foi encontrado", id);
 		}
 		return pessoaFisica;
 	}
@@ -38,7 +38,7 @@ public class PessoaFisicaService {
 
 		if (!pessoaFisica.isPresent()) {
 			log.info("Service: Nenhuma pessoa fisica com cpf: {} foi encontrado", cpf);
-			throw new ConsistenciaException("Nenhum pessoa fisica com cpf: {} foi encontrado", cpf);
+			throw new ConsistenciaException("Nenhuma pessoa fisica com cpf: {} foi encontrado", cpf);
 		}
 		return pessoaFisica;
 	}
@@ -49,7 +49,7 @@ public class PessoaFisicaService {
 
 		if (!pessoaFisica.isPresent()) {
 			log.info("Service: Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
-			throw new ConsistenciaException("Nenhum pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
+			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 		}
 		return pessoaFisica;
 	}

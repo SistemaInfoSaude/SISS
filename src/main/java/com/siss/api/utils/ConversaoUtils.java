@@ -88,6 +88,8 @@ public class ConversaoUtils {
 		pessoaFisica.setConvenioMedico(convenioMedico);
 		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaDto.getDataNascimento()));
 		pessoaFisica.setCpf(pessoaFisicaDto.getCpf());
+		pessoaFisica.setCelular(pessoaFisicaDto.getCelular());
+		pessoaFisica.setTelefone(pessoaFisicaDto.getTelefone());
 
 		return pessoaFisica;
 	}
