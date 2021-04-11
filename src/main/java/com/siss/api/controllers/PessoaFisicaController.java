@@ -37,6 +37,7 @@ public class PessoaFisicaController {
 	 * @param Id da PessoaFisica
 	 * @return Dados da Pessoa Fisica
 	 */
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorId(@PathVariable("id") int id) {
 		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
@@ -65,6 +66,7 @@ public class PessoaFisicaController {
 	 * @param CPF da PessoaFisica
 	 * @return Dados da Pessoa Fisica
 	 */
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/cpf/{cpf}")
 	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
 		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
@@ -93,6 +95,7 @@ public class PessoaFisicaController {
 	 * @param usuarioId da PessoaFisica
 	 * @return Dados da Pessoa Fisica
 	 */
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/usuarioId/{usuarioId}")
 	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("usuarioId") int usuarioId) {
 		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();

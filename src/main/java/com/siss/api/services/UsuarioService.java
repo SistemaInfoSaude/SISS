@@ -68,8 +68,8 @@ public class UsuarioService {
 
 	public Usuario salvar(Usuario usuario) throws ConsistenciaException {
 		log.info("Service: salvando o usuario: {}", usuario);
+		
 		// Se foi informando ID na DTO, é porque trata-se de uma ALTERAÇÃO
-
 		if (usuario.getId() > 0) {
 			// Verificar se o ID existe na base
 			Optional<Usuario> usr = buscarPorId(usuario.getId());
@@ -85,7 +85,6 @@ public class UsuarioService {
 
 			usuario.setSenha(SenhaUtils.gerarHash(usuario.getSenha()));
 			usuario.setDataCadastro(new Date());
-			usuario.setDataAlteracao(new Date());
 			
 			// Seta regra ao usuário
 			Regra regra = new Regra();
@@ -93,6 +92,8 @@ public class UsuarioService {
 			usuario.setRegras(new ArrayList<Regra>());
 			usuario.getRegras().add(regra);
 		}
+		
+		usuario.setDataAlteracao(new Date());
 
 		// Carregando as regras definidas para o usuário, caso existam
 		if (usuario.getRegras() != null) {

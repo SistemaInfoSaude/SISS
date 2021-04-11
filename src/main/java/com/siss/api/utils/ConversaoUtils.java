@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 //DTOS
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.dtos.RegraDto;
+import com.siss.api.dtos.ContatoDto;
 import com.siss.api.dtos.PessoaFisicaDto;
 
 //Entities
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Regra;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.Contato;
 import com.siss.api.entities.ConvenioMedico;
 
 //Utils
@@ -25,7 +27,6 @@ import com.siss.api.security.utils.JwtTokenUtil;
 public class ConversaoUtils {
 
 	/* INICIO CONVERSÃO USUÁRIO */
-
 	public static Usuario Converter(UsuarioDto usuarioDto) {
 		Usuario usuario = new Usuario();
 
@@ -108,6 +109,38 @@ public class ConversaoUtils {
 		return pessoaFisicaDto;
 	}
 	/* FIM CONVERSÃO PESSOA FÍSICA */
+	
+	/* INICIO CONVERSÃO CONTATO */
+	public static Contato Converter(ContatoDto contatoDto) {
+		Contato contato = new Contato();
+		Usuario usuario = new Usuario();
+
+		if (contatoDto.getId() != null && contatoDto.getId() != "") {
+			contato.setId(Integer.parseInt(contatoDto.getId()));
+		}
+
+		usuario.setId(Integer.parseInt(contatoDto.getUsuarioId()));
+		
+		contato.setUsuario(usuario);
+		contato.setCelular(contatoDto.getCelular());
+		contato.setTelefone(contatoDto.getTelefone());
+		contato.setNome(contatoDto.getNome());
+		
+		return contato;
+	}
+	
+	public static ContatoDto Converter(Contato contato) {
+		ContatoDto contatoDto = new ContatoDto();
+
+		contatoDto.setId(Integer.toString(contato.getId()));
+		contatoDto.setUsuarioId(Integer.toString(contato.getUsuario().getId()));
+		contatoDto.setCelular(contato.getCelular());
+		contatoDto.setTelefone(contato.getTelefone());
+		contatoDto.setNome(contato.getNome());
+		
+		return contatoDto;
+	}
+	/* FIM CONVERSÃO CONTATO */
 	
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
