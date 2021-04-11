@@ -1,6 +1,8 @@
 package com.siss.api.services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.siss.api.entities.Regra;
 import com.siss.api.entities.Usuario;
 import com.siss.api.repositories.RegraRepository;
@@ -20,68 +24,69 @@ import com.siss.api.utils.SenhaUtils;
 
 @Service
 public class UsuarioService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 	@Autowired
-	
+
 	private UsuarioRepository usuarioRepository;
 	@Autowired
-	
+
 	private RegraRepository regraReprository;
 	@Autowired
-	
+
 	private HttpServletRequest httpServletRequest;
-	
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	public Optional<Usuario> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando um usuário com o id: {}", id);
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
-		
+
 		if (!usuario.isPresent()) {
 			log.info("Service: Nenhum usuário com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhum usuário com id: {} foi encontrado", id);
 		}
-		
+
 		return usuario;
 	}
 
 	public Optional<Usuario> verificarCredenciais(String usuarioNome) throws ConsistenciaException {
 		log.info("Service: criando credenciais para o usuário: '{}'", usuarioNome);
 		Optional<Usuario> usuario = Optional.ofNullable(usuarioRepository.findByUsuario(usuarioNome));
-		
+
 		if (!usuario.isPresent()) {
 			log.info("Service: Nenhum usuário: {} foi encontrado", usuarioNome);
 			throw new ConsistenciaException("Nenhum usuário: {} foi encontrado", usuarioNome);
 		}
-		
+
 		usuario.get().setRegras(
 				usuario.get().getRegras().stream().filter(r -> r.getAtivo() == true).collect(Collectors.toList()));
-		
+
 		return usuario;
 	}
 
 	public Usuario salvar(Usuario usuario) throws ConsistenciaException {
 		log.info("Service: salvando o usuario: {}", usuario);
 		// Se foi informando ID na DTO, é porque trata-se de uma ALTERAÇÃO
-		
+
 		if (usuario.getId() > 0) {
 			// Verificar se o ID existe na base
 			Optional<Usuario> usr = buscarPorId(usuario.getId());
-			
+
 			// Setando a senha do objeto usuário com a mesma senha encontarda na base.
 			// Se não fizermos isso, a senha fica em branco.
 			usuario.setSenha(usr.get().getSenha());
 		} else {
 			// Se NÃO foi informando ID na DTO, é porque trata-se de uma INCLUSÃO
-			if(usuario.getSenha() == null || usuario.getSenha() == "") {
-				throw new ConsistenciaException(
-					"Senha não foi informado para o usuario: {}", usuario.getUsuario()
-				);
+			if (usuario.getSenha() == null || usuario.getSenha() == "") {
+				throw new ConsistenciaException("Senha não foi informado para o usuario: {}", usuario.getUsuario());
 			}
 
 			usuario.setSenha(SenhaUtils.gerarHash(usuario.getSenha()));
+			usuario.setDataCadastro(new Date());
+			usuario.setDataAlteracao(new Date());
+			
 			// Seta regra ao usuário
 			Regra regra = new Regra();
 			regra.setNome("ROLE_USUARIO");
@@ -103,7 +108,7 @@ public class UsuarioService {
 			}
 			usuario.setRegras(aux);
 		}
-		
+
 		try {
 			return usuarioRepository.save(usuario);
 		} catch (DataIntegrityViolationException e) {
@@ -114,7 +119,7 @@ public class UsuarioService {
 
 	public void alterarSenhaUsuario(String senhaAtual, String novaSenha, int id) throws ConsistenciaException {
 		log.info("Service: alterando a senha do usuário: {}", id);
-		
+
 		// Verificar se existe um usuário com o ID informado
 		Optional<Usuario> usr = buscarPorId(id);
 
@@ -125,7 +130,8 @@ public class UsuarioService {
 		}
 
 		String username = jwtTokenUtil.getUsernameFromToken(token);
-		// Verificar se o usuário do token é diferente do usuário que está sendo alterado
+		// Verificar se o usuário do token é diferente do usuário que está sendo
+		// alterado
 
 		if (!usr.get().getUsuario().equals(username)) {
 			// Caso essa condição for satisfeita, o usuário do token está tentando

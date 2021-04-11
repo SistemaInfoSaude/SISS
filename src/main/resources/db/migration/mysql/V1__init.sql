@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
 ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `ConvenioMedico` (
+CREATE TABLE IF NOT EXISTS `Convenio_Medico` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`))
@@ -21,20 +21,20 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Fisica` (
   `cpf` VARCHAR(11) NOT NULL,
   `celular` VARCHAR(11) NULL,
   `telefone` VARCHAR(10) NULL,
+  `convenio_medico_id` INT NOT NULL,
   `usuario_id` INT NOT NULL,
-  `convenioMedico_id` INT NOT NULL,
   UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE,
-  INDEX `fk_Pessoa_Fisica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
-  INDEX `fk_Pessoa_Fisica_ConvenioMedico1_idx` (`convenioMedico_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Pessoa_Fisica_Usuario`
+  INDEX `fk_Pessoa_Fisica_Convenio_Medico_idx` (`convenio_medico_id` ASC) VISIBLE,
+  INDEX `fk_Pessoa_Fisica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Pessoa_Fisica_Convenio_Medico`
+    FOREIGN KEY (`convenio_medico_id`)
+    REFERENCES `Convenio_Medico` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Pessoa_Fisica_Usuario1`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pessoa_Fisica_ConvenioMedico1`
-    FOREIGN KEY (`convenioMedico_id`)
-    REFERENCES `ConvenioMedico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -44,12 +44,12 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Juridica` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cnpj` VARCHAR(14) NOT NULL,
   `usuario_id` INT NOT NULL,
-  INDEX `fk_Pessoa_Juridica_Usuario1_idx` (`usuario_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
-  CONSTRAINT `fk_Pessoa_Juridica_Usuario1`
+  INDEX `fk_Pessoa_Juridica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Pessoa_Juridica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -61,11 +61,11 @@ CREATE TABLE IF NOT EXISTS `Contato` (
   `celular` VARCHAR(11) NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `usuario_d` INT NOT NULL,
+  `usuario_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Contatos_Usuario1_idx` (`usuario_d` ASC) VISIBLE,
-  CONSTRAINT `fk_Contatos_Usuario1`
-    FOREIGN KEY (`usuario_d`)
+  INDEX `fk_Contatos_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Contatos_Usuario`
+    FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS `Veiculo` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `usuario_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Veiculos_Usuario1_idx` (`usuario_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Veiculos_Usuario1`
+  INDEX `fk_Veiculos_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Veiculos_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
     ON DELETE CASCADE
@@ -103,17 +103,17 @@ CREATE TABLE IF NOT EXISTS `Condicao_Clinica` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `informacao_Adicional` TEXT NULL,
   `usuario_id` INT NOT NULL,
-  `tipoSanguineo_id` INT NOT NULL,
+  `tipo_sanguineo_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Condicao_Clinica_Usuario1_idx` (`usuario_id` ASC) VISIBLE,
-  INDEX `fk_Condicao_Clinica_Tipo_Sanguineo1_idx` (`tipoSanguineo_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Condicao_Clinica_Usuario1`
+  INDEX `fk_Condicao_Clinica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_Condicao_Clinica_Tipo_Sanguineo_idx` (`tipo_sanguineo_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Condicao_Clinica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Condicao_Clinica_Tipo_Sanguineo1`
-    FOREIGN KEY (`tipoSanguineo_id`)
+  CONSTRAINT `fk_Condicao_Clinica_Tipo_Sanguineo`
+    FOREIGN KEY (`tipo_sanguineo_id`)
     REFERENCES `Tipo_Sanguineo` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -125,11 +125,11 @@ CREATE TABLE IF NOT EXISTS `Doenca` (
   `tipo` VARCHAR(100) NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `condicaoClinica_id` INT NOT NULL,
+  `condicao_clinica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Doenca_Condicao_Clinica1_idx` (`condicaoClinica_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Doenca_Condicao_Clinica1`
-    FOREIGN KEY (`condicaoClinica_id`)
+  INDEX `fk_Doenca_Condicao_Clinica_idx` (`condicao_clinica_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Doenca_Condicao_Clinica`
+    FOREIGN KEY (`condicao_clinica_id`)
     REFERENCES `Condicao_Clinica` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
@@ -141,18 +141,18 @@ CREATE TABLE IF NOT EXISTS `Alergia` (
   `tipo` VARCHAR(100) NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `condicaoClinica_id` INT NOT NULL,
+  `condicao_clinica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Alergia_Condicao_Clinica1_idx` (`condicaoClinica_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Alergia_Condicao_Clinica1`
-    FOREIGN KEY (`condicaoClinica_id`)
+  INDEX `fk_Alergia_Condicao_Clinica_idx` (`condicao_clinica_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Alergia_Condicao_Clinica`
+    FOREIGN KEY (`condicao_clinica_id`)
     REFERENCES `Condicao_Clinica` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
-CREATE TABLE `Regra` (
+CREATE TABLE IF NOT EXISTS `Regra` (
  `id` INT NOT NULL AUTO_INCREMENT,
  `nome` VARCHAR(50) NOT NULL,
  `descricao` VARCHAR(255) NOT NULL,
@@ -160,6 +160,7 @@ CREATE TABLE `Regra` (
  PRIMARY KEY (`id`),
  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
 ENGINE = InnoDB;
+
 
 CREATE TABLE `Usuario_Regra` (
  `usuario_id` INT NOT NULL,
@@ -198,3 +199,22 @@ INSERT INTO `Usuario_Regra` (`usuario_id`, `regra_id`) VALUES (
 (SELECT `id` FROM regra WHERE nome = 'ROLE_EXEC_USUARIO')
 );
 
+INSERT INTO `Convenio_Medico` (`id`, `nome`) VALUES
+(DEFAULT, 'Unimed'),
+(DEFAULT, 'Amil Assistência Médica Internacional'),
+(DEFAULT, 'Bradesco Saúde'),
+(DEFAULT, 'Medial Saúde'),
+(DEFAULT, 'Amico Saúde'),
+(DEFAULT, 'Golden Cross'),
+(DEFAULT, 'Sul América Seguro Saúde'),
+(DEFAULT, 'Hospitalar');
+
+INSERT INTO `Tipo_Sanguineo` (`id`, `tipo`) VALUES
+(DEFAULT, 'A+'),
+(DEFAULT, 'A-'),
+(DEFAULT, 'B+'),
+(DEFAULT, 'B-'),
+(DEFAULT, 'AB+'),
+(DEFAULT, 'AB-'),
+(DEFAULT, 'O+'),
+(DEFAULT, 'O-');

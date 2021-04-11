@@ -52,7 +52,7 @@ public class PessoaFisica implements Serializable {
 	}
 
 	public void setId(int id) {
-		this.id= id;
+		this.id = id;
 	}
 
 	public Usuario getUsuario() {
@@ -105,8 +105,8 @@ public class PessoaFisica implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PessoaFisica[" + "id=" + id+ "," + "idUsuario=" + usuario.getId()
-				+ "," + "cpf=" + cpf + "," + "convenioMedico=" + convenioMedico.getNome() + "," + "dataNascimento="
-				+ dataNascimento + "," + "celular=" + celular + "," + "telefone=" + telefone + "]";
+		return "PessoaFisica[" + "id=" + id + "," + "idUsuario=" + usuario.getId() + "," + "cpf=" + cpf + ","
+				+ "convenioMedicoId=" + convenioMedico.getId() + "," + "dataNascimento=" + dataNascimento + ","
+				+ "celular=" + celular + "," + "telefone=" + telefone + "]";
 	}
 }
