@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 //DTOS
 import com.siss.api.dtos.UsuarioDto;
+import com.siss.api.dtos.VeiculoDto;
 import com.siss.api.dtos.RegraDto;
 import com.siss.api.dtos.ContatoDto;
 import com.siss.api.dtos.PessoaFisicaDto;
 
 //Entities
 import com.siss.api.entities.Usuario;
+import com.siss.api.entities.Veiculo;
 import com.siss.api.entities.Regra;
 import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Contato;
@@ -141,6 +143,42 @@ public class ConversaoUtils {
 		return contatoDto;
 	}
 	/* FIM CONVERSÃO CONTATO */
+	
+	/* INICIO CONVERSÃO VEICULO */
+	public static Veiculo Converter(VeiculoDto veiculoDto) {
+		Veiculo veiculo= new Veiculo();
+		Usuario usuario = new Usuario();
+
+		if (veiculoDto.getId() != null && veiculoDto.getId() != "") {
+			veiculo.setId(Integer.parseInt(veiculoDto.getId()));
+		}
+
+		usuario.setId(Integer.parseInt(veiculoDto.getUsuarioId()));
+		
+		veiculo.setUsuario(usuario);
+		veiculo.setMarca(veiculoDto.getMarca());
+		veiculo.setModelo(veiculoDto.getModelo());
+		veiculo.setPlaca(veiculoDto.getPlaca());
+		veiculo.setRenavam(veiculoDto.getRenavam());
+		veiculo.setInformacoesAdicionais(veiculoDto.getInformacoesAdicionais());
+		
+		return veiculo;
+	}
+	
+	public static VeiculoDto Converter(Veiculo veiculo) {
+		VeiculoDto veiculoDto = new VeiculoDto();
+
+		veiculoDto.setId(Integer.toString(veiculo.getId()));
+		veiculoDto.setUsuarioId(Integer.toString(veiculo.getUsuario().getId()));
+		veiculoDto.setMarca(veiculo.getMarca());
+		veiculoDto.setModelo(veiculo.getModelo());
+		veiculoDto.setPlaca(veiculo.getPlaca());
+		veiculoDto.setRenavam(veiculo.getRenavam());
+		veiculoDto.setInformacoesAdicionais(veiculo.getInformacoesAdicionais());
+		
+		return veiculoDto;
+	}
+	/* FIM CONVERSÃO VEICULO */
 	
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);

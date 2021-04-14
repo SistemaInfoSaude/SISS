@@ -33,9 +33,6 @@ public class Veiculo implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
 
-	@Column(name = "nome", nullable = false, length = 45)
-	private String nome;
-
 	@Column(name = "Marca", nullable = false, length = 45)
 	private String marca;
 
@@ -71,14 +68,6 @@ public class Veiculo implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	public String getMarca() {
@@ -149,9 +138,8 @@ public class Veiculo implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Veiculo[" + "idUsuario=" + usuario.getId() + "," + "nome=" + nome + "," + "marca=" + marca + ","
-				+ "modelo=" + modelo + "," + "placa=" + placa + "," + "renavam=" + renavam + ","
-				+ "informacoesAdicionais=" + informacoesAdicionais + "," + "dataCadastro=" + dataCadastro + ","
-				+ "dataAlteracao=" + dataAlteracao + "]";
+		return "Veiculo[" + "idUsuario=" + usuario.getId() + "," + "marca=" + marca + "," + "modelo=" + modelo + ","
+				+ "placa=" + placa + "," + "renavam=" + renavam + "," + "informacoesAdicionais=" + informacoesAdicionais
+				+ "," + "dataCadastro=" + dataCadastro + "," + "dataAlteracao=" + dataAlteracao + "]";
 	}
 }
