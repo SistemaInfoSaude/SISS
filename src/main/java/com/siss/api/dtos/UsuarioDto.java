@@ -15,6 +15,14 @@ public class UsuarioDto {
 	private String senha;
 
 	private List<RegraDto> regras;
+	
+	private PessoaFisicaDto pessoaFisica;
+
+	private CondicaoClinicaDto condicaoClinica;
+	
+	private List<VeiculoDto> veiculos;
+	
+	private List<ContatoDto> contatos;
 
 	public String getId() {
 		return id;
@@ -38,6 +46,38 @@ public class UsuarioDto {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public PessoaFisicaDto getPessoaFisica() {
+		return pessoaFisica;
+	}
+	
+	public void setPessoaFisica(PessoaFisicaDto pessoaFisica) {
+		this.pessoaFisica = pessoaFisica;
+	}
+	
+	public CondicaoClinicaDto getCondicaoClinica() {
+		return condicaoClinica;
+	}
+	
+	public void setCondicaoClinica(CondicaoClinicaDto condicaoClinica) {
+		this.condicaoClinica = condicaoClinica;
+	}
+	
+	public List<VeiculoDto> getVeiculos() {
+		return veiculos;
+	}
+	
+	public void setVeiculos(List<VeiculoDto> veiculos) {
+		this.veiculos = veiculos;
+	}
+	
+	public List<ContatoDto> getContatos() {
+		return contatos;
+	}
+	
+	public void setContatos(List<ContatoDto> contatos) {
+		this.contatos = contatos;
 	}
 
 	public List<RegraDto> getRegras() {

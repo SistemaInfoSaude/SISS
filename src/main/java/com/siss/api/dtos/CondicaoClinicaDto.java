@@ -21,6 +21,10 @@ public class CondicaoClinicaDto {
 	private String tipoSanguineoId;
 
 	private String informacaoAdicional;
+	
+	private List<DoencaDto> doencas;
+
+	private List<AlergiaDto> alergias;
 
 	public String getId() {
 		return id;
@@ -52,6 +56,22 @@ public class CondicaoClinicaDto {
 
 	public void setInformacaoAdicional(String informacaoAdicional) {
 		this.informacaoAdicional = informacaoAdicional;
+	}
+	
+	public List<DoencaDto> getDoencas() {
+		return doencas;
+	}
+	
+	public void setDoencas(List<DoencaDto> doencas) {
+		this.doencas = doencas;
+	}
+	
+	public List<AlergiaDto> getAlergias() {
+		return alergias;
+	}
+	
+	public void setAlergias(List<AlergiaDto> alergias) {
+		this.alergias = alergias;
 	}
 
 	@Override

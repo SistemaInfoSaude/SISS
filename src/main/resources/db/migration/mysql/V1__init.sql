@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Fisica` (
     REFERENCES `Convenio_Medico` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pessoa_Fisica_Usuario1`
+  CONSTRAINT `fk_Pessoa_Fisica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
     ON DELETE NO ACTION

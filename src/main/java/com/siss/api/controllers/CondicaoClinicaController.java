@@ -54,29 +54,6 @@ public class CondicaoClinicaController {
 			return ResponseEntity.status(500).body(response);
 		}
 	}
-	
-	@PreAuthorize("hasAnyRole('USUARIO')")
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<Response<CondicaoClinicaDto>> buscarPorUsuarioId(@PathVariable("id") int id) {
-		Response<CondicaoClinicaDto> response = new Response<CondicaoClinicaDto>();
-		try {
-			log.info("Controller: buscando a condicaoClinica com id: {}", id);
-			Optional<CondicaoClinica> condicaoClinica = condicaoClinicaService.buscarPorId(id);
-
-			response.setDados(ConversaoUtils.Converter(condicaoClinica.get()));
-			return ResponseEntity.ok(response);
-		} catch (ConsistenciaException e) {
-			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
-
-			response.adicionarErro(e.getMensagem());
-			return ResponseEntity.badRequest().body(response);
-		} catch (Exception e) {
-			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
-
-			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
-			return ResponseEntity.status(500).body(response);
-		}
-	}
 
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@PostMapping

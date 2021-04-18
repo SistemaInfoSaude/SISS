@@ -35,7 +35,7 @@ import com.siss.api.security.utils.JwtTokenUtil;
 public class ConversaoUtils {
 
 	/* INICIO CONVERSÃO USUÁRIO */
-	public static Usuario Converter(UsuarioDto usuarioDto) {
+	public static Usuario Converter(UsuarioDto usuarioDto) throws ParseException {
 		Usuario usuario = new Usuario();
 
 		if (usuarioDto.getId() != null && usuarioDto.getId() != "") {
@@ -49,6 +49,38 @@ public class ConversaoUtils {
 				Regra regra = new Regra();
 				regra.setNome(regraDto.getNome());
 				usuario.getRegras().add(regra);
+			}
+		}
+
+		if(usuarioDto.getPessoaFisica() != null && usuarioDto.getPessoaFisica().getId() != null) {
+			usuario.setPessoaFisica(Converter(usuarioDto.getPessoaFisica()));
+		}
+		
+		if(usuarioDto.getCondicaoClinica() != null && usuarioDto.getCondicaoClinica().getId() != null) {
+			usuario.setCondicaoClinica(Converter(usuarioDto.getCondicaoClinica()));
+		}
+		
+		if(usuarioDto.getContatos() != null && usuarioDto.getContatos().size() > 0) {
+			usuario.setContatos(new ArrayList<Contato>());
+			for (ContatoDto contatoDto : usuarioDto.getContatos()) {
+				Contato contato = new Contato();
+				contato.setCelular(contatoDto.getCelular());
+				contato.setTelefone(contatoDto.getTelefone());
+				contato.setNome(contatoDto.getNome());
+				usuario.getContatos().add(contato);
+			}
+		}
+		
+		if(usuarioDto.getVeiculos() != null && usuarioDto.getVeiculos().size() > 0) {
+			usuario.setVeiculos(new ArrayList<Veiculo>());
+			for (VeiculoDto veiculoDto : usuarioDto.getVeiculos()) {
+				Veiculo veiculo = new Veiculo();
+				veiculo.setMarca(veiculoDto.getMarca());
+				veiculo.setModelo(veiculoDto.getModelo());
+				veiculo.setPlaca(veiculoDto.getPlaca());
+				veiculo.setRenavam(veiculoDto.getRenavam());
+				veiculo.setInformacoesAdicionais(veiculoDto.getInformacoesAdicionais());
+				usuario.getVeiculos().add(veiculo);
 			}
 		}
 
@@ -76,6 +108,39 @@ public class ConversaoUtils {
 				usuarioDto.getRegras().add(regraDto);
 			}
 		}
+		
+		if(usuario.getPessoaFisica() != null && usuario.getPessoaFisica().getId() > 0) {
+			usuarioDto.setPessoaFisica(Converter(usuario.getPessoaFisica()));
+		}
+		
+		if(usuario.getCondicaoClinica() != null && usuario.getCondicaoClinica().getId() > 0) {
+			usuarioDto.setCondicaoClinica(Converter(usuario.getCondicaoClinica()));
+		}
+		
+		if(usuario.getContatos() != null && usuario.getContatos().size() > 0) {
+			usuarioDto.setContatos(new ArrayList<ContatoDto>());
+			for (int i = 0; i < usuario.getContatos().size(); i++) {
+				ContatoDto contatoDto = new ContatoDto();
+				contatoDto.setCelular(usuario.getContatos().get(i).getCelular());
+				contatoDto.setTelefone(usuario.getContatos().get(i).getTelefone());
+				contatoDto.setNome(usuario.getContatos().get(i).getNome());
+				usuarioDto.getContatos().add(contatoDto);
+			}
+		}
+		
+		if(usuario.getVeiculos() != null && usuario.getVeiculos().size() > 0) {
+			usuarioDto.setVeiculos(new ArrayList<VeiculoDto>());
+			for (int i = 0; i < usuario.getVeiculos().size(); i++) {
+				VeiculoDto veiculoDto= new VeiculoDto();
+				veiculoDto.setMarca(usuario.getVeiculos().get(i).getMarca());
+				veiculoDto.setModelo(usuario.getVeiculos().get(i).getModelo());
+				veiculoDto.setPlaca(usuario.getVeiculos().get(i).getPlaca());
+				veiculoDto.setRenavam(usuario.getVeiculos().get(i).getRenavam());
+				veiculoDto.setInformacoesAdicionais(usuario.getVeiculos().get(i).getInformacoesAdicionais());
+				usuarioDto.getVeiculos().add(veiculoDto);
+			}
+		}
+		
 		return usuarioDto;
 	}
 	/* FIM CONVERSÃO USUÁRIO */
@@ -196,6 +261,24 @@ public class ConversaoUtils {
 			condicaoClinica.setId(Integer.parseInt(condicaoClinicaDto.getId()));
 		}
 
+		if(condicaoClinicaDto.getDoencas() != null && condicaoClinicaDto.getDoencas().size() > 0) {
+			condicaoClinica.setDoencas(new ArrayList<Doenca>());
+			for (DoencaDto doencaDto : condicaoClinicaDto.getDoencas()) {
+				Doenca doenca = new Doenca();
+				doenca.setTipo(doencaDto.getTipo());
+				condicaoClinica.getDoencas().add(doenca);
+			}
+		}
+		
+		if(condicaoClinicaDto.getAlergias() != null && condicaoClinicaDto.getAlergias().size() > 0) {
+			condicaoClinica.setAlergias(new ArrayList<Alergia>());
+			for (AlergiaDto alergiaDto : condicaoClinicaDto.getAlergias()) {
+				Alergia alergia = new Alergia();
+				alergia .setTipo(alergiaDto.getTipo());
+				condicaoClinica.getAlergias().add(alergia);
+			}
+		}
+		
 		usuario.setId(Integer.parseInt(condicaoClinicaDto.getUsuarioId()));
 		tipoSanguineo.setId(Integer.parseInt(condicaoClinicaDto.getTipoSanguineoId()));
 		
@@ -208,6 +291,28 @@ public class ConversaoUtils {
 	
 	public static CondicaoClinicaDto Converter(CondicaoClinica condicaoClinica) {
 		CondicaoClinicaDto condicaoClinicaDto = new CondicaoClinicaDto();
+		
+		if(condicaoClinica.getDoencas() != null && condicaoClinica.getDoencas().size() > 0) {
+			condicaoClinicaDto.setDoencas(new ArrayList<DoencaDto>());
+			for (int i = 0; i < condicaoClinica.getDoencas().size(); i++) {
+				DoencaDto doencaDto = new DoencaDto();
+				doencaDto.setId(String.valueOf(condicaoClinica.getDoencas().get(i).getId()));
+				doencaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
+				doencaDto.setTipo(condicaoClinica.getDoencas().get(i).getTipo());
+				condicaoClinicaDto.getDoencas().add(doencaDto);
+			}
+		}
+		
+		if(condicaoClinica.getAlergias() != null && condicaoClinica.getAlergias().size() > 0) {
+			condicaoClinicaDto.setAlergias(new ArrayList<AlergiaDto>());
+			for (int i = 0; i < condicaoClinica.getAlergias().size(); i++) {
+				AlergiaDto alergiaDto = new AlergiaDto();
+				alergiaDto.setId(String.valueOf(condicaoClinica.getAlergias().get(i).getId()));
+				alergiaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
+				alergiaDto.setTipo(condicaoClinica.getAlergias().get(i).getTipo());
+				condicaoClinicaDto.getAlergias().add(alergiaDto);
+			}
+		}
 
 		condicaoClinicaDto.setId(Integer.toString(condicaoClinica.getId()));
 		condicaoClinicaDto.setUsuarioId(Integer.toString(condicaoClinica.getUsuario().getId()));

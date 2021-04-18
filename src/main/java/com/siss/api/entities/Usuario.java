@@ -3,6 +3,8 @@ package com.siss.api.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -41,6 +46,14 @@ public class Usuario implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Veiculo> veiculos;
+	
+	@JsonBackReference
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	private PessoaFisica pessoaFisica;
+	
+	@JsonBackReference
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	private CondicaoClinica condicaoClinica;
 
 	@Column(name = "data_Cadastro", nullable = false)
 	private Date dataCadastro;
@@ -91,6 +104,22 @@ public class Usuario implements Serializable {
 
 	public void setVeiculos(List<Veiculo> veiculos) {
 		this.veiculos = veiculos;
+	}
+	
+	public PessoaFisica getPessoaFisica() {
+		return pessoaFisica;
+	}
+	
+	public void setPessoaFisica(PessoaFisica pessoaFisica) {
+		this.pessoaFisica = pessoaFisica;
+	}
+	
+	public CondicaoClinica getCondicaoClinica() {
+		return condicaoClinica;
+	}
+	
+	public void setCondicaoClinica(CondicaoClinica condicaoClinica) {
+		this.condicaoClinica = condicaoClinica;
 	}
 
 	public Date getDataCadastro() {
