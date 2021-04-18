@@ -32,30 +32,30 @@ public class CondicaoClinica implements Serializable {
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
-	
+
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	private TipoSanguineo tipoSanguineo;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "condicaoClinica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Doenca> doencas;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "condicaoClinica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Alergia> alergias;
 
-	@Column(name = "nome", nullable = true)
+	@Column(name = "informacao_Adicional", nullable = true)
 	private String informacaoAdicional;
 
-	public int getId( ) {
+	public int getId() {
 		return id;
 	}
-	
-	public void setI(int id) {
+
+	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -63,7 +63,7 @@ public class CondicaoClinica implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
+
 	public TipoSanguineo getTipoSanguineo() {
 		return tipoSanguineo;
 	}
@@ -71,19 +71,19 @@ public class CondicaoClinica implements Serializable {
 	public void setTipoSanguineo(TipoSanguineo tipoSanguineo) {
 		this.tipoSanguineo = tipoSanguineo;
 	}
-	
+
 	public List<Doenca> getDoencas() {
 		return doencas;
 	}
-	
+
 	public void setDoencas(List<Doenca> doencas) {
 		this.doencas = doencas;
 	}
-	
+
 	public List<Alergia> getAlergias() {
 		return alergias;
 	}
-	
+
 	public void setAlergias(List<Alergia> alergias) {
 		this.alergias = alergias;
 	}
@@ -98,7 +98,7 @@ public class CondicaoClinica implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CondicaoClinica[id=" + id + "idUsuario=" + usuario.getId() + "," + "informacaoAdicional="
-				+ informacaoAdicional + "]";
+		return "CondicaoClinica[id=" + id + "idUsuario=" + usuario.getId() + "," + "tipoSanguineoId="
+				+ tipoSanguineo.getId() + "," + "informacaoAdicional=" + informacaoAdicional + "]";
 	}
 }

@@ -58,6 +58,14 @@ public class Alergia implements Serializable {
 		this.condicaoClinica = condicaoClinica;
 	}
 
+	public String getTipo() {
+		return tipo;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}

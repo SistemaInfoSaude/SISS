@@ -58,6 +58,14 @@ public class Doenca implements Serializable {
 		this.condicaoClinica = condicaoClinica;
 	}
 
+	public String getTipo() {
+		return tipo;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -86,7 +94,7 @@ public class Doenca implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CondicaoClinica[id=" + id+ "idCondicaoClinica=" + condicaoClinica.getId() + ","
+		return "Doenca[id=" + id+ "idCondicaoClinica=" + condicaoClinica.getId() + ","
 				+ "tipo=" + tipo + "]";
 	}
 }

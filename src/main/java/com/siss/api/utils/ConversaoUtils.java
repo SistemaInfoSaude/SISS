@@ -12,17 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.dtos.VeiculoDto;
 import com.siss.api.dtos.RegraDto;
+import com.siss.api.dtos.AlergiaDto;
+import com.siss.api.dtos.CondicaoClinicaDto;
 import com.siss.api.dtos.ContatoDto;
+import com.siss.api.dtos.DoencaDto;
 import com.siss.api.dtos.PessoaFisicaDto;
 
 //Entities
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.entities.Regra;
+import com.siss.api.entities.TipoSanguineo;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.Alergia;
+import com.siss.api.entities.CondicaoClinica;
 import com.siss.api.entities.Contato;
 import com.siss.api.entities.ConvenioMedico;
-
+import com.siss.api.entities.Doenca;
 //Utils
 import com.siss.api.security.utils.JwtTokenUtil;
 
@@ -179,6 +185,94 @@ public class ConversaoUtils {
 		return veiculoDto;
 	}
 	/* FIM CONVERSÃO VEICULO */
+	
+	/* INICIO CONVERSÃO CONDICAO CLINICA */
+	public static CondicaoClinica Converter(CondicaoClinicaDto condicaoClinicaDto) {
+		CondicaoClinica condicaoClinica = new CondicaoClinica();
+		TipoSanguineo tipoSanguineo = new TipoSanguineo();
+		Usuario usuario = new Usuario();
+
+		if (condicaoClinicaDto.getId() != null && condicaoClinicaDto.getId() != "") {
+			condicaoClinica.setId(Integer.parseInt(condicaoClinicaDto.getId()));
+		}
+
+		usuario.setId(Integer.parseInt(condicaoClinicaDto.getUsuarioId()));
+		tipoSanguineo.setId(Integer.parseInt(condicaoClinicaDto.getTipoSanguineoId()));
+		
+		condicaoClinica.setUsuario(usuario);
+		condicaoClinica.setTipoSanguineo(tipoSanguineo);
+		condicaoClinica.setInformacaoAdicional(condicaoClinicaDto.getInformacaoAdicional());
+		
+		return condicaoClinica;
+	}
+	
+	public static CondicaoClinicaDto Converter(CondicaoClinica condicaoClinica) {
+		CondicaoClinicaDto condicaoClinicaDto = new CondicaoClinicaDto();
+
+		condicaoClinicaDto.setId(Integer.toString(condicaoClinica.getId()));
+		condicaoClinicaDto.setUsuarioId(Integer.toString(condicaoClinica.getUsuario().getId()));
+		condicaoClinicaDto.setTipoSanguineoId(String.valueOf(condicaoClinica.getTipoSanguineo().getId()));
+		condicaoClinicaDto.setInformacaoAdicional(condicaoClinica.geInformacaoAdicional());
+		
+		return condicaoClinicaDto;
+	}
+	/* FIM CONVERSÃO CONDICAO CLINICA */
+	
+	/* INCIO CONVERSÃO DOENCA */
+	public static Doenca Converter(DoencaDto doencaDto) {
+		Doenca doenca = new Doenca();
+		CondicaoClinica condicaoClinica = new CondicaoClinica();
+
+		if (doencaDto.getId() != null && doencaDto.getId() != "") {
+			doenca.setId(Integer.parseInt(doencaDto.getId()));
+		}
+
+		condicaoClinica.setId(Integer.parseInt(doencaDto.getCondicaoClinicaId()));
+		
+		doenca.setCondicaoClinica(condicaoClinica);
+		doenca.setTipo(doencaDto.getTipo());
+		
+		return doenca;
+	}
+	
+	public static DoencaDto Converter(Doenca doenca) {
+		DoencaDto doencaDto = new DoencaDto();
+
+		doencaDto.setId(Integer.toString(doenca.getId()));
+		doencaDto.setCondicaoClinicaId(String.valueOf(doenca.getCondicaoClinica().getId()));
+		doencaDto.setTipo(doenca.getTipo());
+		
+		return doencaDto;
+	}
+	/* FIM CONVERSÃO DOENCA */
+	
+	/* INCIO CONVERSÃO ALERGIA */
+	public static Alergia Converter(AlergiaDto alergiaDto) {
+		Alergia alergia = new Alergia();
+		CondicaoClinica condicaoClinica = new CondicaoClinica();
+
+		if (alergiaDto.getId() != null && alergiaDto.getId() != "") {
+			alergia.setId(Integer.parseInt(alergiaDto.getId()));
+		}
+
+		condicaoClinica.setId(Integer.parseInt(alergiaDto.getCondicaoClinicaId()));
+		
+		alergia.setCondicaoClinica(condicaoClinica);
+		alergia.setTipo(alergiaDto.getTipo());
+		
+		return alergia;
+	}
+	
+	public static AlergiaDto Converter(Alergia alergia) {
+		AlergiaDto alergiaDto = new AlergiaDto();
+
+		alergiaDto .setId(Integer.toString(alergia.getId()));
+		alergiaDto .setCondicaoClinicaId(String.valueOf(alergia.getCondicaoClinica().getId()));
+		alergiaDto .setTipo(alergia.getTipo());
+		
+		return alergiaDto;
+	}
+	/* FIM CONVERSÃO ALERGIA */
 	
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
