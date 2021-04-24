@@ -19,6 +19,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -49,6 +50,10 @@ public class Usuario implements Serializable {
 	
 	@JsonBackReference
 	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
+	private PessoaJuridica pessoaJuridica;
+	
+	@JsonBackReference
+	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
 	private PessoaFisica pessoaFisica;
 	
 	@JsonBackReference
@@ -60,6 +65,9 @@ public class Usuario implements Serializable {
 
 	@Column(name = "data_Alteracao", nullable = false)
 	private Date dataAlteracao;
+	
+	@Transient
+	private Boolean executante;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "Usuario_Regra", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = {
@@ -114,6 +122,14 @@ public class Usuario implements Serializable {
 		this.pessoaFisica = pessoaFisica;
 	}
 	
+	public PessoaJuridica getPessoaJuridica() {
+		return pessoaJuridica;
+	}
+	
+	public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
+		this.pessoaJuridica = pessoaJuridica;
+	}
+	
 	public CondicaoClinica getCondicaoClinica() {
 		return condicaoClinica;
 	}
@@ -145,7 +161,15 @@ public class Usuario implements Serializable {
 	public void setRegras(List<Regra> regras) {
 		this.regras = regras;
 	}
+	
+	public Boolean getExecutante() {
+		return executante;
+	}
 
+	public void setExecutante(Boolean executante) {
+		this.executante = executante;
+	}
+	
 	@PreUpdate
 	public void preUpdate() {
 		dataCadastro = new Date();

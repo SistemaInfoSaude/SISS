@@ -40,7 +40,7 @@ public class UsuarioController {
 	 * @return Dados do usuário
 	 */
 	@GetMapping(value = "/{id}")
-	@PreAuthorize("hasAnyRole('USUARIO')")
+	@PreAuthorize("hasAnyRole('USUARIO', 'ROLE_EXEC_USUARIO')")
 	public ResponseEntity<Response<UsuarioDto>> buscarPorId(@PathVariable("id") int id) {
 		Response<UsuarioDto> response = new Response<UsuarioDto>();
 		try {
@@ -50,6 +50,7 @@ public class UsuarioController {
 
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
+			
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
 			response.adicionarErro(e.getMensagem());
 

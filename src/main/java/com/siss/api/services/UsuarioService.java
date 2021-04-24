@@ -88,9 +88,14 @@ public class UsuarioService {
 			
 			// Seta regra ao usuário
 			Regra regra = new Regra();
-			regra.setNome("ROLE_USUARIO");
+			if(usuario.getExecutante()) {
+				regra.setNome("ROLE_EXEC_USUARIO");
+			}else {
+				regra.setNome("ROLE_USUARIO");
+			}
 			usuario.setRegras(new ArrayList<Regra>());
 			usuario.getRegras().add(regra);
+			
 		}
 		
 		usuario.setDataAlteracao(new Date());

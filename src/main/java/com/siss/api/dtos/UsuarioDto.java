@@ -13,10 +13,14 @@ public class UsuarioDto {
 	private String usuario;
 	
 	private String senha;
+	
+	private String executante;
 
 	private List<RegraDto> regras;
 	
 	private PessoaFisicaDto pessoaFisica;
+	
+	private PessoaJuridicaDto pessoaJuridica;
 
 	private CondicaoClinicaDto condicaoClinica;
 	
@@ -48,12 +52,28 @@ public class UsuarioDto {
 		this.senha = senha;
 	}
 	
+	public String getExecutante() {
+		return executante;
+	}
+
+	public void setExecutante(String executante) {
+		this.executante = executante;
+	}
+	
 	public PessoaFisicaDto getPessoaFisica() {
 		return pessoaFisica;
 	}
 	
 	public void setPessoaFisica(PessoaFisicaDto pessoaFisica) {
 		this.pessoaFisica = pessoaFisica;
+	}
+
+	public PessoaJuridicaDto getPessoaJuridica() {
+		return pessoaJuridica;
+	}
+	
+	public void setPessoaJuridica(PessoaJuridicaDto pessoaJuridica) {
+		this.pessoaJuridica = pessoaJuridica;
 	}
 	
 	public CondicaoClinicaDto getCondicaoClinica() {

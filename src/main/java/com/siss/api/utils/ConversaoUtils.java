@@ -17,13 +17,14 @@ import com.siss.api.dtos.CondicaoClinicaDto;
 import com.siss.api.dtos.ContatoDto;
 import com.siss.api.dtos.DoencaDto;
 import com.siss.api.dtos.PessoaFisicaDto;
-
+import com.siss.api.dtos.PessoaJuridicaDto;
 //Entities
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.entities.Regra;
 import com.siss.api.entities.TipoSanguineo;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.PessoaJuridica;
 import com.siss.api.entities.Alergia;
 import com.siss.api.entities.CondicaoClinica;
 import com.siss.api.entities.Contato;
@@ -44,6 +45,7 @@ public class ConversaoUtils {
 
 		usuario.setUsuario(usuarioDto.getUsuario());
 		if (usuarioDto.getRegras() != null && usuarioDto.getRegras().size() > 0) {
+			
 			usuario.setRegras(new ArrayList<Regra>());
 			for (RegraDto regraDto : usuarioDto.getRegras()) {
 				Regra regra = new Regra();
@@ -54,6 +56,14 @@ public class ConversaoUtils {
 
 		if(usuarioDto.getPessoaFisica() != null && usuarioDto.getPessoaFisica().getId() != null) {
 			usuario.setPessoaFisica(Converter(usuarioDto.getPessoaFisica()));
+		}
+		
+		if(usuarioDto.getPessoaJuridica() != null && usuarioDto.getPessoaJuridica().getId() != null) {
+			usuario.setPessoaJuridica(Converter(usuarioDto.getPessoaJuridica()));
+		}
+		
+		if(usuarioDto.getExecutante() != null && usuarioDto.getExecutante() != "") {
+			usuario.setExecutante(true);
 		}
 		
 		if(usuarioDto.getCondicaoClinica() != null && usuarioDto.getCondicaoClinica().getId() != null) {
@@ -93,7 +103,8 @@ public class ConversaoUtils {
 
 	public static UsuarioDto Converter(Usuario usuario) {
 		UsuarioDto usuarioDto = new UsuarioDto();
-
+		Boolean regraExecutante = false;
+		
 		usuarioDto.setId(Integer.toString(usuario.getId()));
 		usuarioDto.setUsuario(usuario.getUsuario());
 
@@ -101,6 +112,9 @@ public class ConversaoUtils {
 			usuarioDto.setRegras(new ArrayList<RegraDto>());
 
 			for (int i = 0; i < usuario.getRegras().size(); i++) {
+				if(usuario.getRegras().get(i).getNome() == "ROLE_EXEC_USUARIO") {
+					regraExecutante = true;
+				}
 				RegraDto regraDto = new RegraDto();
 				regraDto.setNome(usuario.getRegras().get(i).getNome());
 				regraDto.setDescricao(usuario.getRegras().get(i).getDescricao());
@@ -113,8 +127,16 @@ public class ConversaoUtils {
 			usuarioDto.setPessoaFisica(Converter(usuario.getPessoaFisica()));
 		}
 		
+		if(usuario.getPessoaJuridica() != null && usuario.getPessoaJuridica().getId() > 0) {
+			usuarioDto.setPessoaJuridica(Converter(usuario.getPessoaJuridica()));
+		}
+		
 		if(usuario.getCondicaoClinica() != null && usuario.getCondicaoClinica().getId() > 0) {
 			usuarioDto.setCondicaoClinica(Converter(usuario.getCondicaoClinica()));
+		}
+		
+		if(regraExecutante) {
+			usuarioDto.setExecutante("1");
 		}
 		
 		if(usuario.getContatos() != null && usuario.getContatos().size() > 0) {
@@ -182,6 +204,34 @@ public class ConversaoUtils {
 		return pessoaFisicaDto;
 	}
 	/* FIM CONVERSÃO PESSOA FÍSICA */
+	
+	/* INICIO CONVERSÃO PESSOA JRUDICA*/
+	public static PessoaJuridica Converter(PessoaJuridicaDto pessoaJuridicaDto) throws ParseException {
+		PessoaJuridica pessoaJuridica = new PessoaJuridica();
+		Usuario usuario = new Usuario();
+
+		if (pessoaJuridicaDto.getId() != null && pessoaJuridicaDto.getId() != "") {
+			pessoaJuridica.setId(Integer.parseInt(pessoaJuridicaDto.getId()));
+		}
+
+		usuario.setId(Integer.parseInt(pessoaJuridicaDto.getUsuarioId()));
+		
+		pessoaJuridica.setUsuario(usuario);
+		pessoaJuridica.setCnpj(pessoaJuridicaDto.getCnpj());
+
+		return pessoaJuridica;
+	}
+
+	public static PessoaJuridicaDto Converter(PessoaJuridica pessoaJuridica) {
+		PessoaJuridicaDto pessoaJuridicaDto = new PessoaJuridicaDto();
+
+		pessoaJuridicaDto.setId(Integer.toString(pessoaJuridica.getId()));
+		pessoaJuridicaDto.setUsuarioId(Integer.toString(pessoaJuridica.getUsuario().getId()));
+		pessoaJuridicaDto.setCnpj(pessoaJuridica.getCnpj());
+		
+		return pessoaJuridicaDto;
+	}
+	/* FIM CONVERSÃO PESSOA JURIDICA */
 	
 	/* INICIO CONVERSÃO CONTATO */
 	public static Contato Converter(ContatoDto contatoDto) {
