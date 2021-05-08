@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.siss.api.dtos.PessoaFisicaDto;
+import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.entities.PessoaFisica;
 import com.siss.api.response.Response;
 import com.siss.api.services.PessoaFisicaService;
@@ -66,15 +67,15 @@ public class PessoaFisicaController {
 	 * @param CPF da PessoaFisica
 	 * @return Dados da Pessoa Fisica
 	 */
-	@PreAuthorize("hasAnyRole('USUARIO')")
+	@PreAuthorize("hasAnyRole('USUARIO_EXEC')")
 	@GetMapping(value = "/cpf/{cpf}")
-	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+	public ResponseEntity<Response<UsuarioDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
+		Response<UsuarioDto> response = new Response<UsuarioDto>();
 		try {
 			log.info("Controller: buscando a PF com CPF: {}", cpf);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorCpf(cpf);
 			
-			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			response.setDados(ConversaoUtils.ConverterBusca(pessoaFisica.get()));
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
@@ -97,13 +98,13 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/usuarioId/{usuarioId}")
-	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("usuarioId") int usuarioId) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+	public ResponseEntity<Response<UsuarioDto>> buscarPorUsuarioId(@PathVariable("usuarioId") int usuarioId) {
+		Response<UsuarioDto> response = new Response<UsuarioDto>();
 		try {
 			log.info("Controller: buscando a PF com usuarioId: {}", usuarioId);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorUsuarioId(usuarioId);
 			
-			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			response.setDados(ConversaoUtils.ConverterBusca(pessoaFisica.get()));
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());

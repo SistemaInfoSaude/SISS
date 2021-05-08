@@ -118,8 +118,8 @@ public class UsuarioService {
 		try {
 			return usuarioRepository.save(usuario);
 		} catch (DataIntegrityViolationException e) {
-			log.info("Service: O cpf '{}' já está cadastrado para outro usuário", usuario.getUsuario());
-			throw new ConsistenciaException("O cpf '{}' já está cadastrado para outro usuário", usuario.getUsuario());
+			log.info("Service: O usuario '{}' já está cadastrado", usuario.getUsuario());
+			throw new ConsistenciaException("O usuario '{}' já está cadastrado", usuario.getUsuario());
 		}
 	}
 
