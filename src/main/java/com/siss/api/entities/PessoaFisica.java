@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -27,16 +28,11 @@ public class PessoaFisica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@JsonBackReference
-	@OneToOne(fetch = FetchType.EAGER)
-	private Usuario usuario;
-
-	@JsonBackReference
-	@OneToOne(fetch = FetchType.EAGER)
-	private ConvenioMedico convenioMedico;
-
 	@Column(name = "cpf", nullable = false, length = 11)
 	private String cpf;
+
+	@Column(name = "rg", nullable = false, length = 9)
+	private String rg;
 
 	@Column(name = "data_Nascimento", nullable = false)
 	private Date dataNascimento;
@@ -46,6 +42,26 @@ public class PessoaFisica implements Serializable {
 
 	@Column(name = "celular", nullable = true, length = 11)
 	private String celular;
+
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.EAGER)
+	private Usuario usuario;
+
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.EAGER)
+	private ConvenioMedico convenioMedico;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "pessoaFisica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Contato> contatos;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "pessoaFisica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Veiculo> veiculos;
+
+	@JsonBackReference
+	@OneToOne(mappedBy = "pessoaFisica", fetch = FetchType.EAGER)
+	private CondicaoClinica condicaoClinica;
 
 	public int getId() {
 		return id;
@@ -61,6 +77,14 @@ public class PessoaFisica implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getRg() {
+		return rg;
+	}
+
+	public void setRg(String rg) {
+		this.rg = rg;
 	}
 
 	public String getCpf() {
@@ -101,6 +125,30 @@ public class PessoaFisica implements Serializable {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
+	}
+
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
+	}
+
+	public List<Veiculo> getVeiculos() {
+		return veiculos;
+	}
+
+	public void setVeiculos(List<Veiculo> veiculos) {
+		this.veiculos = veiculos;
+	}
+
+	public CondicaoClinica getCondicaoClinica() {
+		return condicaoClinica;
+	}
+
+	public void setCondicaoClinica(CondicaoClinica condicaoClinica) {
+		this.condicaoClinica = condicaoClinica;
 	}
 
 	@Override

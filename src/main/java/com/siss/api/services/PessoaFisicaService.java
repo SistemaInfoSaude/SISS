@@ -1,5 +1,6 @@
 package com.siss.api.services;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,17 @@ public class PessoaFisicaService {
 		}
 		return pessoaFisica;
 	}
+	
+	public Optional<PessoaFisica> buscarPorRg(String rg) throws ConsistenciaException {
+		log.info("Service: buscando a pessoa fisica com o RG: {}", rg);
+		Optional<PessoaFisica> pessoaFisica = pessoaFisicaRepository.findByRg(rg);
+
+		if (!pessoaFisica.isPresent()) {
+			log.info("Service: Nenhuma pessoa fisica com RG: {} foi encontrado", rg);
+			throw new ConsistenciaException("Nenhuma pessoa fisica com RG: {} foi encontrado", rg);
+		}
+		return pessoaFisica;
+	}
 
 	public Optional<PessoaFisica> buscarPorUsuarioId(int usuarioId) throws ConsistenciaException {
 		log.info("Service: buscando a pessoa fisica com o usuarioId: {}", usuarioId);
@@ -50,6 +62,17 @@ public class PessoaFisicaService {
 		if (!pessoaFisica.isPresent()) {
 			log.info("Service: Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
+		}
+		return pessoaFisica;
+	}
+	
+	public Optional<List<PessoaFisica>> buscarPorPlacaVeiculo(String placa) throws ConsistenciaException {
+		log.info("Service: buscando a PF que possuir o veiculo com a placa: {}", placa);
+		Optional<List<PessoaFisica>> pessoaFisica = pessoaFisicaRepository.findByVeiculoPlaca(placa);
+
+		if (!pessoaFisica.isPresent() || pessoaFisica.get().size() < 1) {
+			log.info("Service: Nenhuma pessoa fisica possui o veiculo com placa: {}", placa);
+			throw new ConsistenciaException("Nenhuma pessoa fisica possui o veiculo com placa: {}", placa);
 		}
 		return pessoaFisica;
 	}

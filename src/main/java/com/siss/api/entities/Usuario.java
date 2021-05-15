@@ -37,35 +37,18 @@ public class Usuario implements Serializable {
 	@Column(name = "usuario", nullable = false, length = 100)
 	private String usuario;
 
+	@Column(name = "email", nullable = false, length = 150)
+	private String email;
+
 	@Column(name = "senha", nullable = false, length = 255)
 	private String senha;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Contato> contatos;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Veiculo> veiculos;
-	
-	@JsonBackReference
-	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
-	private PessoaJuridica pessoaJuridica;
-	
-	@JsonBackReference
-	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
-	private PessoaFisica pessoaFisica;
-	
-	@JsonBackReference
-	@OneToOne(mappedBy = "usuario", fetch = FetchType.EAGER)
-	private CondicaoClinica condicaoClinica;
 
 	@Column(name = "data_Cadastro", nullable = false)
 	private Date dataCadastro;
 
 	@Column(name = "data_Alteracao", nullable = false)
 	private Date dataAlteracao;
-	
+
 	@Transient
 	private Boolean executante;
 
@@ -80,6 +63,14 @@ public class Usuario implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getUsuario() {
@@ -97,47 +88,7 @@ public class Usuario implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
-	public List<Contato> getContatos() {
-		return contatos;
-	}
-
-	public void setContatos(List<Contato> contatos) {
-		this.contatos = contatos;
-	}
-
-	public List<Veiculo> getVeiculos() {
-		return veiculos;
-	}
-
-	public void setVeiculos(List<Veiculo> veiculos) {
-		this.veiculos = veiculos;
-	}
 	
-	public PessoaFisica getPessoaFisica() {
-		return pessoaFisica;
-	}
-	
-	public void setPessoaFisica(PessoaFisica pessoaFisica) {
-		this.pessoaFisica = pessoaFisica;
-	}
-	
-	public PessoaJuridica getPessoaJuridica() {
-		return pessoaJuridica;
-	}
-	
-	public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
-		this.pessoaJuridica = pessoaJuridica;
-	}
-	
-	public CondicaoClinica getCondicaoClinica() {
-		return condicaoClinica;
-	}
-	
-	public void setCondicaoClinica(CondicaoClinica condicaoClinica) {
-		this.condicaoClinica = condicaoClinica;
-	}
-
 	public Date getDataCadastro() {
 		return dataCadastro;
 	}
@@ -161,7 +112,7 @@ public class Usuario implements Serializable {
 	public void setRegras(List<Regra> regras) {
 		this.regras = regras;
 	}
-	
+
 	public Boolean getExecutante() {
 		return executante;
 	}
@@ -169,7 +120,7 @@ public class Usuario implements Serializable {
 	public void setExecutante(Boolean executante) {
 		this.executante = executante;
 	}
-	
+
 	@PreUpdate
 	public void preUpdate() {
 		dataCadastro = new Date();
@@ -182,7 +133,7 @@ public class Usuario implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Usuario[" + "id=" + id+ "," + "usuario=" + usuario + "," + "dataCadastro=" + dataCadastro
-				+ "," + "dataAlteracao=" + dataAlteracao + "]";
+		return "Usuario[" + "id=" + id + "," + "usuario=" + usuario + "," + "email=" + email + "," + "dataCadastro="
+				+ dataCadastro + "," + "dataAlteracao=" + dataAlteracao + "]";
 	}
 }

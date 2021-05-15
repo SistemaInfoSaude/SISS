@@ -1,11 +1,15 @@
+-- MySQL Workbench Forward Engineering
+
 CREATE TABLE IF NOT EXISTS `Usuario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `usuario` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(150) NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE (`usuario`))
+  UNIQUE INDEX (`usuario` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -20,14 +24,16 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Fisica` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `data_Nascimento` DATE NOT NULL,
   `cpf` VARCHAR(11) NOT NULL,
-  `celular` VARCHAR(11) NULL,
-  `telefone` VARCHAR(10) NULL,
+  `rg` VARCHAR(9) NOT NULL,
+  `celular` VARCHAR(11) NULL DEFAULT NULL,
+  `telefone` VARCHAR(10) NULL DEFAULT NULL,
   `convenio_medico_id` INT NOT NULL,
   `usuario_id` INT NOT NULL,
   UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE,
   PRIMARY KEY (`id`),
   INDEX `fk_Pessoa_Fisica_Convenio_Medico_idx` (`convenio_medico_id` ASC) VISIBLE,
   INDEX `fk_Pessoa_Fisica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  UNIQUE INDEX `rg_UNIQUE` (`rg` ASC) VISIBLE,
   CONSTRAINT `fk_Pessoa_Fisica_Convenio_Medico`
     FOREIGN KEY (`convenio_medico_id`)
     REFERENCES `Convenio_Medico` (`id`)
@@ -36,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Fisica` (
   CONSTRAINT `fk_Pessoa_Fisica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -50,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Juridica` (
   CONSTRAINT `fk_Pessoa_Juridica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -58,18 +64,18 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Contato` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(100) NOT NULL,
-  `telefone` VARCHAR(10) NULL,
-  `celular` VARCHAR(11) NULL,
+  `telefone` VARCHAR(10) NULL DEFAULT NULL,
+  `celular` VARCHAR(11) NULL DEFAULT NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `usuario_id` INT NOT NULL,
+  `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Contatos_Usuario_idx` (`usuario_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Contatos_Usuario`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `Usuario` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
+  INDEX `fk_Contato_Pessoa_Fisica1_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Contato_Pessoa_Fisica1`
+    FOREIGN KEY (`pessoa_fisica_id`)
+    REFERENCES `Pessoa_Fisica` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -79,43 +85,29 @@ CREATE TABLE IF NOT EXISTS `Veiculo` (
   `modelo` VARCHAR(45) NOT NULL,
   `placa` VARCHAR(8) NOT NULL,
   `renavam` VARCHAR(11) NOT NULL,
-  `informacoes_Adicionais` TEXT NULL,
+  `informacoes_Adicionais` TEXT NULL DEFAULT NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `usuario_id` INT NOT NULL,
+  `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Veiculos_Usuario_idx` (`usuario_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Veiculos_Usuario`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `Usuario` (`id`)
+  INDEX `fk_Veiculo_Pessoa_Fisica1_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Veiculo_Pessoa_Fisica1`
+    FOREIGN KEY (`pessoa_fisica_id`)
+    REFERENCES `Pessoa_Fisica` (`id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
-CREATE TABLE IF NOT EXISTS `Tipo_Sanguineo` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `tipo` VARCHAR(3) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
 CREATE TABLE IF NOT EXISTS `Condicao_Clinica` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `informacao_Adicional` TEXT NULL,
-  `usuario_id` INT NOT NULL,
-  `tipo_sanguineo_id` INT NOT NULL,
+  `informacao_Adicional` TEXT NULL DEFAULT NULL,
+  `tipo_Sanguineo` VARCHAR(3) NOT NULL,
+  `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Condicao_Clinica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
-  INDEX `fk_Condicao_Clinica_Tipo_Sanguineo_idx` (`tipo_sanguineo_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Condicao_Clinica_Usuario`
-    FOREIGN KEY (`usuario_id`)
-    REFERENCES `Usuario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Condicao_Clinica_Tipo_Sanguineo`
-    FOREIGN KEY (`tipo_sanguineo_id`)
-    REFERENCES `Tipo_Sanguineo` (`id`)
+  INDEX `fk_Condicao_Clinica_Pessoa_Fisica1_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Condicao_Clinica_Pessoa_Fisica`
+    FOREIGN KEY (`pessoa_fisica_id`)
+    REFERENCES `Pessoa_Fisica` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -123,7 +115,7 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `Doenca` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `tipo` VARCHAR(100) NULL,
+  `tipo` VARCHAR(100) NULL DEFAULT NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `condicao_clinica_id` INT NOT NULL,
@@ -139,7 +131,7 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `Alergia` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `tipo` VARCHAR(100) NULL,
+  `tipo` VARCHAR(100) NULL DEFAULT NULL,
   `data_Cadastro` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `condicao_clinica_id` INT NOT NULL,
@@ -154,37 +146,37 @@ ENGINE = InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `Regra` (
- `id` INT NOT NULL AUTO_INCREMENT,
- `nome` VARCHAR(50) NOT NULL,
- `descricao` VARCHAR(255) NOT NULL,
- `ativo` BIT NOT NULL,
- PRIMARY KEY (`id`),
- UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(50) NOT NULL,
+  `descricao` VARCHAR(255) NOT NULL,
+  `ativo` BIT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
-CREATE TABLE `Usuario_Regra` (
- `usuario_id` INT NOT NULL,
- `regra_id` INT NOT NULL,
- PRIMARY KEY (`usuario_id`, `regra_id`),
- INDEX `fk_Usuario_Regra_Regra_idx` (`regra_id` ASC),
- INDEX `fk_Usuario_Regra_Usuario_idx` (`usuario_id` ASC),
- CONSTRAINT `fk_Usuario_Regra_Usuario`
-	FOREIGN KEY (`usuario_id`)
-	REFERENCES `Usuario` (`id`)
-	ON DELETE NO ACTION
-	ON UPDATE NO ACTION,
- CONSTRAINT `fk_Usuario_Regra_Regra`
-	FOREIGN KEY (`regra_id`)
-	REFERENCES `Regra` (`id`)
-	ON DELETE NO ACTION
-	ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `Usuario_Regra` (
+  `usuario_id` INT NOT NULL,
+  `regra_id` INT NOT NULL,
+  PRIMARY KEY (`usuario_id`, `regra_id`),
+  INDEX `fk_Usuario_Regra_Regra_idx` (`regra_id` ASC) VISIBLE,
+  INDEX `fk_Usuario_Regra_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Usuario_Regra_Usuario`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `Usuario` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Usuario_Regra_Regra`
+    FOREIGN KEY (`regra_id`)
+    REFERENCES `Regra` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-INSERT INTO `Usuario` (`id`, `usuario`, `senha`) VALUES
-(DEFAULT, 'usuario_comum', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
-INSERT INTO `Usuario` (`id`, `usuario`, `senha`) VALUES
-(DEFAULT, 'usuario_executante', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
+INSERT INTO `Usuario` (`id`, `usuario`, `email`, `senha`) VALUES
+(DEFAULT, 'usuario_comum', 'email_teste_1@email.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
+INSERT INTO `Usuario` (`id`, `usuario`, `email`, `senha`) VALUES
+(DEFAULT, 'usuario_executante', 'email_teste_2@email.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
 
 INSERT INTO `Regra` (`id`, `nome`, `descricao`, `ativo`) VALUES
 (DEFAULT, 'ROLE_EXEC_USUARIO', 'Permite acesso aos serviços de executante', TRUE);
@@ -209,13 +201,3 @@ INSERT INTO `Convenio_Medico` (`id`, `nome`) VALUES
 (DEFAULT, 'Golden Cross'),
 (DEFAULT, 'Sul América Seguro Saúde'),
 (DEFAULT, 'Hospitalar');
-
-INSERT INTO `Tipo_Sanguineo` (`id`, `tipo`) VALUES
-(DEFAULT, 'A+'),
-(DEFAULT, 'A-'),
-(DEFAULT, 'B+'),
-(DEFAULT, 'B-'),
-(DEFAULT, 'AB+'),
-(DEFAULT, 'AB-'),
-(DEFAULT, 'O+'),
-(DEFAULT, 'O-');

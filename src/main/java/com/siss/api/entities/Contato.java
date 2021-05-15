@@ -31,7 +31,7 @@ public class Contato implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario usuario;
+	private PessoaFisica pessoaFisica;
 
 	@Column(name = "nome", nullable = false, length = 100)
 	private String nome;
@@ -48,12 +48,12 @@ public class Contato implements Serializable {
 	@Column(name = "data_Alteracao", nullable = false)
 	private Date dataAlteracao;
 
-	public Usuario getUsuario() {
-		return usuario;
+	public PessoaFisica getPessoaFisica() {
+		return pessoaFisica;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setPessoaFisica(PessoaFisica pessoaFisica) {
+		this.pessoaFisica = pessoaFisica;
 	}
 
 	public int getId() {
@@ -106,17 +106,18 @@ public class Contato implements Serializable {
 
 	@PreUpdate
 	public void preUpdate() {
-		dataCadastro = new Date();
+		this.setDataAlteracao(new Date());
 	}
 
 	@PrePersist
 	public void prePersist() {
-		dataAlteracao = new Date();
+		this.setDataCadastro(new Date());
+		this.setDataAlteracao(new Date());
 	}
 
 	@Override
 	public String toString() {
-		return "Contato[" + "id=" + id + "," + "idUsuario=" + usuario.getId() + "," + "nome=" + nome + "," + "telefone="
+		return "Contato[" + "id=" + id + "," + "idPessoaFisica=" + pessoaFisica.getId() + "," + "nome=" + nome + "," + "telefone="
 				+ telefone + "," + "celular=" + celular + "," + "dataCadastro=" + dataCadastro + "," + "dataAlteracao="
 				+ dataAlteracao + "]";
 	}

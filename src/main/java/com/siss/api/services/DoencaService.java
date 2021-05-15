@@ -54,11 +54,9 @@ public class DoencaService {
 		int condicaoClinicaId = doenca.getCondicaoClinica().getId();
 
 		if (doenca.getId() > 0) {
-			buscarPorId(doenca.getId());
-		} else {
-			doenca.setDataCadastro(new Date());
+			Doenca doencaExistente = buscarPorId(doenca.getId()).get();
+			doenca.setDataCadastro(doencaExistente.getDataCadastro());
 		}
-		doenca.setDataAlteracao(new Date());
 
 		try {
 			if (!condicaoClinicaService.buscarPorId(condicaoClinicaId).isPresent()) {

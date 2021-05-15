@@ -16,13 +16,13 @@ public class PessoaFisicaDto {
 	@Length(min = 1, message = "usuarioId deve conter ao menos 1 caractere.")
 	private String usuarioId;
 
-	@NotEmpty(message = "convenioMedicoId não pode ser vazio.")
-	@Length(min = 1, message = "convenioMedicoId deve conter ao menos 1 caractere.")
-	private String convenioMedicoId;
-
 	@NotEmpty(message = "CPF não pode ser vazio.")
 	@CPF(message = "CPF inválido.")
 	private String cpf;
+
+	@NotEmpty(message = "RG não pode ser vazio.")
+	@Length(min = 9, max = 9, message = "RG deve conter 9 caracteres.")
+	private String rg;
 
 	@NotEmpty(message = "dataNascimento não pode ser vazio.")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
@@ -34,6 +34,14 @@ public class PessoaFisicaDto {
 
 	@Length(min = 11, max = 11, message = "celular deve conter 11 caracteres.")
 	private String celular;
+
+	private ConvenioMedicoDto convenioMedico;
+
+	private CondicaoClinicaDto condicaoClinica;
+
+	private List<VeiculoDto> veiculos;
+
+	private List<ContatoDto> contatos;
 
 	public String getId() {
 		return id;
@@ -51,12 +59,12 @@ public class PessoaFisicaDto {
 		this.usuarioId = usuarioId;
 	}
 
-	public String getConvenioMedicoId() {
-		return convenioMedicoId;
+	public ConvenioMedicoDto getConvenioMedico() {
+		return convenioMedico;
 	}
 
-	public void setConvenioMedicoId(String convenioMedicoId) {
-		this.convenioMedicoId = convenioMedicoId;
+	public void setConvenioMedico(ConvenioMedicoDto convenioMedico) {
+		this.convenioMedico = convenioMedico;
 	}
 
 	public String getCpf() {
@@ -65,6 +73,14 @@ public class PessoaFisicaDto {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+	
+	public String getRg() {
+		return rg;
+	}
+
+	public void setRg(String rg) {
+		this.rg = rg;
 	}
 
 	public String getDataNascimento() {
@@ -91,10 +107,33 @@ public class PessoaFisicaDto {
 		this.celular = celular;
 	}
 
+	public CondicaoClinicaDto getCondicaoClinica() {
+		return condicaoClinica;
+	}
+
+	public void setCondicaoClinica(CondicaoClinicaDto condicaoClinica) {
+		this.condicaoClinica = condicaoClinica;
+	}
+
+	public List<VeiculoDto> getVeiculos() {
+		return veiculos;
+	}
+
+	public void setVeiculos(List<VeiculoDto> veiculos) {
+		this.veiculos = veiculos;
+	}
+
+	public List<ContatoDto> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<ContatoDto> contatos) {
+		this.contatos = contatos;
+	}
+
 	@Override
 	public String toString() {
-		return "PessoaFisica[id=" + id + "," + "usuarioId=" + usuarioId + "," + "convenioMedicoId=" + convenioMedicoId
-				+ "," + "cpf=" + cpf + "," + "dataNascimento=" + dataNascimento + "," + "telefone=" + telefone + ","
-				+ "celular=" + celular + "]";
+		return "PessoaFisica[id=" + id + "," + "usuarioId=" + usuarioId + "," + "cpf=" + cpf + "," + "dataNascimento="
+				+ dataNascimento + "," + "telefone=" + telefone + "," + "celular=" + celular + "]";
 	}
 }

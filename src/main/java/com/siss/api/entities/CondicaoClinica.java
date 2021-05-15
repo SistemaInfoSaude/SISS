@@ -31,11 +31,7 @@ public class CondicaoClinica implements Serializable {
 
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
-	private Usuario usuario;
-
-	@JsonBackReference
-	@OneToOne(fetch = FetchType.EAGER)
-	private TipoSanguineo tipoSanguineo;
+	private PessoaFisica pessoaFisica;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "condicaoClinica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -45,6 +41,9 @@ public class CondicaoClinica implements Serializable {
 	@OneToMany(mappedBy = "condicaoClinica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Alergia> alergias;
 
+	@Column(name = "tipo_Sanguineo", nullable = true)
+	private String tipoSanguineo;
+	
 	@Column(name = "informacao_Adicional", nullable = true)
 	private String informacaoAdicional;
 
@@ -56,19 +55,19 @@ public class CondicaoClinica implements Serializable {
 		this.id = id;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public PessoaFisica getPessoaFisica() {
+		return pessoaFisica;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setPessoaFisica(PessoaFisica pessoaFisica) {
+		this.pessoaFisica = pessoaFisica;
 	}
 
-	public TipoSanguineo getTipoSanguineo() {
+	public String getTipoSanguineo() {
 		return tipoSanguineo;
 	}
 
-	public void setTipoSanguineo(TipoSanguineo tipoSanguineo) {
+	public void setTipoSanguineo(String tipoSanguineo) {
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
@@ -98,7 +97,7 @@ public class CondicaoClinica implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CondicaoClinica[id=" + id + "idUsuario=" + usuario.getId() + "," + "tipoSanguineoId="
-				+ tipoSanguineo.getId() + "," + "informacaoAdicional=" + informacaoAdicional + "]";
+		return "CondicaoClinica[id=" + id + "idPf=" + pessoaFisica.getId() + "," + "tipoSanguineo="
+				+ tipoSanguineo + "," + "informacaoAdicional=" + informacaoAdicional + "]";
 	}
 }

@@ -68,11 +68,11 @@ public class ContatoController {
 	 * @return Lista de Contatos
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
-	@GetMapping(value = "/usuarioId/{usuarioId}")
-	public ResponseEntity<List<Contato>> buscarPorUsuarioId(@PathVariable("usuarioId") int usuarioId) {
+	@GetMapping(value = "/pessoaFisicaId/{pessoaFisicaId}")
+	public ResponseEntity<List<Contato>> buscarPorPessoaFisicaId(@PathVariable("pessoaFisicaId") int pessoaFisicaId) {
 		try {
-			log.info("Controller: buscando os contatos do usuario de ID: {}", usuarioId);
-			Optional<List<Contato>> listaContatos = contatoService.buscarPorUsuarioId(usuarioId);
+			log.info("Controller: buscando os contatos do usuario de ID: {}", pessoaFisicaId);
+			Optional<List<Contato>> listaContatos = contatoService.buscarPorPessoaFisicaId(pessoaFisicaId);
 			
 			return ResponseEntity.ok(listaContatos.get());
 		} catch (ConsistenciaException e) {

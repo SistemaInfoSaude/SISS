@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class VeiculoDto {
 	private String id;
 
-	@NotEmpty(message = "usuarioId não pode ser vazio.")
-	@Length(min = 1, message = "usuarioId deve conter ao menos 1 caractere.")
-	private String usuarioId;
+	@NotEmpty(message = "pessoaFisicaId não pode ser vazio.")
+	@Length(min = 1, message = "pessoaFisicaId deve conter ao menos 1 caractere.")
+	private String pessoaFisicaId;
 
 	@NotEmpty(message = "marca não pode ser vazio.")
 	@Length(min = 3, max = 45, message = "marca deve conter no máximo 45 caracteres.")
@@ -42,12 +42,12 @@ public class VeiculoDto {
 		this.id = id;
 	}
 
-	public String getUsuarioId() {
-		return usuarioId;
+	public String getPessoaFisicaId() {
+		return pessoaFisicaId;
 	}
 
-	public void setUsuarioId(String usuarioId) {
-		this.usuarioId = usuarioId;
+	public void setPessoaFisicaId(String pessoaFisicaId) {
+		this.pessoaFisicaId = pessoaFisicaId;
 	}
 
 	public String getMarca() {
@@ -92,8 +92,8 @@ public class VeiculoDto {
 
 	@Override
 	public String toString() {
-		return "Veiculo[id=" + id + "," + "usuarioId=" + usuarioId + "," + "marca=" + marca + "," + "modelo=" + modelo
-				+ "," + "placa=" + placa + "," + "renavam=" + renavam + "," + "informacoesAdicionais="
+		return "Veiculo[id=" + id + "," + "pessoaFisicaId=" + pessoaFisicaId + "," + "marca=" + marca + "," + "modelo="
+				+ modelo + "," + "placa=" + placa + "," + "renavam=" + renavam + "," + "informacoesAdicionais="
 				+ informacoesAdicionais + "]";
 	}
 }

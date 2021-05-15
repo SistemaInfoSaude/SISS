@@ -84,12 +84,13 @@ public class Doenca implements Serializable {
 
 	@PreUpdate
 	public void preUpdate() {
-		dataCadastro = new Date();
+		this.setDataAlteracao(new Date());
 	}
 
 	@PrePersist
 	public void prePersist() {
-		dataAlteracao = new Date();
+		this.setDataCadastro(new Date());
+		this.setDataAlteracao(new Date());
 	}
 
 	@Override

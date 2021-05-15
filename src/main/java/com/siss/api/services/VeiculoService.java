@@ -21,7 +21,7 @@ public class VeiculoService {
 	private VeiculoRepository veiculoRepository;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private PessoaFisicaService pessoaFisicaService;
 
 	public Optional<Veiculo> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando o veiculo com o id: {}", id);
@@ -34,31 +34,29 @@ public class VeiculoService {
 		return veiculo;
 	}
 
-	public Optional<List<Veiculo>> buscarPorUsuarioId(int usuarioId) throws ConsistenciaException {
-		log.info("Service: buscando os veiculos do usuario de id: {}", usuarioId);
+	public Optional<List<Veiculo>> buscarPorPessoaFisicaId(int pessoaFisicaId) throws ConsistenciaException {
+		log.info("Service: buscando os veiculos da PF de id: {}", pessoaFisicaId);
 		
-		Optional<List<Veiculo>> veiculos = Optional.ofNullable(veiculoRepository.findByUsuarioId(usuarioId));
+		Optional<List<Veiculo>> veiculos = Optional.ofNullable(veiculoRepository.findByPessoaFisicaId(pessoaFisicaId));
 		if (!veiculos.isPresent() || veiculos.get().size() < 1) {
-			log.info("Service: Nenhum veiculos encontrado para o usuario de id: {}", usuarioId);
-			throw new ConsistenciaException("Nenhum veiculo encontrado para o usuario de id: {}", usuarioId);
+			log.info("Service: Nenhum veiculos encontrado para a PF de id: {}", pessoaFisicaId);
+			throw new ConsistenciaException("Nenhum veiculo encontrado para a PF de id: {}", pessoaFisicaId);
 		}
 		return veiculos;
 	}
 
 	public Veiculo salvar(Veiculo veiculo) throws ConsistenciaException {
 		log.info("Service: salvando o veiculo: {}", veiculo.toString());
-		int usuarioId = veiculo.getUsuario().getId();
+		int pfId = veiculo.getPessoaFisica().getId();
 
 		if (veiculo.getId() > 0) {
-			buscarPorId(veiculo.getId());
-		} else {
-			veiculo.setDataCadastro(new Date());
+			Veiculo veiculoExistente = buscarPorId(veiculo.getId()).get();
+			veiculo.setDataCadastro(veiculoExistente.getDataCadastro());
 		}
-		veiculo.setDataAlteracao(new Date());
 
 		try {
-			if (!usuarioService.buscarPorId(usuarioId).isPresent()) {
-				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
+			if (!pessoaFisicaService.buscarPorId(pfId).isPresent()) {
+				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
 			return veiculoRepository.save(veiculo);
 		} catch (DataIntegrityViolationException e) {

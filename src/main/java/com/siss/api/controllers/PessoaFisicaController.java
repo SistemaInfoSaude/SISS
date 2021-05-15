@@ -1,6 +1,7 @@
 package com.siss.api.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -67,15 +68,73 @@ public class PessoaFisicaController {
 	 * @param CPF da PessoaFisica
 	 * @return Dados da Pessoa Fisica
 	 */
-	@PreAuthorize("hasAnyRole('USUARIO_EXEC')")
+	@PreAuthorize("hasAnyRole('EXEC_USUARIO')")
 	@GetMapping(value = "/cpf/{cpf}")
-	public ResponseEntity<Response<UsuarioDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
-		Response<UsuarioDto> response = new Response<UsuarioDto>();
+	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
+		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
 		try {
 			log.info("Controller: buscando a PF com CPF: {}", cpf);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorCpf(cpf);
 			
-			response.setDados(ConversaoUtils.ConverterBusca(pessoaFisica.get()));
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	/**
+	 * Retorna os dados de uma pessoa fisica a partir de seu RG
+	 *
+	 * @param RG da PessoaFisica
+	 * @return Dados da Pessoa Fisica
+	 */
+	@PreAuthorize("hasAnyRole('EXEC_USUARIO')")
+	@GetMapping(value = "/rg/{rg}")
+	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorRg(@PathVariable("rg") String rg) {
+		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+		try {
+			log.info("Controller: buscando a PF com RG: {}", rg);
+			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorRg(rg);
+			
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	/**
+	 * Retorna os dados de uma pessoa fisica a partir da placa do veiculo
+	 *
+	 * @param Placa do Veiculo
+	 * @return Dados da Pessoa Fisica
+	 */
+	@PreAuthorize("hasAnyRole('EXEC_USUARIO')")
+	@GetMapping(value = "/placaVeiculo/{placa}")
+	public ResponseEntity<Response<List<PessoaFisica>>> buscarPorPlacaVeiculo(@PathVariable("placa") String placa) {
+		Response<List<PessoaFisica>> response = new Response<List<PessoaFisica>>();
+		try {
+			log.info("Controller: buscando a PF que possuir o veiculo com a placa: {}", placa);
+			Optional<List<PessoaFisica>> pessoaFisica = pessoaFisicaService.buscarPorPlacaVeiculo(placa);
+			
+			response.setDados(pessoaFisica.get());
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());

@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -30,8 +31,9 @@ public class Veiculo implements Serializable {
 	private int id;
 
 	@JsonBackReference
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Usuario usuario;
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "pessoa_fisica_id", nullable = false, updatable = false, insertable = true)
+	private PessoaFisica pessoaFisica;
 
 	@Column(name = "Marca", nullable = false, length = 45)
 	private String marca;
@@ -54,12 +56,12 @@ public class Veiculo implements Serializable {
 	@Column(name = "data_Alteracao", nullable = false)
 	private Date dataAlteracao;
 
-	public Usuario getUsuario() {
-		return usuario;
+	public PessoaFisica getPessoaFisica() {
+		return pessoaFisica;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setPessoaFisica(PessoaFisica pessoaFisica) {
+		this.pessoaFisica = pessoaFisica;
 	}
 
 	public int getId() {
@@ -128,18 +130,20 @@ public class Veiculo implements Serializable {
 
 	@PreUpdate
 	public void preUpdate() {
-		dataCadastro = new Date();
+		this.setDataAlteracao(new Date());
 	}
 
 	@PrePersist
 	public void prePersist() {
-		dataAlteracao = new Date();
+		this.setDataCadastro(new Date());
+		this.setDataAlteracao(new Date());
 	}
 
 	@Override
 	public String toString() {
-		return "Veiculo[" + "idUsuario=" + usuario.getId() + "," + "marca=" + marca + "," + "modelo=" + modelo + ","
-				+ "placa=" + placa + "," + "renavam=" + renavam + "," + "informacoesAdicionais=" + informacoesAdicionais
-				+ "," + "dataCadastro=" + dataCadastro + "," + "dataAlteracao=" + dataAlteracao + "]";
+		return "Veiculo[" + "idPessoaFisica=" + pessoaFisica.getId() + "," + "marca=" + marca + "," + "modelo=" + modelo
+				+ "," + "placa=" + placa + "," + "renavam=" + renavam + "," + "informacoesAdicionais="
+				+ informacoesAdicionais + "," + "dataCadastro=" + dataCadastro + "," + "dataAlteracao=" + dataAlteracao
+				+ "]";
 	}
 }

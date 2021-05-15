@@ -68,11 +68,11 @@ public class VeiculoController {
 	 * @return Lista de Veiculos
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
-	@GetMapping(value = "/usuarioId/{usuarioId}")
-	public ResponseEntity<List<Veiculo>> buscarPorUsuarioId(@PathVariable("usuarioId") int usuarioId) {
+	@GetMapping(value = "/pessoaFisicaId/{pessoaFisicaId}")
+	public ResponseEntity<List<Veiculo>> buscarPorPessoaFisicaId(@PathVariable("pessoaFisicaId") int pessoaFisicaId) {
 		try {
-			log.info("Controller: buscando os veiculos do usuario de ID: {}", usuarioId);
-			Optional<List<Veiculo>> listaVeiculos = veiculoService.buscarPorUsuarioId(usuarioId);
+			log.info("Controller: buscando os veiculos da PF de ID: {}", pessoaFisicaId);
+			Optional<List<Veiculo>> listaVeiculos = veiculoService.buscarPorPessoaFisicaId(pessoaFisicaId);
 			
 			return ResponseEntity.ok(listaVeiculos.get());
 		} catch (ConsistenciaException e) {

@@ -7,9 +7,9 @@ import org.hibernate.validator.constraints.Length;
 public class ContatoDto {
 	private String id;
 
-	@NotEmpty(message = "usuarioId não pode ser vazio.")
-	@Length(min = 1, message = "usuarioId deve conter ao menos 1 caractere.")
-	private String usuarioId;
+	@NotEmpty(message = "pessoaFisicaId não pode ser vazio.")
+	@Length(min = 1, message = "pessoaFisicaId deve conter ao menos 1 caractere.")
+	private String pessoaFisicaId;
 
 	@NotEmpty(message = "nome não pode ser vazio.")
 	@Length(min = 3, message = "usuarioId deve conter entre 3 a 100 caracteres.")
@@ -29,12 +29,12 @@ public class ContatoDto {
 		this.id = id;
 	}
 
-	public String getUsuarioId() {
-		return usuarioId;
+	public String getPessoaFisicaId() {
+		return pessoaFisicaId;
 	}
 
-	public void setUsuarioId(String usuarioId) {
-		this.usuarioId = usuarioId;
+	public void setPessoaFisicaId(String pessoaFisicaId) {
+		this.pessoaFisicaId = pessoaFisicaId;
 	}
 
 	public String getNome() {
@@ -63,7 +63,7 @@ public class ContatoDto {
 
 	@Override
 	public String toString() {
-		return "Contato[id=" + id + "," + "usuarioId=" + usuarioId + "," + "nome=" + nome + "telefone=" + telefone + ","
-				+ "celular=" + celular + "]";
+		return "Contato[id=" + id + "," + "pessoaFisicaId=" + pessoaFisicaId + "," + "nome=" + nome + "telefone="
+				+ telefone + "," + "celular=" + celular + "]";
 	}
 }

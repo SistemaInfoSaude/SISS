@@ -21,7 +21,7 @@ public class ContatoService {
 	private ContatoRepository contatoRepository;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private PessoaFisicaService pessoaFisicaService;
 
 	public Optional<Contato> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando o contato de id: {}", id);
@@ -34,31 +34,29 @@ public class ContatoService {
 		return contato;
 	}
 
-	public Optional<List<Contato>> buscarPorUsuarioId(int usuarioId) throws ConsistenciaException {
-		log.info("Service: buscando os contatos do usuario de id: {}", usuarioId);
+	public Optional<List<Contato>> buscarPorPessoaFisicaId(int pessoaFisicaId) throws ConsistenciaException {
+		log.info("Service: buscando os contatos do usuario de id: {}", pessoaFisicaId);
 		
-		Optional<List<Contato>> contatos = Optional.ofNullable(contatoRepository.findByUsuarioId(usuarioId));
+		Optional<List<Contato>> contatos = Optional.ofNullable(contatoRepository.findByPessoaFisicaId(pessoaFisicaId));
 		if (!contatos.isPresent() || contatos.get().size() < 1) {
-			log.info("Service: Nenhum contato encontrado para o usuario de id: {}", usuarioId);
-			throw new ConsistenciaException("Nenhum contato encontrado para o usuario de id: {}", usuarioId);
+			log.info("Service: Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
+			throw new ConsistenciaException("Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
 		}
 		return contatos;
 	}
 
 	public Contato salvar(Contato contato) throws ConsistenciaException {
 		log.info("Service: salvando o contato: {}", contato.toString());
-		int usuarioId = contato.getUsuario().getId();
+		int pfId = contato.getPessoaFisica().getId();
 
 		if (contato.getId() > 0) {
-			buscarPorId(contato.getId());
-		} else {
-			contato.setDataCadastro(new Date());
+			Contato contatoExistente = buscarPorId(contato.getId()).get();
+			contato.setDataCadastro(contatoExistente.getDataCadastro());
 		}
-		contato.setDataAlteracao(new Date());
 
 		try {
-			if (!usuarioService.buscarPorId(usuarioId).isPresent()) {
-				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
+			if (!pessoaFisicaService.buscarPorId(pfId).isPresent()) {
+				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
 			return contatoRepository.save(contato);
 		} catch (DataIntegrityViolationException e) {

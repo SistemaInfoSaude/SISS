@@ -20,7 +20,7 @@ public class CondicaoClinicaService {
 	private CondicaoClinicaRepository condicaoClinicaRepository;
 
 	@Autowired
-	private UsuarioService usuarioService;
+	private PessoaFisicaService pessoaFisicaService;
 
 	public Optional<CondicaoClinica> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando a condicaoClinica com o id: {}", id);
@@ -35,15 +35,15 @@ public class CondicaoClinicaService {
 	
 	public CondicaoClinica salvar(CondicaoClinica condicaoClinica) throws ConsistenciaException {
 		log.info("Service: salvando a condicaoClinica: {}", condicaoClinica.toString());
-		int usuarioId = condicaoClinica.getUsuario().getId();
+		int pfId = condicaoClinica.getPessoaFisica().getId();
 
 		if (condicaoClinica.getId() > 0) {
 			buscarPorId(condicaoClinica.getId());
 		}
 
 		try {
-			if (!usuarioService.buscarPorId(usuarioId).isPresent()) {
-				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
+			if (!pessoaFisicaService.buscarPorId(pfId).isPresent()) {
+				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
 			return condicaoClinicaRepository.save(condicaoClinica);
 		} catch (DataIntegrityViolationException e) {

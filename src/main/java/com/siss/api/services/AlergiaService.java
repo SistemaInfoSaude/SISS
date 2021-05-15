@@ -52,11 +52,9 @@ public class AlergiaService {
 		int condicaoClinicaId = alergia.getCondicaoClinica().getId();
 
 		if (alergia.getId() > 0) {
-			buscarPorId(alergia.getId());
-		} else {
-			alergia.setDataCadastro(new Date());
+			Alergia alergiaExistente = buscarPorId(alergia.getId()).get();
+			alergia.setDataCadastro(alergiaExistente.getDataCadastro());
 		}
-		alergia.setDataAlteracao(new Date());
 
 		try {
 			if (!condicaoClinicaService.buscarPorId(condicaoClinicaId).isPresent()) {
