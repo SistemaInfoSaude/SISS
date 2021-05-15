@@ -17,9 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.exceptions.ConsistenciaException;
+import com.siss.api.repositories.PessoaFisicaRepository;
 import com.siss.api.repositories.UsuarioRepository;
 import com.siss.api.repositories.VeiculoRepository;
 
@@ -33,7 +35,7 @@ public class VeiculoServiceTest {
 	@MockBean
 	private VeiculoRepository veiculoRepository;
 	@MockBean
-	private UsuarioRepository usuarioRepository;
+	private PessoaFisicaRepository pessoaFisicaRepository;
 	
 	@Autowired
 	private VeiculoService veiculoService;
@@ -60,28 +62,28 @@ public class VeiculoServiceTest {
 		List<Veiculo> lstVeiculo = new ArrayList<Veiculo>();
 		lstVeiculo.add(new Veiculo());
 
-		BDDMockito.given(veiculoRepository.findByUsuarioId(Mockito.anyInt())).willReturn((lstVeiculo));
+		BDDMockito.given(veiculoRepository.findByPessoaFisicaId(Mockito.anyInt())).willReturn((lstVeiculo));
 
-		Optional<List<Veiculo>> resultado = veiculoService.buscarPorUsuarioId(1);
+		Optional<List<Veiculo>> resultado = veiculoService.buscarPorPessoaFisicaId(1);
 
 		assertTrue(resultado.isPresent());
 	}
 	@Test(expected = ConsistenciaException.class)
 	public void testBuscarPorVeiculoIdSemSucesso() throws ConsistenciaException {
 		
-		BDDMockito.given(veiculoRepository.findByUsuarioId(Mockito.anyInt())).willReturn(null);
+		BDDMockito.given(veiculoRepository.findByPessoaFisicaId(Mockito.anyInt())).willReturn(null);
 
-		veiculoService.buscarPorUsuarioId(1);
+		veiculoService.buscarPorPessoaFisicaId(1);
 	}
 	@Test
 	public void testSalvarComSucesso() throws ConsistenciaException {
 		
-		Usuario usuario = new Usuario();
+		PessoaFisica pessoaFisica = new PessoaFisica();
 		Veiculo veiculo = new Veiculo();
-		usuario.setId(1);
-		veiculo.setUsuario(usuario);
+		pessoaFisica.setId(1);
+		veiculo.setPessoaFisica(pessoaFisica);
 		
-		BDDMockito.given(usuarioRepository.findById(Mockito.anyInt())).willReturn(Optional.of(usuario));
+		BDDMockito.given(pessoaFisicaRepository.findById(Mockito.anyInt())).willReturn(Optional.of(pessoaFisica));
 		
 		BDDMockito.given(veiculoRepository.save(Mockito.any(Veiculo.class))).willReturn(new Veiculo());
 		
@@ -92,13 +94,13 @@ public class VeiculoServiceTest {
 	@Test(expected = ConsistenciaException.class)
 	public void testSalvarSemSucesso() throws ConsistenciaException {
 		
-		Usuario usuario = new Usuario();
+		PessoaFisica pessoaFisica = new PessoaFisica();
 		Veiculo veiculo = new Veiculo();
-		usuario.setId(0);
-		veiculo.setUsuario(usuario);
+		pessoaFisica.setId(0);
+		veiculo.setPessoaFisica(pessoaFisica);
 		veiculo.setPlaca("12315645648947987897988789789");
 		
-		BDDMockito.given(usuarioRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
+		BDDMockito.given(pessoaFisicaRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
 		
 		BDDMockito.given(veiculoRepository.save(Mockito.any(Veiculo.class))).willReturn(new Veiculo());
 		

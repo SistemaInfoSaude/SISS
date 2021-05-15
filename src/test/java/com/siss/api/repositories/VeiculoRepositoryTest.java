@@ -16,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.siss.api.entities.ConvenioMedico;
+import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 
@@ -27,21 +29,24 @@ public class VeiculoRepositoryTest {
 	@Autowired
 	VeiculoRepository veiculoRepository;
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	PessoaFisicaRepository pessoaFisicaRepository;
 	
 	Veiculo veiculoTeste;
-	Usuario usuarioTeste;
+	PessoaFisica pessoaFisicaTeste;
+	ConvenioMedico convenioMedicoTeste;
 	
 	private void CriarVeiculoTestes() throws ParseException {
 		
-		usuarioTeste = new Usuario();
+		pessoaFisicaTeste = new PessoaFisica();
+		convenioMedicoTeste = new ConvenioMedico();
 		veiculoTeste = new Veiculo();
 		
-		usuarioTeste.setId(1);
-		usuarioTeste.setUsuario("UsuarioLegal");
-		usuarioTeste.setSenha("SenhaLegal");
-		usuarioTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
-		usuarioTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
+		convenioMedicoTeste.setId(1);
+		
+		pessoaFisicaTeste.setId(1);
+		pessoaFisicaTeste.setRg("332291388");
+		pessoaFisicaTeste.setCpf("59842469026");
+		pessoaFisicaTeste.setConvenioMedico(convenioMedicoTeste);
 		
 		veiculoTeste.setId(1);
 		veiculoTeste.setMarca("BMW");
@@ -50,17 +55,17 @@ public class VeiculoRepositoryTest {
 		veiculoTeste.setRenavam("AIQOWE125");
 		veiculoTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
 		veiculoTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
-		veiculoTeste.setUsuario(usuarioTeste);
+		veiculoTeste.setPessoaFisica(pessoaFisicaTeste);
 		
 		List<Veiculo> veiculos = new ArrayList<Veiculo>();
 		
-		usuarioTeste.setVeiculos(veiculos);
+		pessoaFisicaTeste.setVeiculos(veiculos);
 	}
 	@Before
 	public void setUp() throws Exception {
 
 		CriarVeiculoTestes();
-		usuarioRepository.save(usuarioTeste);
+		pessoaFisicaRepository.save(pessoaFisicaTeste);
 		veiculoRepository.save(veiculoTeste);
 
 	}
@@ -68,13 +73,13 @@ public class VeiculoRepositoryTest {
 	@After
 	public void tearDown() throws Exception {
 
-		usuarioRepository.deleteAll();
+		pessoaFisicaRepository.deleteAll();
 		veiculoRepository.deleteAll();
 
 	}
 	@Test
 	public void testfindByUsuarioId() {
-		List<Veiculo> veiculos = veiculoRepository.findByUsuarioId(usuarioTeste.getId());
+		List<Veiculo> veiculos = veiculoRepository.findByPessoaFisicaId(pessoaFisicaTeste.getId());
 		assertTrue(!veiculos.isEmpty());
 	}
 }

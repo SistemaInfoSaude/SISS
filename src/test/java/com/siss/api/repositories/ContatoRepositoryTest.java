@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Contato;
+import com.siss.api.entities.ConvenioMedico;
+import com.siss.api.entities.PessoaFisica;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,21 +29,24 @@ public class ContatoRepositoryTest {
 	@Autowired
 	ContatoRepository contatoRepository;
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	PessoaFisicaRepository pessoaFisicaRepository;
 	
 	Contato contatoTeste;
-	Usuario usuarioTeste;
+	PessoaFisica pessoaFisicaTeste;
+	ConvenioMedico convenioMedicoTeste;
 	
 	private void CriarContatoTestes() throws ParseException {
 		
-		usuarioTeste = new Usuario();
+		pessoaFisicaTeste = new PessoaFisica();
+		convenioMedicoTeste = new ConvenioMedico();
 		contatoTeste = new Contato();
 		
-		usuarioTeste.setId(1);
-		usuarioTeste.setUsuario("UsuarioLegal");
-		usuarioTeste.setSenha("SenhaLegal");
-		usuarioTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
-		usuarioTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
+		convenioMedicoTeste.setId(1);
+		
+		pessoaFisicaTeste.setId(1);
+		pessoaFisicaTeste.setRg("332291388");
+		pessoaFisicaTeste.setCpf("59842469026");
+		pessoaFisicaTeste.setConvenioMedico(convenioMedicoTeste);
 		
 		contatoTeste.setId(1);
 		contatoTeste.setNome("Nome do Usuario");
@@ -49,17 +54,17 @@ public class ContatoRepositoryTest {
 		contatoTeste.setCelular("9995846725");
 		contatoTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
 		contatoTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
-		contatoTeste.setUsuario(usuarioTeste);
+		contatoTeste.setPessoaFisica(pessoaFisicaTeste);
 		
 		List<Contato> contatos = new ArrayList<Contato>();
 		
-		usuarioTeste.setContatos(contatos);
+		pessoaFisicaTeste.setContatos(contatos);
 	}
 	@Before
 	public void setUp() throws Exception {
 
 		CriarContatoTestes();
-		usuarioRepository.save(usuarioTeste);
+		pessoaFisicaRepository.save(pessoaFisicaTeste);
 		contatoRepository.save(contatoTeste);
 
 	}
@@ -67,13 +72,13 @@ public class ContatoRepositoryTest {
 	@After
 	public void tearDown() throws Exception {
 
-		usuarioRepository.deleteAll();
+		pessoaFisicaRepository.deleteAll();
 		contatoRepository.deleteAll();
 
 	}
 	@Test
 	public void testfindByUsuarioId() {
-		List<Contato> contatos = contatoRepository.findByUsuarioId(usuarioTeste.getId());
+		List<Contato> contatos = contatoRepository.findByPessoaFisicaId(pessoaFisicaTeste.getId());
 		assertTrue(!contatos.isEmpty());
 	}
 }
