@@ -9,7 +9,7 @@ public class EmailUtils {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	private void enviar(SimpleMailMessage email) {
+	public void enviar(SimpleMailMessage email) {
 		mailSender.send(email);
 	}
 }
