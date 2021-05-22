@@ -10,8 +10,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.siss.api.entities.Alergia;
+import com.siss.api.entities.CondicaoClinica;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.repositories.AlergiaRepository;
+import com.siss.api.security.services.JwtUserDetailsService;
 
 @Service
 public class AlergiaService {
@@ -23,6 +25,9 @@ public class AlergiaService {
 	@Autowired
 	private CondicaoClinicaService condicaoClinicaService;
 
+	@Autowired
+	private JwtUserDetailsService userDetailsService;
+
 	public Optional<Alergia> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando a alergia com o id: {}", id);
 		Optional<Alergia> alergia = alergiaRepository.findById(id);
@@ -31,6 +36,7 @@ public class AlergiaService {
 			log.info("Service: Nenhuma alergia com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma alergia com id: {} foi encontrado", id);
 		}
+		userDetailsService.checkUser(alergia.get().getCondicaoClinica().getPessoaFisica().getUsuario());
 		return alergia;
 	}
 
@@ -45,6 +51,7 @@ public class AlergiaService {
 			throw new ConsistenciaException("Nenhuma alergia encontrada para a condicao clinica de id: {}",
 					condicaoClinicaId);
 		}
+		userDetailsService.checkUser(alergias.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
 		return alergias;
 	}
 
@@ -58,9 +65,11 @@ public class AlergiaService {
 		}
 
 		try {
-			if (!condicaoClinicaService.buscarPorId(condicaoClinicaId).isPresent()) {
+			Optional<CondicaoClinica> condicaoClinica = condicaoClinicaService.buscarPorId(condicaoClinicaId);
+			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
+			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
 			return alergiaRepository.save(alergia);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
@@ -70,7 +79,8 @@ public class AlergiaService {
 
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo a alergia de id: {}", id);
-		buscarPorId(id);
+		Optional<Alergia> alergia = buscarPorId(id);
+		userDetailsService.checkUser(alergia.get().getCondicaoClinica().getPessoaFisica().getUsuario());
 		alergiaRepository.deleteById(id);
 	}
 }

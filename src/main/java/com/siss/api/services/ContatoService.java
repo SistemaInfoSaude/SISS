@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.siss.api.entities.Contato;
+import com.siss.api.entities.PessoaFisica;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.repositories.ContatoRepository;
+import com.siss.api.security.services.JwtUserDetailsService;
 
 @Service
 public class ContatoService {
@@ -22,6 +24,9 @@ public class ContatoService {
 
 	@Autowired
 	private PessoaFisicaService pessoaFisicaService;
+	
+	@Autowired
+	private JwtUserDetailsService userDetailsService;
 
 	public Optional<Contato> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando o contato de id: {}", id);
@@ -31,6 +36,7 @@ public class ContatoService {
 			log.info("Service: Nenhum contato com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhum contato com id: {} foi encontrado", id);
 		}
+		userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
 		return contato;
 	}
 
@@ -42,6 +48,7 @@ public class ContatoService {
 			log.info("Service: Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
 			throw new ConsistenciaException("Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
 		}
+		userDetailsService.checkUser(contatos.get().get(0).getPessoaFisica().getUsuario());
 		return contatos;
 	}
 
@@ -55,9 +62,11 @@ public class ContatoService {
 		}
 
 		try {
-			if (!pessoaFisicaService.buscarPorId(pfId).isPresent()) {
+			Optional<PessoaFisica> pf = pessoaFisicaService.buscarPorId(pfId);
+			if (!pf.isPresent()) {
 				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
+			userDetailsService.checkUser(pf.get().getUsuario());
 			return contatoRepository.save(contato);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
@@ -67,7 +76,8 @@ public class ContatoService {
 	
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo o contato de id: {}", id);
-		buscarPorId(id);
+		Optional<Contato> contato = buscarPorId(id);
+		userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
 		contatoRepository.deleteById(id);
 	}
 }

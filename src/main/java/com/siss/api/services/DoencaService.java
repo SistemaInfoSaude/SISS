@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.siss.api.entities.Alergia;
+import com.siss.api.entities.CondicaoClinica;
 import com.siss.api.entities.Doenca;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.repositories.DoencaRepository;
 import com.siss.api.repositories.VeiculoRepository;
+import com.siss.api.security.services.JwtUserDetailsService;
 
 @Service
 public class DoencaService {
@@ -25,6 +28,9 @@ public class DoencaService {
 	@Autowired
 	private CondicaoClinicaService condicaoClinicaService;
 
+	@Autowired
+	private JwtUserDetailsService userDetailsService;
+
 	public Optional<Doenca> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando a doenca com o id: {}", id);
 		Optional<Doenca> doenca = doencaRepository.findById(id);
@@ -33,6 +39,7 @@ public class DoencaService {
 			log.info("Service: Nenhuma doenca com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma doenca com id: {} foi encontrado", id);
 		}
+		userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
 		return doenca;
 	}
 
@@ -46,6 +53,7 @@ public class DoencaService {
 			log.info("Service: Nenhuma doenca encontrada para a condicao clinica de id: {}", condicaoClinicaId);
 			throw new ConsistenciaException("Nenhuma doenca encontrada para a condicao clinica de id: {}", condicaoClinicaId);
 		}
+		userDetailsService.checkUser(doencas.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
 		return doencas;
 	}
 
@@ -59,9 +67,11 @@ public class DoencaService {
 		}
 
 		try {
-			if (!condicaoClinicaService.buscarPorId(condicaoClinicaId).isPresent()) {
+			Optional<CondicaoClinica> condicaoClinica = condicaoClinicaService.buscarPorId(condicaoClinicaId);
+			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
+			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
 			return doencaRepository.save(doenca);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
@@ -71,7 +81,8 @@ public class DoencaService {
 	
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo a doenca de id: {}", id);
-		buscarPorId(id);
+		Optional<Doenca> doenca = buscarPorId(id);
+		userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
 		doencaRepository.deleteById(id);
 	}
 }
