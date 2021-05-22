@@ -43,9 +43,9 @@ public class CondicaoClinica implements Serializable {
 
 	@Column(name = "tipo_Sanguineo", nullable = true)
 	private String tipoSanguineo;
-	
-	@Column(name = "informacao_Adicional", nullable = true)
-	private String informacaoAdicional;
+
+	@Column(name = "convenio_Medico", nullable = true)
+	private String convenioMedico;
 
 	public int getId() {
 		return id;
@@ -87,17 +87,17 @@ public class CondicaoClinica implements Serializable {
 		this.alergias = alergias;
 	}
 
-	public String geInformacaoAdicional() {
-		return informacaoAdicional;
+	public String getConvenioMedico() {
+		return convenioMedico;
 	}
 
-	public void setInformacaoAdicional(String informacaoAdicional) {
-		this.informacaoAdicional = informacaoAdicional;
+	public void setConvenioMedico(String convenioMedico) {
+		this.convenioMedico = convenioMedico;
 	}
 
 	@Override
 	public String toString() {
-		return "CondicaoClinica[id=" + id + "idPf=" + pessoaFisica.getId() + "," + "tipoSanguineo="
-				+ tipoSanguineo + "," + "informacaoAdicional=" + informacaoAdicional + "]";
+		return "CondicaoClinica[id=" + id + "idPf=" + pessoaFisica.getId() + "," + "tipoSanguineo=" + tipoSanguineo
+				+ "," + "convenioMedico=" + convenioMedico + "]";
 	}
 }

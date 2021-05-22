@@ -16,7 +16,7 @@ public class CondicaoClinicaDto {
 	@Length(min = 1, message = "pessoaFisicaId deve conter ao menos 1 caractere.")
 	private String pessoaFisicaId;
 
-	private String informacaoAdicional;
+	private String convenioMedico;
 
 	private String tipoSanguineo;
 
@@ -48,12 +48,12 @@ public class CondicaoClinicaDto {
 		this.tipoSanguineo = tipoSanguineo;
 	}
 
-	public String getInformacaoAdicional() {
-		return informacaoAdicional;
+	public String getConvenioMedico() {
+		return convenioMedico;
 	}
 
-	public void setInformacaoAdicional(String informacaoAdicional) {
-		this.informacaoAdicional = informacaoAdicional;
+	public void setConvenioMedico(String convenioMedico) {
+		this.convenioMedico = convenioMedico;
 	}
 
 	public List<DoencaDto> getDoencas() {
@@ -75,6 +75,6 @@ public class CondicaoClinicaDto {
 	@Override
 	public String toString() {
 		return "CondicaoClinica[id=" + id + "," + "pessoaFisicaId=" + pessoaFisicaId + "," + "tipoSanguineo="
-				+ tipoSanguineo + "," + "informacaoAdicional=" + informacaoAdicional + "]";
+				+ tipoSanguineo + "," + "convenioMedico=" + convenioMedico + "]";
 	}
 }

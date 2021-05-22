@@ -68,4 +68,10 @@ public class DoencaService {
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
 	}
+	
+	public void excluirPorId(int id) throws ConsistenciaException {
+		log.info("Service: excluíndo a doenca de id: {}", id);
+		buscarPorId(id);
+		doencaRepository.deleteById(id);
+	}
 }

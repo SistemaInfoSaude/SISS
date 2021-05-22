@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Contato;
-import com.siss.api.entities.ConvenioMedico;
 import com.siss.api.entities.PessoaFisica;
 
 @RunWith(SpringRunner.class)
@@ -33,20 +32,16 @@ public class ContatoRepositoryTest {
 	
 	Contato contatoTeste;
 	PessoaFisica pessoaFisicaTeste;
-	ConvenioMedico convenioMedicoTeste;
 	
 	private void CriarContatoTestes() throws ParseException {
 		
 		pessoaFisicaTeste = new PessoaFisica();
-		convenioMedicoTeste = new ConvenioMedico();
 		contatoTeste = new Contato();
-		
-		convenioMedicoTeste.setId(1);
 		
 		pessoaFisicaTeste.setId(1);
 		pessoaFisicaTeste.setRg("332291388");
+		pessoaFisicaTeste.setNome("Teste Teste");
 		pessoaFisicaTeste.setCpf("59842469026");
-		pessoaFisicaTeste.setConvenioMedico(convenioMedicoTeste);
 		
 		contatoTeste.setId(1);
 		contatoTeste.setNome("Nome do Usuario");

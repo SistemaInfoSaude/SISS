@@ -36,6 +36,9 @@ public class Contato implements Serializable {
 	@Column(name = "nome", nullable = false, length = 100)
 	private String nome;
 
+	@Column(name = "parentesco", nullable = false)
+	private String parentesco;
+
 	@Column(name = "telefone", nullable = false, length = 10)
 	private String telefone;
 
@@ -70,6 +73,14 @@ public class Contato implements Serializable {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getParentesco() {
+		return parentesco;
+	}
+
+	public void setParentesco(String parentesco) {
+		this.parentesco = parentesco;
 	}
 
 	public String getTelefone() {
@@ -117,8 +128,8 @@ public class Contato implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Contato[" + "id=" + id + "," + "idPessoaFisica=" + pessoaFisica.getId() + "," + "nome=" + nome + "," + "telefone="
-				+ telefone + "," + "celular=" + celular + "," + "dataCadastro=" + dataCadastro + "," + "dataAlteracao="
-				+ dataAlteracao + "]";
+		return "Contato[" + "id=" + id + "," + "idPessoaFisica=" + pessoaFisica.getId() + "," + "nome=" + nome + ","
+				+ "telefone=" + telefone + "," + "celular=" + celular + "," + "dataCadastro=" + dataCadastro + ","
+				+ "dataAlteracao=" + dataAlteracao + "]";
 	}
 }

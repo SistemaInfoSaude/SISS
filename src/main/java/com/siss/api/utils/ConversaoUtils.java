@@ -15,7 +15,6 @@ import com.siss.api.dtos.RegraDto;
 import com.siss.api.dtos.AlergiaDto;
 import com.siss.api.dtos.CondicaoClinicaDto;
 import com.siss.api.dtos.ContatoDto;
-import com.siss.api.dtos.ConvenioMedicoDto;
 import com.siss.api.dtos.DoencaDto;
 import com.siss.api.dtos.PessoaFisicaDto;
 import com.siss.api.dtos.PessoaJuridicaDto;
@@ -29,7 +28,6 @@ import com.siss.api.entities.PessoaJuridica;
 import com.siss.api.entities.Alergia;
 import com.siss.api.entities.CondicaoClinica;
 import com.siss.api.entities.Contato;
-import com.siss.api.entities.ConvenioMedico;
 import com.siss.api.entities.Doenca;
 //Utils
 import com.siss.api.security.utils.JwtTokenUtil;
@@ -105,14 +103,9 @@ public class ConversaoUtils {
 	public static PessoaFisica Converter(PessoaFisicaDto pessoaFisicaDto) throws ParseException {
 		PessoaFisica pessoaFisica = new PessoaFisica();
 		Usuario usuario = new Usuario();
-		ConvenioMedico convenioMedico = new ConvenioMedico();
 
 		if (pessoaFisicaDto.getId() != null && pessoaFisicaDto.getId() != "") {
 			pessoaFisica.setId(Integer.parseInt(pessoaFisicaDto.getId()));
-		}
-
-		if (pessoaFisicaDto.getConvenioMedico() != null && pessoaFisicaDto.getConvenioMedico().getId() != null) {
-			pessoaFisica.setConvenioMedico(Converter(pessoaFisicaDto.getConvenioMedico()));
 		}
 
 		if (pessoaFisicaDto.getCondicaoClinica() != null && pessoaFisicaDto.getCondicaoClinica().getId() != null) {
@@ -146,6 +139,7 @@ public class ConversaoUtils {
 		usuario.setId(Integer.parseInt(pessoaFisicaDto.getUsuarioId()));
 
 		pessoaFisica.setUsuario(usuario);
+		pessoaFisica.setNome(pessoaFisicaDto.getNome());
 		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaDto.getDataNascimento()));
 		pessoaFisica.setCpf(pessoaFisicaDto.getCpf());
 		pessoaFisica.setRg(pessoaFisicaDto.getRg());
@@ -157,10 +151,6 @@ public class ConversaoUtils {
 
 	public static PessoaFisicaDto Converter(PessoaFisica pessoaFisica) {
 		PessoaFisicaDto pessoaFisicaDto = new PessoaFisicaDto();
-
-		if (pessoaFisica.getConvenioMedico() != null && pessoaFisica.getConvenioMedico().getId() > 0) {
-			pessoaFisicaDto.setConvenioMedico(Converter(pessoaFisica.getConvenioMedico()));
-		}
 
 		if (pessoaFisica.getCondicaoClinica() != null && pessoaFisica.getCondicaoClinica().getId() > 0) {
 			pessoaFisicaDto.setCondicaoClinica(Converter(pessoaFisica.getCondicaoClinica()));
@@ -194,6 +184,7 @@ public class ConversaoUtils {
 
 		pessoaFisicaDto.setId(Integer.toString(pessoaFisica.getId()));
 		pessoaFisicaDto.setUsuarioId(Integer.toString(pessoaFisica.getUsuario().getId()));
+		pessoaFisicaDto.setNome(pessoaFisica.getNome());
 		pessoaFisicaDto.setCpf(pessoaFisica.getCpf());
 		pessoaFisicaDto.setRg(pessoaFisica.getRg());
 		pessoaFisicaDto.setDataNascimento(pessoaFisica.getDataNascimento().toString());
@@ -251,6 +242,7 @@ public class ConversaoUtils {
 		contato.setCelular(contatoDto.getCelular());
 		contato.setTelefone(contatoDto.getTelefone());
 		contato.setNome(contatoDto.getNome());
+		contato.setParentesco(contatoDto.getParentesco());
 
 		return contato;
 	}
@@ -263,6 +255,7 @@ public class ConversaoUtils {
 		contatoDto.setCelular(contato.getCelular());
 		contatoDto.setTelefone(contato.getTelefone());
 		contatoDto.setNome(contato.getNome());
+		contatoDto.setParentesco(contato.getParentesco());
 
 		return contatoDto;
 	}
@@ -333,7 +326,7 @@ public class ConversaoUtils {
 
 		pessoaFisica.setId(Integer.parseInt(condicaoClinicaDto.getPessoaFisicaId()));
 		condicaoClinica.setPessoaFisica(pessoaFisica);
-		condicaoClinica.setInformacaoAdicional(condicaoClinicaDto.getInformacaoAdicional());
+		condicaoClinica.setConvenioMedico(condicaoClinicaDto.getConvenioMedico());
 		condicaoClinica.setTipoSanguineo(condicaoClinicaDto.getTipoSanguineo());
 
 		return condicaoClinica;
@@ -367,7 +360,7 @@ public class ConversaoUtils {
 		condicaoClinicaDto.setId(Integer.toString(condicaoClinica.getId()));
 		condicaoClinicaDto.setPessoaFisicaId(Integer.toString(condicaoClinica.getPessoaFisica().getId()));
 		condicaoClinicaDto.setTipoSanguineo(condicaoClinica.getTipoSanguineo());
-		condicaoClinicaDto.setInformacaoAdicional(condicaoClinica.geInformacaoAdicional());
+		condicaoClinicaDto.setConvenioMedico(condicaoClinica.getConvenioMedico());
 
 		return condicaoClinicaDto;
 	}
@@ -428,29 +421,6 @@ public class ConversaoUtils {
 		return alergiaDto;
 	}
 	/* FIM CONVERSÃO ALERGIA */
-
-	/* INCIO CONVERSÃO CONVENIO MEDICO */
-	public static ConvenioMedico Converter(ConvenioMedicoDto convenioMedicoDto) {
-		ConvenioMedico convenioMedico = new ConvenioMedico();
-
-		if (convenioMedicoDto.getId() != null && convenioMedicoDto.getId() != "") {
-			convenioMedico.setId(Integer.parseInt(convenioMedicoDto.getId()));
-		}
-
-		convenioMedico.setNome(convenioMedicoDto.getNome());
-
-		return convenioMedico;
-	}
-
-	public static ConvenioMedicoDto Converter(ConvenioMedico convenioMedico) {
-		ConvenioMedicoDto convenioMedicoDto = new ConvenioMedicoDto();
-
-		convenioMedicoDto.setId(Integer.toString(convenioMedico.getId()));
-		convenioMedicoDto.setNome(convenioMedico.getNome());
-
-		return convenioMedicoDto;
-	}
-	/* FIM CONVERSÃO CONVENIO MEDICO */
 
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);

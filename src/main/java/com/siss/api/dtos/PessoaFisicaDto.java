@@ -23,6 +23,9 @@ public class PessoaFisicaDto {
 	@NotEmpty(message = "RG não pode ser vazio.")
 	@Length(min = 9, max = 9, message = "RG deve conter 9 caracteres.")
 	private String rg;
+	
+	@NotEmpty(message = "Nome não pode ser vazio.")
+	private String nome;
 
 	@NotEmpty(message = "dataNascimento não pode ser vazio.")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
@@ -34,8 +37,6 @@ public class PessoaFisicaDto {
 
 	@Length(min = 11, max = 11, message = "celular deve conter 11 caracteres.")
 	private String celular;
-
-	private ConvenioMedicoDto convenioMedico;
 
 	private CondicaoClinicaDto condicaoClinica;
 
@@ -59,14 +60,6 @@ public class PessoaFisicaDto {
 		this.usuarioId = usuarioId;
 	}
 
-	public ConvenioMedicoDto getConvenioMedico() {
-		return convenioMedico;
-	}
-
-	public void setConvenioMedico(ConvenioMedicoDto convenioMedico) {
-		this.convenioMedico = convenioMedico;
-	}
-
 	public String getCpf() {
 		return cpf;
 	}
@@ -81,6 +74,14 @@ public class PessoaFisicaDto {
 
 	public void setRg(String rg) {
 		this.rg = rg;
+	}
+	
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getDataNascimento() {

@@ -64,4 +64,10 @@ public class ContatoService {
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
 	}
+	
+	public void excluirPorId(int id) throws ConsistenciaException {
+		log.info("Service: excluíndo o contato de id: {}", id);
+		buscarPorId(id);
+		contatoRepository.deleteById(id);
+	}
 }

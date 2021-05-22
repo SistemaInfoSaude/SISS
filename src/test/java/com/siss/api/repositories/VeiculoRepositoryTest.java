@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.siss.api.entities.ConvenioMedico;
 import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
@@ -33,20 +32,17 @@ public class VeiculoRepositoryTest {
 	
 	Veiculo veiculoTeste;
 	PessoaFisica pessoaFisicaTeste;
-	ConvenioMedico convenioMedicoTeste;
 	
 	private void CriarVeiculoTestes() throws ParseException {
 		
 		pessoaFisicaTeste = new PessoaFisica();
-		convenioMedicoTeste = new ConvenioMedico();
 		veiculoTeste = new Veiculo();
 		
-		convenioMedicoTeste.setId(1);
 		
 		pessoaFisicaTeste.setId(1);
 		pessoaFisicaTeste.setRg("332291388");
 		pessoaFisicaTeste.setCpf("59842469026");
-		pessoaFisicaTeste.setConvenioMedico(convenioMedicoTeste);
+		pessoaFisicaTeste.setNome("Teste Teste");
 		
 		veiculoTeste.setId(1);
 		veiculoTeste.setMarca("BMW");

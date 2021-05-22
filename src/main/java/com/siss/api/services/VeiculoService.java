@@ -64,4 +64,10 @@ public class VeiculoService {
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
 	}
+	
+	public void excluirPorId(int id) throws ConsistenciaException {
+		log.info("Service: excluíndo o veiculo de id: {}", id);
+		buscarPorId(id);
+		veiculoRepository.deleteById(id);
+	}
 }

@@ -34,6 +34,9 @@ public class PessoaFisica implements Serializable {
 	@Column(name = "rg", nullable = false, length = 9)
 	private String rg;
 
+	@Column(name = "nome", nullable = false)
+	private String nome;
+
 	@Column(name = "data_Nascimento", nullable = false)
 	private Date dataNascimento;
 
@@ -46,10 +49,6 @@ public class PessoaFisica implements Serializable {
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
-
-	@JsonBackReference
-	@OneToOne(fetch = FetchType.EAGER)
-	private ConvenioMedico convenioMedico;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "pessoaFisica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -94,14 +93,15 @@ public class PessoaFisica implements Serializable {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-
-	public ConvenioMedico getConvenioMedico() {
-		return convenioMedico;
+	
+	public String getNome() {
+		return nome;
 	}
 
-	public void setConvenioMedico(ConvenioMedico convenioMedico) {
-		this.convenioMedico = convenioMedico;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
+
 
 	public Date getDataNascimento() {
 		return dataNascimento;
@@ -154,7 +154,6 @@ public class PessoaFisica implements Serializable {
 	@Override
 	public String toString() {
 		return "PessoaFisica[" + "id=" + id + "," + "idUsuario=" + usuario.getId() + "," + "cpf=" + cpf + ","
-				+ "convenioMedicoId=" + convenioMedico.getId() + "," + "dataNascimento=" + dataNascimento + ","
-				+ "celular=" + celular + "," + "telefone=" + telefone + "]";
+				+ "dataNascimento=" + dataNascimento + "," + "celular=" + celular + "," + "telefone=" + telefone + "]";
 	}
 }

@@ -15,6 +15,9 @@ public class ContatoDto {
 	@Length(min = 3, message = "usuarioId deve conter entre 3 a 100 caracteres.")
 	private String nome;
 
+	@NotEmpty(message = "parentesco não pode ser vazio.")
+	private String parentesco;
+
 	@Column(name = "telefone", nullable = true, length = 10)
 	private String telefone;
 
@@ -43,6 +46,14 @@ public class ContatoDto {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getParentesco() {
+		return parentesco;
+	}
+
+	public void setParentesco(String parentesco) {
+		this.parentesco = parentesco;
 	}
 
 	public String getTelefone() {

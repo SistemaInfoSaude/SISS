@@ -39,10 +39,11 @@ public class AlergiaService {
 
 		Optional<List<Alergia>> alergias = Optional
 				.ofNullable(alergiaRepository.findByCondicaoClinicaId(condicaoClinicaId));
-		
+
 		if (!alergias.isPresent() || alergias.get().size() < 1) {
 			log.info("Service: Nenhuma alergia encontrada para a condicao clinica de id: {}", condicaoClinicaId);
-			throw new ConsistenciaException("Nenhuma alergia encontrada para a condicao clinica de id: {}", condicaoClinicaId);
+			throw new ConsistenciaException("Nenhuma alergia encontrada para a condicao clinica de id: {}",
+					condicaoClinicaId);
 		}
 		return alergias;
 	}
@@ -65,5 +66,11 @@ public class AlergiaService {
 			log.info("Service: Inconsistência de dados.");
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
+	}
+
+	public void excluirPorId(int id) throws ConsistenciaException {
+		log.info("Service: excluíndo a alergia de id: {}", id);
+		buscarPorId(id);
+		alergiaRepository.deleteById(id);
 	}
 }

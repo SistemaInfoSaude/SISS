@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,4 +111,22 @@ public class AlergiaController {
 			return ResponseEntity.status(500).body(response);
 		}
 	}
+
+	@PreAuthorize("hasAnyRole('USUARIO')")
+	@DeleteMapping(value = "excluir/{id}")
+	public ResponseEntity<String> excluirPorId(@PathVariable("id") int id) {
+		try {
+			log.info("Controller: excluíndo alergia a ID: {}", id);
+			alergiaService.excluirPorId(id);
+			return ResponseEntity.ok("alergia de id: " + id + " excluído com sucesso");
+		} catch (ConsistenciaException e) {
+			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMensagem());
+		} catch (Exception e) {
+			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(e.getMessage());
+		}
+
+	}
+
 }
