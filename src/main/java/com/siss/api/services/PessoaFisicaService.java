@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.Usuario;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.repositories.PessoaFisicaRepository;
+import com.siss.api.security.services.JwtUserDetailsService;
 import com.siss.api.services.UsuarioService;
 
 @Service
@@ -21,6 +23,9 @@ public class PessoaFisicaService {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private JwtUserDetailsService userDetailsService;
 
 	public Optional<PessoaFisica> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando a pessoa fisica com o id: {}", id);
@@ -30,6 +35,8 @@ public class PessoaFisicaService {
 			log.info("Service: Nenhuma pessoa fisica com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma pessoa fisica com id: {} foi encontrado", id);
 		}
+		
+		userDetailsService.checkUser(pessoaFisica.get().getUsuario());
 		return pessoaFisica;
 	}
 
@@ -63,6 +70,8 @@ public class PessoaFisicaService {
 			log.info("Service: Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 		}
+
+		userDetailsService.checkUser(pessoaFisica.get().getUsuario());
 		return pessoaFisica;
 	}
 	
@@ -91,9 +100,12 @@ public class PessoaFisicaService {
 		}
 
 		try {
-			if (!usuarioService.buscarPorId(usuarioId).isPresent()) {
+			Optional<Usuario> usr = usuarioService.buscarPorId(usuarioId);
+			if (!usr.isPresent()) {
 				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
 			}
+			
+			userDetailsService.checkUser(usr.get());
 			return pessoaFisicaRepository.save(pessoaFisica);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: O cpf: {} já está cadastrado para outra pessoa fisica", pessoaFisica.getCpf());
