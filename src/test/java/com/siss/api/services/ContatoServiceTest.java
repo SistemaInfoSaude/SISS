@@ -18,10 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.siss.api.entities.Usuario;
+import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Contato;
 import com.siss.api.exceptions.ConsistenciaException;
-import com.siss.api.repositories.UsuarioRepository;
+import com.siss.api.repositories.PessoaFisicaRepository;
 import com.siss.api.repositories.ContatoRepository;
 
 @RunWith(SpringRunner.class)
@@ -32,7 +32,7 @@ public class ContatoServiceTest {
 	@MockBean
 	private ContatoRepository contatoRepository;
 	@MockBean
-	private UsuarioRepository usuarioRepository;
+	private PessoaFisicaRepository usuarioRepository;
 
 	@Autowired
 	private ContatoService contatoService;
@@ -56,14 +56,14 @@ public class ContatoServiceTest {
 	}
 
 	@Test
-	public void testBuscarPorUsuarioIdExistente() throws ConsistenciaException {
+	public void testBuscarPorPessoaFisicaIdExistente() throws ConsistenciaException {
 
 		List<Contato> lstContato = new ArrayList<Contato>();
 		lstContato.add(new Contato());
 
-		BDDMockito.given(contatoRepository.findByUsuarioId(Mockito.anyInt())).willReturn((lstContato));
+		BDDMockito.given(contatoRepository.findByPessoaFisicaId(Mockito.anyInt())).willReturn((lstContato));
 
-		Optional<List<Contato>> resultado = contatoService.buscarPorUsuarioId(1);
+		Optional<List<Contato>> resultado = contatoService.buscarPorPessoaFisicaId(1);
 
 
 		assertTrue(resultado.isPresent());
@@ -74,20 +74,20 @@ public class ContatoServiceTest {
 
  
 	@Test(expected = ConsistenciaException.class)
-	public void testBuscarPorUsuarioIdNaoExistente() throws ConsistenciaException {
+	public void testBuscarPorPessoaFisicaIdNaoExistente() throws ConsistenciaException {
 
-		BDDMockito.given(contatoRepository.findByUsuarioId(Mockito.anyInt())).willReturn(null);
+		BDDMockito.given(contatoRepository.findByPessoaFisicaId(Mockito.anyInt())).willReturn(null);
 
-		contatoService.buscarPorUsuarioId(1);
+		contatoService.buscarPorPessoaFisicaId(1);
 	}
 	
 	@Test
 	public void testSalvarComSucesso() throws ConsistenciaException {
 		
-		Usuario usuario = new Usuario();
+		PessoaFisica usuario = new PessoaFisica();
 		Contato contato = new Contato();
 		usuario.setId(1);
-		contato.setUsuario(usuario);
+		contato.setPessoaFisica(usuario);
 		
 		BDDMockito.given(usuarioRepository.findById(Mockito.anyInt())).willReturn(Optional.of(usuario));
 		
@@ -101,10 +101,10 @@ public class ContatoServiceTest {
 	@Test(expected = ConsistenciaException.class)
 	public void testSalvarSemSucesso() throws ConsistenciaException, ParseException {
 		
-		Usuario usuario = new Usuario();
+		PessoaFisica usuario = new PessoaFisica();
 		Contato contato = new Contato();
 		usuario.setId(0);
-		contato.setUsuario(usuario);
+		contato.setPessoaFisica(usuario);
 		contato.setNome("Lorem ipsum dolor sit amet");
 		contato.setCelular("99956548722");
 		contato.setTelefone("3356548722");

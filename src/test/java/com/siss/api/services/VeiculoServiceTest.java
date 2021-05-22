@@ -18,11 +18,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.siss.api.entities.PessoaFisica;
-import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.repositories.PessoaFisicaRepository;
-import com.siss.api.repositories.UsuarioRepository;
 import com.siss.api.repositories.VeiculoRepository;
 
 

@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Contato;
 import com.siss.api.entities.PessoaFisica;
 
