@@ -181,9 +181,9 @@ public class UsuarioService {
 			usuarioRepository.save(usuario.get());
 
 			emailUtils.enviar(
-					usuario.get().getEmail(), 
-					"SISS - Alteração senha", 
-					"Código: " + hashCode
+				usuario.get().getEmail(), 
+				"SISS - Alteração senha", 
+				"Código: " + hashCode
 			);
 			
 			codigoEmailDto.setEmail(usuario.get().getEmail());
