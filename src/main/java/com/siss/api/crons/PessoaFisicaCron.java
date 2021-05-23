@@ -31,7 +31,7 @@ public class PessoaFisicaCron {
 				email.setTo(pf.getUsuario().getEmail());
 				email.setSubject("SISS - Atualização de Dados");
 				email.setText("Olá humano, poderia atualizar suas informações, por favor?");
-				emailUtils.enviar(email);
+//				emailUtils.enviar(email);
 			}
 		}
 	}

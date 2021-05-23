@@ -103,6 +103,26 @@ public class UsuarioController {
 			return ResponseEntity.status(500).body(response);
 		}
 	}
+	
+	@GetMapping(value = "/enviarCodigo/{email}")
+	public String enviarCodigo(@PathVariable("email") String email) {
+		try {
+			Boolean codigoEnviado = usuarioService.enviarCodigoAlteracaoSenha(email);
+			String msg = "";
+			
+			if(codigoEnviado) {
+				msg = "Código enviado com sucesso.";
+			}else {
+				msg = "Não foi possível enviar o código.";
+			}
+
+			return msg;
+		} catch (ConsistenciaException e) {		
+			return "Nenhum usuário com o email '" + email + "' foi encontrando";
+		} catch (Exception e) {
+			return "Ocorreu um erro na aplicação: " + e.getMessage();
+		}
+	}
 
 	/**
 	 * 150 Altera a senha do usuário, verificando o próprio usuário e a senha atual.

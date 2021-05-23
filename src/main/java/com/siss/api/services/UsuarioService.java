@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import com.siss.api.repositories.RegraRepository;
 import com.siss.api.repositories.UsuarioRepository;
 import com.siss.api.security.utils.JwtTokenUtil;
 import com.siss.api.exceptions.ConsistenciaException;
+import com.siss.api.utils.EmailUtils;
 import com.siss.api.utils.SenhaUtils;
 
 @Service
@@ -39,6 +41,9 @@ public class UsuarioService {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	@Autowired
+	EmailUtils emailUtils;
+
 	public Optional<Usuario> buscarPorId(int id) throws ConsistenciaException {
 		log.info("Service: buscando um usuário com o id: {}", id);
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -46,6 +51,18 @@ public class UsuarioService {
 		if (!usuario.isPresent()) {
 			log.info("Service: Nenhum usuário com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhum usuário com id: {} foi encontrado", id);
+		}
+
+		return usuario;
+	}
+
+	public Optional<Usuario> buscarPorEmail(String email) throws ConsistenciaException {
+		log.info("Service: buscando um usuário com o email: {}", email);
+		Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+
+		if (!usuario.isPresent()) {
+			log.info("Service: Nenhum usuário com email: {} foi encontrado", email);
+			throw new ConsistenciaException("Nenhum usuário com email: {} foi encontrado", email);
 		}
 
 		return usuario;
@@ -68,7 +85,7 @@ public class UsuarioService {
 
 	public Usuario salvar(Usuario usuario) throws ConsistenciaException {
 		log.info("Service: salvando o usuario: {}", usuario);
-		
+
 		// Se foi informando ID na DTO, é porque trata-se de uma ALTERAÇÃO
 		if (usuario.getId() > 0) {
 			// Verificar se o ID existe na base
@@ -85,19 +102,19 @@ public class UsuarioService {
 
 			usuario.setSenha(SenhaUtils.gerarHash(usuario.getSenha()));
 			usuario.setDataCadastro(new Date());
-			
+
 			// Seta regra ao usuário
 			Regra regra = new Regra();
-			if(usuario.getExecutante()) {
+			if (usuario.getExecutante()) {
 				regra.setNome("ROLE_EXEC_USUARIO");
-			}else {
+			} else {
 				regra.setNome("ROLE_USUARIO");
 			}
 			usuario.setRegras(new ArrayList<Regra>());
 			usuario.getRegras().add(regra);
-			
+
 		}
-		
+
 		usuario.setDataAlteracao(new Date());
 
 		// Carregando as regras definidas para o usuário, caso existam
@@ -121,6 +138,21 @@ public class UsuarioService {
 			log.info("Service: O usuario '{}' já está cadastrado", usuario.getUsuario());
 			throw new ConsistenciaException("O usuario '{}' já está cadastrado", usuario.getUsuario());
 		}
+	}
+
+	public Boolean enviarCodigoAlteracaoSenha(String email) throws ConsistenciaException {
+		Optional<Usuario> usuario = buscarPorEmail(email);
+
+		if (usuario.get().getId() > 0) {
+			String hashCode = Integer.toString(SenhaUtils.gerarHashCode());
+			usuario.get().setHashCode(hashCode);
+			usuarioRepository.save(usuario.get());
+
+			emailUtils.enviar(usuario.get().getEmail(), "SISS - Alteração senha", "Código: " + hashCode);
+			return true;
+		}
+
+		return false;
 	}
 
 	public void alterarSenhaUsuario(String senhaAtual, String novaSenha, int id) throws ConsistenciaException {

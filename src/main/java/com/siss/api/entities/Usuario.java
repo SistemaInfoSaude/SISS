@@ -49,6 +49,9 @@ public class Usuario implements Serializable {
 	@Column(name = "data_Alteracao", nullable = false)
 	private Date dataAlteracao;
 
+	@Column(name = "hash_Code", nullable = true)
+	private String hashCode;
+	
 	@Transient
 	private Boolean executante;
 
@@ -119,6 +122,14 @@ public class Usuario implements Serializable {
 
 	public void setExecutante(Boolean executante) {
 		this.executante = executante;
+	}
+	
+	public String getHashCode() {
+		return hashCode;
+	}
+
+	public void setHashCode(String hashCode) {
+		this.hashCode = hashCode;
 	}
 
 	@PreUpdate
