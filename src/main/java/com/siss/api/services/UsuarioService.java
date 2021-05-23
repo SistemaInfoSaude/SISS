@@ -15,6 +15,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.siss.api.dtos.CodigoEmailDto;
 import com.siss.api.entities.Regra;
 import com.siss.api.entities.Usuario;
 import com.siss.api.repositories.RegraRepository;
@@ -140,41 +141,24 @@ public class UsuarioService {
 		}
 	}
 
-	public Boolean enviarCodigoAlteracaoSenha(String email) throws ConsistenciaException {
-		Optional<Usuario> usuario = buscarPorEmail(email);
+	public void alterarSenhaUsuario(String senhaAtual, String novaSenha, int id)
+			throws ConsistenciaException {
 
-		if (usuario.get().getId() > 0) {
-			String hashCode = Integer.toString(SenhaUtils.gerarHashCode());
-			usuario.get().setHashCode(hashCode);
-			usuarioRepository.save(usuario.get());
-
-			emailUtils.enviar(usuario.get().getEmail(), "SISS - Alteração senha", "Código: " + hashCode);
-			return true;
-		}
-
-		return false;
-	}
-
-	public void alterarSenhaUsuario(String senhaAtual, String novaSenha, int id) throws ConsistenciaException {
 		log.info("Service: alterando a senha do usuário: {}", id);
 
-		// Verificar se existe um usuário com o ID informado
 		Optional<Usuario> usr = buscarPorId(id);
 
-		// String token = request.getHeader("Authorization");
 		String token = httpServletRequest.getHeader("Authorization");
 		if (token != null && token.startsWith("Bearer ")) {
 			token = token.substring(7);
 		}
 
 		String username = jwtTokenUtil.getUsernameFromToken(token);
+		
 		// Verificar se o usuário do token é diferente do usuário que está sendo
 		// alterado
-
 		if (!usr.get().getUsuario().equals(username)) {
-			// Caso essa condição for satisfeita, o usuário do token está tentando
-			// alterar a senha de outro usuário. Não podemos deixar isso acontecer.
-			log.info("Service: Cpf do token diferente do cpf do usuário a ser alterado");
+			log.info("Service: Usuario do token diferente do usuário a ser alterado");
 			throw new ConsistenciaException("Você não tem permissão para alterar a senha de outro usuário.");
 		}
 
@@ -185,5 +169,45 @@ public class UsuarioService {
 		}
 
 		usuarioRepository.alterarSenhaUsuario(SenhaUtils.gerarHash(novaSenha), id);
+	}
+
+	public CodigoEmailDto enviarCodigoAlteracaoSenha(String email) throws ConsistenciaException {
+		Optional<Usuario> usuario = buscarPorEmail(email);
+		CodigoEmailDto codigoEmailDto = new CodigoEmailDto();
+
+		if (usuario.get().getId() > 0) {
+			String hashCode = Integer.toString(SenhaUtils.gerarHashCode());
+			usuario.get().setHashCode(hashCode);
+			usuarioRepository.save(usuario.get());
+
+			emailUtils.enviar(
+					usuario.get().getEmail(), 
+					"SISS - Alteração senha", 
+					"Código: " + hashCode
+			);
+			
+			codigoEmailDto.setEmail(usuario.get().getEmail());
+			codigoEmailDto.setCodigo(hashCode);
+			codigoEmailDto.setIdUsuario(Integer.toString(usuario.get().getId()));
+			codigoEmailDto.setMensagem("Código enviado com sucesso.");
+		}else {
+			throw new ConsistenciaException("Não foi possível enviar o código.");
+		}
+
+		return codigoEmailDto;
+	}
+	
+	public void redefinirSenhaUsuario(String codigo, String novaSenha, int id)
+			throws ConsistenciaException {
+		Optional<Usuario> usr = buscarPorId(id);
+		
+		// Verificar se o código de confirmação é igual ao enviado no email do usuário
+		if (!usr.get().getHashCode().equals(codigo)) {
+			log.info("Service: Código de confirmação inválido");
+			throw new ConsistenciaException("Código de confirmação inválido.");
+		}
+		
+		usuarioRepository.alterarSenhaUsuario(SenhaUtils.gerarHash(novaSenha), id);
+		usuarioRepository.resetarHashCode(id);
 	}
 }

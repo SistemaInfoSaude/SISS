@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.siss.api.dtos.CodigoEmailDto;
+import com.siss.api.dtos.RedefinirSenhaDto;
 import com.siss.api.dtos.SenhaDto;
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.entities.Regra;
@@ -50,7 +53,7 @@ public class UsuarioController {
 
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
-			
+
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
 			response.adicionarErro(e.getMensagem());
 
@@ -103,40 +106,22 @@ public class UsuarioController {
 			return ResponseEntity.status(500).body(response);
 		}
 	}
-	
-	@GetMapping(value = "/enviarCodigo/{email}")
-	public String enviarCodigo(@PathVariable("email") String email) {
-		try {
-			Boolean codigoEnviado = usuarioService.enviarCodigoAlteracaoSenha(email);
-			String msg = "";
-			
-			if(codigoEnviado) {
-				msg = "Código enviado com sucesso.";
-			}else {
-				msg = "Não foi possível enviar o código.";
-			}
-
-			return msg;
-		} catch (ConsistenciaException e) {		
-			return "Nenhum usuário com o email '" + email + "' foi encontrando";
-		} catch (Exception e) {
-			return "Ocorreu um erro na aplicação: " + e.getMessage();
-		}
-	}
 
 	/**
-	 * 150 Altera a senha do usuário, verificando o próprio usuário e a senha atual.
+	 * Altera a senha do usuário, verificando o próprio usuário e a senha atual.
 	 *
 	 * @param Dados de entrada do usuário
 	 * @return Dados do usuario persistido
 	 */
-	@PostMapping(value = "/senha")
+	@PostMapping(value = "/alterarSenha")
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	public ResponseEntity<Response<SenhaDto>> alterarSenhaUsuario(@Valid @RequestBody SenhaDto senhaDto,
 			BindingResult result) {
+
 		Response<SenhaDto> response = new Response<SenhaDto>();
+
 		try {
 			log.info("Controller: alterando a senha do usuário: {}", senhaDto.getIdUsuario());
-			// Verificando se todos os campos da DTO foram preenchidos
 			if (result.hasErrors()) {
 				for (int i = 0; i < result.getErrorCount(); i++) {
 
@@ -145,20 +130,83 @@ public class UsuarioController {
 				log.info("Controller: Os campos obrigatórios não foram preenchidos");
 				return ResponseEntity.badRequest().body(response);
 			}
-			// Alterando a senha do usuário
 
 			this.usuarioService.alterarSenhaUsuario(senhaDto.getSenhaAtual(), senhaDto.getNovaSenha(),
 					Integer.parseInt(senhaDto.getIdUsuario()));
+
 			response.setDados(senhaDto);
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
+
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
 			response.adicionarErro(e.getMensagem());
 			return ResponseEntity.badRequest().body(response);
 		} catch (Exception e) {
+
 			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
 			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
 
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+
+	/**
+	 * Envia código de validação ao email do usuário para alterar a senha
+	 *
+	 * @param Email do usuario
+	 * @return sucesso ou erro no envio
+	 */
+	@PostMapping(value = "/enviarCodigo")
+	public ResponseEntity<Response<CodigoEmailDto>> enviarCodigo(@Valid @RequestBody CodigoEmailDto codigoEmailDto,
+			BindingResult result) {
+
+		Response<CodigoEmailDto> response = new Response<CodigoEmailDto>();
+
+		try {
+			response.setDados(usuarioService.enviarCodigoAlteracaoSenha(codigoEmailDto.getEmail()));
+			return ResponseEntity.ok(response);
+			
+		} catch (ConsistenciaException e) {
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+
+	/**
+	 * Altera a senha do usuário, verificando o código de email
+	 *
+	 * @param Dados de entrada do usuário
+	 * @return Dados do usuario persistido
+	 */
+	@PostMapping(value = "/redefinirSenha")
+	public ResponseEntity<Response<RedefinirSenhaDto>> novaSenhaUsuario(
+			@Valid @RequestBody RedefinirSenhaDto redefinirSenhaDto, BindingResult result) {
+
+		Response<RedefinirSenhaDto> response = new Response<RedefinirSenhaDto>();
+
+		try {
+			if (result.hasErrors()) {
+				for (int i = 0; i < result.getErrorCount(); i++) {
+					response.adicionarErro(result.getAllErrors().get(i).getDefaultMessage());
+				}
+				return ResponseEntity.badRequest().body(response);
+			}
+
+			this.usuarioService.redefinirSenhaUsuario(redefinirSenhaDto.getCodigo(), redefinirSenhaDto.getNovaSenha(),
+					Integer.parseInt(redefinirSenhaDto.getIdUsuario()));
+
+			response.setDados(redefinirSenhaDto);
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
 			return ResponseEntity.status(500).body(response);
 		}
 	}

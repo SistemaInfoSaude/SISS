@@ -16,6 +16,6 @@ public class EmailUtils {
         email.setTo(to);
         email.setSubject(subject);
         email.setText(text);
-//        mailSender.send(email);
+        mailSender.send(email);
     }
 }
