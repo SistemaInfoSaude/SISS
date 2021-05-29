@@ -12,5 +12,5 @@ import com.siss.api.entities.Veiculo;
 
 public interface VeiculoRepository extends JpaRepository<Veiculo, Integer> {
 	@Query("SELECT ve FROM Veiculo ve WHERE ve.pessoaFisica.id = :pessoaFisicaId")
-	List<Veiculo> findByPessoaFisicaId(@Param("pessoaFisicaId") int usuarioId);
+	List<Veiculo> findByPessoaFisicaId(@Param("pessoaFisicaId") int pessoaFisicaId);
 }

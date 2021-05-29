@@ -1,7 +1,7 @@
 package com.siss.api.repositories;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

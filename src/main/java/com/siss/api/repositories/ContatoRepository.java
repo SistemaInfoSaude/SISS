@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import com.siss.api.entities.Contato;
 
-@Transactional(readOnly = true)
 public interface ContatoRepository extends JpaRepository<Contato, Integer> {
 	@Query("SELECT ct FROM Contato ct WHERE ct.pessoaFisica.id = :pessoaFisicaId")
 	List<Contato> findByPessoaFisicaId(@Param("pessoaFisicaId") int pessoaFisicaId);

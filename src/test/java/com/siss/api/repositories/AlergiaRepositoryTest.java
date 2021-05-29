@@ -1,7 +1,6 @@
 package com.siss.api.repositories;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +44,7 @@ public class AlergiaRepositoryTest {
 		alergiaTeste.setCondicaoClinica(condicaoClinicaTeste);
 		
 	}
+	
 	@Before
 	public void setUp() throws Exception {
 
@@ -60,6 +60,7 @@ public class AlergiaRepositoryTest {
 		alergiaRepository.deleteAll();
 
 	}
+	
 	@Test
 	public void testFindByCondicaoClinicaId() {
 		List<Alergia> alergias = alergiaRepository.findByCondicaoClinicaId(condicaoClinicaTeste.getId());
