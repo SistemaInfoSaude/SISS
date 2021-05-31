@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.siss.api.entities.PessoaFisica;
-import com.siss.api.entities.Usuario;
 import com.siss.api.entities.Veiculo;
 
 @RunWith(SpringRunner.class)
