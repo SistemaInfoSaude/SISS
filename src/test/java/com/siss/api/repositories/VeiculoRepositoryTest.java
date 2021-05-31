@@ -42,6 +42,7 @@ public class VeiculoRepositoryTest {
 		pessoaFisicaTeste.setRg("332291388");
 		pessoaFisicaTeste.setCpf("59842469026");
 		pessoaFisicaTeste.setNome("Teste Teste");
+		pessoaFisicaTeste.setDataNascimento(new SimpleDateFormat("dd/MM/yyyy").parse("05/04/2001"));
 		
 		veiculoTeste.setId(1);
 		veiculoTeste.setMarca("BMW");
@@ -73,7 +74,7 @@ public class VeiculoRepositoryTest {
 
 	}
 	@Test
-	public void testfindByUsuarioId() {
+	public void testfindByPessoaFisicaId() {
 		List<Veiculo> veiculos = veiculoRepository.findByPessoaFisicaId(pessoaFisicaTeste.getId());
 		assertTrue(!veiculos.isEmpty());
 	}

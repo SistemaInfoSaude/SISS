@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `hash_Code` VARCHAR(5) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX (`usuario` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+  UNIQUE INDEX (`usuario` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC))
 ENGINE = InnoDB;
 
 
@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Fisica` (
   `celular` VARCHAR(11) NULL DEFAULT NULL,
   `telefone` VARCHAR(10) NULL DEFAULT NULL,
   `usuario_id` INT NOT NULL,
-  UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC) VISIBLE,
+  UNIQUE INDEX `cpf_UNIQUE` (`cpf` ASC),
   PRIMARY KEY (`id`),
-  INDEX `fk_Pessoa_Fisica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
-  UNIQUE INDEX `rg_UNIQUE` (`rg` ASC) VISIBLE,
+  INDEX `fk_Pessoa_Fisica_Usuario_idx` (`usuario_id` ASC),
+  UNIQUE INDEX `rg_UNIQUE` (`rg` ASC),
   CONSTRAINT `fk_Pessoa_Fisica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `Pessoa_Juridica` (
   `cnpj` VARCHAR(14) NOT NULL,
   `usuario_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Pessoa_Juridica_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_Pessoa_Juridica_Usuario_idx` (`usuario_id` ASC),
   CONSTRAINT `fk_Pessoa_Juridica_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `Contato` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Contato_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  INDEX `fk_Contato_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC),
   CONSTRAINT `fk_Contato_Pessoa_Fisica`
     FOREIGN KEY (`pessoa_fisica_id`)
     REFERENCES `Pessoa_Fisica` (`id`)
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `Veiculo` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Veiculo_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  INDEX `fk_Veiculo_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC),
   CONSTRAINT `fk_Veiculo_Pessoa_Fisica`
     FOREIGN KEY (`pessoa_fisica_id`)
     REFERENCES `Pessoa_Fisica` (`id`)
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `Condicao_Clinica` (
   `tipo_Sanguineo` VARCHAR(3) NOT NULL,
   `pessoa_fisica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Condicao_Clinica_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC) VISIBLE,
+  INDEX `fk_Condicao_Clinica_Pessoa_Fisica_idx` (`pessoa_fisica_id` ASC),
   CONSTRAINT `fk_Condicao_Clinica_Pessoa_Fisica`
     FOREIGN KEY (`pessoa_fisica_id`)
     REFERENCES `Pessoa_Fisica` (`id`)
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `Doenca` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `condicao_clinica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Doenca_Condicao_Clinica_idx` (`condicao_clinica_id` ASC) VISIBLE,
+  INDEX `fk_Doenca_Condicao_Clinica_idx` (`condicao_clinica_id` ASC),
   CONSTRAINT `fk_Doenca_Condicao_Clinica`
     FOREIGN KEY (`condicao_clinica_id`)
     REFERENCES `Condicao_Clinica` (`id`)
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `Alergia` (
   `data_Alteracao` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `condicao_clinica_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Alergia_Condicao_Clinica_idx` (`condicao_clinica_id` ASC) VISIBLE,
+  INDEX `fk_Alergia_Condicao_Clinica_idx` (`condicao_clinica_id` ASC),
   CONSTRAINT `fk_Alergia_Condicao_Clinica`
     FOREIGN KEY (`condicao_clinica_id`)
     REFERENCES `Condicao_Clinica` (`id`)
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `Regra` (
   `descricao` VARCHAR(255) NOT NULL,
   `ativo` BIT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC) VISIBLE)
+  UNIQUE INDEX `nome_UNIQUE` (`nome` ASC))
 ENGINE = InnoDB;
 
 
@@ -147,8 +147,8 @@ CREATE TABLE IF NOT EXISTS `Usuario_Regra` (
   `usuario_id` INT NOT NULL,
   `regra_id` INT NOT NULL,
   PRIMARY KEY (`usuario_id`, `regra_id`),
-  INDEX `fk_Usuario_Regra_Regra_idx` (`regra_id` ASC) VISIBLE,
-  INDEX `fk_Usuario_Regra_Usuario_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_Usuario_Regra_Regra_idx` (`regra_id` ASC),
+  INDEX `fk_Usuario_Regra_Usuario_idx` (`usuario_id` ASC),
   CONSTRAINT `fk_Usuario_Regra_Usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `Usuario` (`id`)

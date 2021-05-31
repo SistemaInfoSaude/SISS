@@ -16,8 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.siss.api.entities.Contato;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.Contato;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,14 +33,14 @@ public class ContatoRepositoryTest {
 	PessoaFisica pessoaFisicaTeste;
 	
 	private void CriarContatoTestes() throws ParseException {
-		
 		pessoaFisicaTeste = new PessoaFisica();
 		contatoTeste = new Contato();
 		
-		pessoaFisicaTeste.setId(1);
+		pessoaFisicaTeste.setId(2);
 		pessoaFisicaTeste.setRg("332291388");
-		pessoaFisicaTeste.setNome("Teste Teste");
 		pessoaFisicaTeste.setCpf("59842469026");
+		pessoaFisicaTeste.setNome("Teste Teste");
+		pessoaFisicaTeste.setDataNascimento(new SimpleDateFormat("dd/MM/yyyy").parse("05/04/2001"));
 		
 		contatoTeste.setId(1);
 		contatoTeste.setNome("Nome do Usuario");
@@ -48,6 +48,7 @@ public class ContatoRepositoryTest {
 		contatoTeste.setCelular("9995846725");
 		contatoTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
 		contatoTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
+		contatoTeste.setParentesco("pai");
 		contatoTeste.setPessoaFisica(pessoaFisicaTeste);
 		
 		List<Contato> contatos = new ArrayList<Contato>();
@@ -71,7 +72,7 @@ public class ContatoRepositoryTest {
 
 	}
 	@Test
-	public void testfindByUsuarioId() {
+	public void testFindByPessoaFisicaId() {
 		List<Contato> contatos = contatoRepository.findByPessoaFisicaId(pessoaFisicaTeste.getId());
 		assertTrue(!contatos.isEmpty());
 	}

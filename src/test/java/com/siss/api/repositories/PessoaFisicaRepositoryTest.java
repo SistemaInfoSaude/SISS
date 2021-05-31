@@ -36,11 +36,14 @@ public class PessoaFisicaRepositoryTest {
 		pessoaFisicaTeste = new PessoaFisica();
 		usuarioTeste = new Usuario();
 
-		pessoaFisicaTeste.setId(1);
-		pessoaFisicaTeste.setCpf("05887098025");
-		pessoaFisicaTeste.setDataNascimento(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
+		pessoaFisicaTeste.setId(3);
+		pessoaFisicaTeste.setRg("332291399");
+		pessoaFisicaTeste.setCpf("59842460026");
+		pessoaFisicaTeste.setNome("Teste Teste");
+		pessoaFisicaTeste.setDataNascimento(new SimpleDateFormat("dd/MM/yyyy").parse("05/04/2001"));
 		
 		usuarioTeste.setId(1);
+		usuarioTeste.setEmail("teste1234@email.com");
 		usuarioTeste.setUsuario("UsuarioLegal");
 		usuarioTeste.setSenha("SenhaLegal");
 		usuarioTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
@@ -71,7 +74,7 @@ public class PessoaFisicaRepositoryTest {
 	public void testFindByUsuarioId() {
 		
 		Optional<PessoaFisica> pessoaFisica = pessoaFisicaRepository.findByUsuarioId(usuarioTeste.getId());
-		assertEquals(usuarioTeste.getId(), pessoaFisica.get().getId());
+		assertEquals(pessoaFisicaTeste.getId(), pessoaFisica.get().getId());
 	}
 /*	
 	@Test

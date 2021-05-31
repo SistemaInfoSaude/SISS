@@ -36,7 +36,9 @@ public class PessoaFisicaService {
 			throw new ConsistenciaException("Nenhuma pessoa fisica com id: {} foi encontrado", id);
 		}
 		
-		userDetailsService.checkUser(pessoaFisica.get().getUsuario());
+		if(pessoaFisica.get().getUsuario() != null) {
+			userDetailsService.checkUser(pessoaFisica.get().getUsuario());
+		}
 		return pessoaFisica;
 	}
 
@@ -71,7 +73,9 @@ public class PessoaFisicaService {
 			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 		}
 
-		userDetailsService.checkUser(pessoaFisica.get().getUsuario());
+		if(pessoaFisica.get().getUsuario() != null) {
+			userDetailsService.checkUser(pessoaFisica.get().getUsuario());
+		}
 		return pessoaFisica;
 	}
 	
@@ -105,7 +109,9 @@ public class PessoaFisicaService {
 				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
 			}
 			
-			userDetailsService.checkUser(usr.get());
+			if(usr.get() != null) {
+				userDetailsService.checkUser(usr.get());
+			}
 			return pessoaFisicaRepository.save(pessoaFisica);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: O cpf: {} já está cadastrado para outra pessoa fisica", pessoaFisica.getCpf());

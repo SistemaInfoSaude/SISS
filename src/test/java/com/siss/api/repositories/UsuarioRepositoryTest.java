@@ -31,6 +31,7 @@ public class UsuarioRepositoryTest {
 		usuarioTeste = new Usuario();
 		
 		usuarioTeste.setId(1);
+		usuarioTeste.setEmail("teste123456@gmail.com");
 		usuarioTeste.setUsuario("UsuarioLegal");
 		usuarioTeste.setSenha("SenhaLegal");
 		usuarioTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));

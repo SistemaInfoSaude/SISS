@@ -40,7 +40,7 @@ public class VeiculoServiceTest {
 
 	@Test
 	public void testBuscarPorIdExistente() throws ConsistenciaException {
-		
+
 		BDDMockito.given(veiculoRepository.findById(Mockito.anyInt())).willReturn(Optional.of(new Veiculo()));
 
 		Optional<Veiculo> resultado = veiculoService.buscarPorId(1);

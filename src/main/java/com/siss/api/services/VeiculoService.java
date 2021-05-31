@@ -36,7 +36,10 @@ public class VeiculoService {
 			log.info("Service: Nenhum veiculo com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma veiculo com id: {} foi encontrado", id);
 		}
-		userDetailsService.checkUser(veiculo.get().getPessoaFisica().getUsuario());
+		
+		if(veiculo.get().getPessoaFisica() != null) {
+			userDetailsService.checkUser(veiculo.get().getPessoaFisica().getUsuario());
+		}
 		return veiculo;
 	}
 
@@ -48,7 +51,10 @@ public class VeiculoService {
 			log.info("Service: Nenhum veiculos encontrado para a PF de id: {}", pessoaFisicaId);
 			throw new ConsistenciaException("Nenhum veiculo encontrado para a PF de id: {}", pessoaFisicaId);
 		}
-		userDetailsService.checkUser(veiculos.get().get(0).getPessoaFisica().getUsuario());
+		
+		if(veiculos.get().get(0).getPessoaFisica() != null) {
+			userDetailsService.checkUser(veiculos.get().get(0).getPessoaFisica().getUsuario());
+		}
 		return veiculos;
 	}
 
@@ -66,7 +72,9 @@ public class VeiculoService {
 			if (!pf.isPresent()) {
 				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
-			userDetailsService.checkUser(pf.get().getUsuario());
+			if(pf.get() != null && pf.get().getUsuario() != null) {
+				userDetailsService.checkUser(pf.get().getUsuario());
+			}
 			return veiculoRepository.save(veiculo);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
@@ -77,7 +85,9 @@ public class VeiculoService {
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo o veiculo de id: {}", id);
 		Optional<Veiculo> veiculo = buscarPorId(id);
-		userDetailsService.checkUser(veiculo.get().getPessoaFisica().getUsuario());
+		if(veiculo.get().getPessoaFisica() != null) {
+			userDetailsService.checkUser(veiculo.get().getPessoaFisica().getUsuario());
+		}
 		veiculoRepository.deleteById(id);
 	}
 }
