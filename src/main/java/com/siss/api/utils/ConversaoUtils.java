@@ -17,6 +17,7 @@ import com.siss.api.dtos.CondicaoClinicaDto;
 import com.siss.api.dtos.ContatoDto;
 import com.siss.api.dtos.DoencaDto;
 import com.siss.api.dtos.PessoaFisicaDto;
+import com.siss.api.dtos.PessoaFisicaInfoDto;
 import com.siss.api.dtos.PessoaJuridicaDto;
 //Entities
 import com.siss.api.entities.Usuario;
@@ -100,21 +101,21 @@ public class ConversaoUtils {
 	/* FIM CONVERSÃO USUÁRIO */
 
 	/* INICIO CONVERSÃO PESSOA FÍSICA */
-	public static PessoaFisica Converter(PessoaFisicaDto pessoaFisicaDto) throws ParseException {
+	public static PessoaFisica Converter(PessoaFisicaInfoDto pessoaFisicaInfoDto) throws ParseException {
 		PessoaFisica pessoaFisica = new PessoaFisica();
 		Usuario usuario = new Usuario();
 
-		if (pessoaFisicaDto.getId() != null && pessoaFisicaDto.getId() != "") {
-			pessoaFisica.setId(Integer.parseInt(pessoaFisicaDto.getId()));
+		if (pessoaFisicaInfoDto.getId() != null && pessoaFisicaInfoDto.getId() != "") {
+			pessoaFisica.setId(Integer.parseInt(pessoaFisicaInfoDto.getId()));
 		}
 
-		if (pessoaFisicaDto.getCondicaoClinica() != null && pessoaFisicaDto.getCondicaoClinica().getId() != null) {
-			pessoaFisica.setCondicaoClinica(Converter(pessoaFisicaDto.getCondicaoClinica()));
+		if (pessoaFisicaInfoDto.getCondicaoClinica() != null && pessoaFisicaInfoDto.getCondicaoClinica().getId() != null) {
+			pessoaFisica.setCondicaoClinica(Converter(pessoaFisicaInfoDto.getCondicaoClinica()));
 		}
 
-		if (pessoaFisicaDto.getContatos() != null && pessoaFisicaDto.getContatos().size() > 0) {
+		if (pessoaFisicaInfoDto.getContatos() != null && pessoaFisicaInfoDto.getContatos().size() > 0) {
 			pessoaFisica.setContatos(new ArrayList<Contato>());
-			for (ContatoDto contatoDto : pessoaFisicaDto.getContatos()) {
+			for (ContatoDto contatoDto : pessoaFisicaInfoDto.getContatos()) {
 				Contato contato = new Contato();
 				contato.setCelular(contatoDto.getCelular());
 				contato.setTelefone(contatoDto.getTelefone());
@@ -123,9 +124,9 @@ public class ConversaoUtils {
 			}
 		}
 
-		if (pessoaFisicaDto.getVeiculos() != null && pessoaFisicaDto.getVeiculos().size() > 0) {
+		if (pessoaFisicaInfoDto.getVeiculos() != null && pessoaFisicaInfoDto.getVeiculos().size() > 0) {
 			pessoaFisica.setVeiculos(new ArrayList<Veiculo>());
-			for (VeiculoDto veiculoDto : pessoaFisicaDto.getVeiculos()) {
+			for (VeiculoDto veiculoDto : pessoaFisicaInfoDto.getVeiculos()) {
 				Veiculo veiculo = new Veiculo();
 				veiculo.setMarca(veiculoDto.getMarca());
 				veiculo.setModelo(veiculoDto.getModelo());
@@ -136,9 +137,30 @@ public class ConversaoUtils {
 			}
 		}
 
-		usuario.setId(Integer.parseInt(pessoaFisicaDto.getUsuarioId()));
+		usuario.setId(Integer.parseInt(pessoaFisicaInfoDto.getUsuarioId()));
 
 		pessoaFisica.setUsuario(usuario);
+		pessoaFisica.setNome(pessoaFisicaInfoDto.getNome());
+		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaInfoDto.getDataNascimento()));
+		pessoaFisica.setCpf(pessoaFisicaInfoDto.getCpf());
+		pessoaFisica.setRg(pessoaFisicaInfoDto.getRg());
+		pessoaFisica.setCelular(pessoaFisicaInfoDto.getCelular());
+		pessoaFisica.setTelefone(pessoaFisicaInfoDto.getTelefone());
+
+		return pessoaFisica;
+	}
+	
+	public static PessoaFisica Converter(PessoaFisicaDto pessoaFisicaDto) throws ParseException {
+		PessoaFisica pessoaFisica = new PessoaFisica();
+		Usuario usuario = new Usuario();
+
+		if (pessoaFisicaDto.getId() != null && pessoaFisicaDto.getId() != "") {
+			pessoaFisica.setId(Integer.parseInt(pessoaFisicaDto.getId()));
+		}
+
+		usuario.setId(Integer.parseInt(pessoaFisicaDto.getUsuarioId()));
+		pessoaFisica.setUsuario(usuario);
+		
 		pessoaFisica.setNome(pessoaFisicaDto.getNome());
 		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaDto.getDataNascimento()));
 		pessoaFisica.setCpf(pessoaFisicaDto.getCpf());
@@ -149,8 +171,8 @@ public class ConversaoUtils {
 		return pessoaFisica;
 	}
 
-	public static PessoaFisicaDto Converter(PessoaFisica pessoaFisica) {
-		PessoaFisicaDto pessoaFisicaDto = new PessoaFisicaDto();
+	public static PessoaFisicaInfoDto Converter(PessoaFisica pessoaFisica) {
+		PessoaFisicaInfoDto pessoaFisicaDto = new PessoaFisicaInfoDto();
 
 		if (pessoaFisica.getCondicaoClinica() != null && pessoaFisica.getCondicaoClinica().getId() > 0) {
 			pessoaFisicaDto.setCondicaoClinica(Converter(pessoaFisica.getCondicaoClinica()));

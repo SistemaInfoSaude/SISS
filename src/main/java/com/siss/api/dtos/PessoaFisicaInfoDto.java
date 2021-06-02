@@ -1,5 +1,7 @@
 package com.siss.api.dtos;
 
+import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
@@ -7,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PessoaFisicaDto {
+public class PessoaFisicaInfoDto {
 	private String id;
 
 	@NotEmpty(message = "usuarioId não pode ser vazio.")
@@ -36,7 +38,12 @@ public class PessoaFisicaDto {
 	@Length(min = 11, max = 11, message = "celular deve conter 11 caracteres.")
 	private String celular;
 
-	
+	private CondicaoClinicaDto condicaoClinica;
+
+	private List<VeiculoDto> veiculos;
+
+	private List<ContatoDto> contatos;
+
 	public String getId() {
 		return id;
 	}
@@ -99,6 +106,30 @@ public class PessoaFisicaDto {
 
 	public void setCelular(String celular) {
 		this.celular = celular;
+	}
+
+	public CondicaoClinicaDto getCondicaoClinica() {
+		return condicaoClinica;
+	}
+
+	public void setCondicaoClinica(CondicaoClinicaDto condicaoClinica) {
+		this.condicaoClinica = condicaoClinica;
+	}
+
+	public List<VeiculoDto> getVeiculos() {
+		return veiculos;
+	}
+
+	public void setVeiculos(List<VeiculoDto> veiculos) {
+		this.veiculos = veiculos;
+	}
+
+	public List<ContatoDto> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<ContatoDto> contatos) {
+		this.contatos = contatos;
 	}
 
 	@Override

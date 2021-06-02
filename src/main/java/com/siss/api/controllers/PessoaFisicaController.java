@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.siss.api.dtos.PessoaFisicaDto;
+import com.siss.api.dtos.PessoaFisicaInfoDto;
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.entities.PessoaFisica;
 import com.siss.api.response.Response;
@@ -41,8 +43,8 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorId(@PathVariable("id") int id) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+	public ResponseEntity<Response<PessoaFisicaInfoDto>> buscarPorId(@PathVariable("id") int id) {
+		Response<PessoaFisicaInfoDto> response = new Response<PessoaFisicaInfoDto>();
 		try {
 			log.info("Controller: buscando a PF com id: {}", id);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorId(id);
@@ -70,8 +72,8 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('EXEC_USUARIO')")
 	@GetMapping(value = "/cpf/{cpf}")
-	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+	public ResponseEntity<Response<PessoaFisicaInfoDto>> buscarPorCpf(@PathVariable("cpf") String cpf) {
+		Response<PessoaFisicaInfoDto> response = new Response<PessoaFisicaInfoDto>();
 		try {
 			log.info("Controller: buscando a PF com CPF: {}", cpf);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorCpf(cpf);
@@ -99,8 +101,8 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('EXEC_USUARIO')")
 	@GetMapping(value = "/rg/{rg}")
-	public ResponseEntity<Response<PessoaFisicaDto>> buscarPorRg(@PathVariable("rg") String rg) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+	public ResponseEntity<Response<PessoaFisicaInfoDto>> buscarPorRg(@PathVariable("rg") String rg) {
+		Response<PessoaFisicaInfoDto> response = new Response<PessoaFisicaInfoDto>();
 		try {
 			log.info("Controller: buscando a PF com RG: {}", rg);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorRg(rg);
@@ -186,9 +188,9 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@PostMapping
-	public ResponseEntity<Response<PessoaFisicaDto>> salvar(@Valid @RequestBody PessoaFisicaDto pessoaFisicaDto,
+	public ResponseEntity<Response<PessoaFisicaInfoDto>> salvar(@Valid @RequestBody PessoaFisicaDto pessoaFisicaDto,
 			BindingResult result) {
-		Response<PessoaFisicaDto> response = new Response<PessoaFisicaDto>();
+		Response<PessoaFisicaInfoDto> response = new Response<PessoaFisicaInfoDto>();
 		try {
 			log.info("Controller: salvando a pessoa fisica: {}", pessoaFisicaDto.toString());
 
