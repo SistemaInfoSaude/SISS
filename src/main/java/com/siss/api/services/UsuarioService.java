@@ -68,6 +68,18 @@ public class UsuarioService {
 
 		return usuario;
 	}
+	
+	public Usuario buscarPorUsername(String username) throws ConsistenciaException {
+		log.info("Service: buscando um usuário com o username: {}", username);
+		Usuario usuario = usuarioRepository.findByUsuario(username);
+
+		if (usuario.equals(null)) {
+			log.info("Service: Nenhum usuário com username: {} foi encontrado", username);
+			throw new ConsistenciaException("Nenhum usuário com email: {} foi encontrado", username);
+		}
+
+		return usuario;
+	}
 
 	public Optional<Usuario> verificarCredenciais(String usuarioNome) throws ConsistenciaException {
 		log.info("Service: criando credenciais para o usuário: '{}'", usuarioNome);

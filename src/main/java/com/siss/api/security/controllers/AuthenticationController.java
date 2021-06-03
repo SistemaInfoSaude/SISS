@@ -76,7 +76,14 @@ public class AuthenticationController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationDto.getUsuario());
-			response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
+			
+			Usuario usr = usuarioService.buscarPorUsername(authenticationDto.getUsuario());
+			
+			if(!usr.equals(null)) {
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr));
+			}else {
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
+			}
 
 			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException e) {
