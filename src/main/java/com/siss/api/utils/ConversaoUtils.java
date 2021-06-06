@@ -1,5 +1,6 @@
 package com.siss.api.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -452,12 +453,30 @@ public class ConversaoUtils {
 	}
 	/* FIM CONVERSÃO ALERGIA */
 
+	public static boolean isDateValidFormat(String date) 
+	{
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            df.setLenient(false);
+            df.parse(date);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+	}
+	
 	public static Date parseDate(String dateValue) throws ParseException {
-		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateValue);
 	}
 
 	public static String formatDate(String dateValue) throws ParseException {
-		return new SimpleDateFormat("dd/MM/yyyy")
-				.format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(dateValue));
+		
+		if(!isDateValidFormat(dateValue)) {
+			return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+					.format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(dateValue));
+		}
+		
+		return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+				.format(parseDate(dateValue));
 	}
 }
