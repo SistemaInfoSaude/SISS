@@ -157,9 +157,10 @@ public class CondicaoClinicaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/condicaoClinica").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros").value("pessoaFisicaId não pode ser vazio."));
+				.andExpect(jsonPath("$.erros.length()").value(2));
 	}
-/*	@Test
+	
+	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testSalvarPessoaFisicaIdInsuficiente() throws Exception {
 		
@@ -172,6 +173,6 @@ public class CondicaoClinicaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/condicaoClinica").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros").value("pessoaFisicaId deve conter ao menos 1 caractere."));
-	}*/
+				.andExpect(jsonPath("$.erros.length()").value(3));
+	}
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -109,7 +110,8 @@ public class ConversaoUtils {
 			pessoaFisica.setId(Integer.parseInt(pessoaFisicaInfoDto.getId()));
 		}
 
-		if (pessoaFisicaInfoDto.getCondicaoClinica() != null && pessoaFisicaInfoDto.getCondicaoClinica().getId() != null) {
+		if (pessoaFisicaInfoDto.getCondicaoClinica() != null
+				&& pessoaFisicaInfoDto.getCondicaoClinica().getId() != null) {
 			pessoaFisica.setCondicaoClinica(Converter(pessoaFisicaInfoDto.getCondicaoClinica()));
 		}
 
@@ -149,7 +151,7 @@ public class ConversaoUtils {
 
 		return pessoaFisica;
 	}
-	
+
 	public static PessoaFisica Converter(PessoaFisicaDto pessoaFisicaDto) throws ParseException {
 		PessoaFisica pessoaFisica = new PessoaFisica();
 		Usuario usuario = new Usuario();
@@ -160,7 +162,7 @@ public class ConversaoUtils {
 
 		usuario.setId(Integer.parseInt(pessoaFisicaDto.getUsuarioId()));
 		pessoaFisica.setUsuario(usuario);
-		
+
 		pessoaFisica.setNome(pessoaFisicaDto.getNome());
 		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaDto.getDataNascimento()));
 		pessoaFisica.setCpf(pessoaFisicaDto.getCpf());
@@ -362,8 +364,10 @@ public class ConversaoUtils {
 				doencaDto.setId(String.valueOf(condicaoClinica.getDoencas().get(i).getId()));
 				doencaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
 				doencaDto.setTipo(condicaoClinica.getDoencas().get(i).getTipo());
-				doencaDto.setDataCadastro(formatDate(condicaoClinica.getDoencas().get(i).getDataCadastro().toString()).toString());
-				doencaDto.setDataAtualizacao(formatDate(condicaoClinica.getDoencas().get(i).getDataAlteracao().toString()).toString());
+				doencaDto.setDataCadastro(
+						formatDate(condicaoClinica.getDoencas().get(i).getDataCadastro().toString()).toString());
+				doencaDto.setDataAtualizacao(
+						formatDate(condicaoClinica.getDoencas().get(i).getDataAlteracao().toString()).toString());
 				condicaoClinicaDto.getDoencas().add(doencaDto);
 			}
 		}
@@ -375,8 +379,10 @@ public class ConversaoUtils {
 				alergiaDto.setId(String.valueOf(condicaoClinica.getAlergias().get(i).getId()));
 				alergiaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
 				alergiaDto.setTipo(condicaoClinica.getAlergias().get(i).getTipo());
-				alergiaDto.setDataCadastro(formatDate(condicaoClinica.getAlergias().get(i).getDataCadastro().toString()).toString());
-				alergiaDto.setDataAtualizacao(formatDate(condicaoClinica.getAlergias().get(i).getDataAlteracao().toString()).toString());
+				alergiaDto.setDataCadastro(
+						formatDate(condicaoClinica.getAlergias().get(i).getDataCadastro().toString()).toString());
+				alergiaDto.setDataAtualizacao(
+						formatDate(condicaoClinica.getAlergias().get(i).getDataAlteracao().toString()).toString());
 				condicaoClinicaDto.getAlergias().add(alergiaDto);
 			}
 		}
@@ -449,9 +455,9 @@ public class ConversaoUtils {
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
 	}
-	
+
 	public static String formatDate(String dateValue) throws ParseException {
-		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateValue);
-        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date);
+		return new SimpleDateFormat("dd/MM/yyyy")
+				.format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(dateValue));
 	}
 }

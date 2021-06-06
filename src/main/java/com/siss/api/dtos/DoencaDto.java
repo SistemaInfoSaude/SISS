@@ -2,6 +2,8 @@ package com.siss.api.dtos;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
@@ -12,10 +14,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class DoencaDto {
 	private String id;
 
+	@NotBlank
 	@NotEmpty(message = "condicaoClinicaId não pode ser vazio.")
 	@Length(min = 1, message = "condicaoClinicaId deve conter ao menos 1 caractere.")
 	private String condicaoClinicaId;
 
+	@NotBlank
 	@NotEmpty(message = "tipo não pode ser vazio.")
 	@Length(min = 1, message = "tipo deve conter ao menos 1 caractere.")
 	private String tipo;

@@ -131,7 +131,7 @@ public class AlergiaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/alergia").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros").value("condicaoClinicaId não pode ser vazio."));
+				.andExpect(jsonPath("$.erros.length()").value(2));
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")
@@ -146,7 +146,7 @@ public class AlergiaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/alergia").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros").value("tipo não pode ser vazio."));
+				.andExpect(jsonPath("$.erros.length()").value(2));
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")

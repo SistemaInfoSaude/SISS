@@ -1,5 +1,6 @@
 package com.siss.api.dtos;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class PessoaJuridicaDto {
 	private String id;
 
+	@NotBlank
 	@NotEmpty(message = "usuarioId não pode ser vazio.")
 	@Length(min = 1, message = "usuarioId deve conter ao menos 1 caractere.")
 	private String usuarioId;

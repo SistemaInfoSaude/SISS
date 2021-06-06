@@ -1,9 +1,11 @@
 package com.siss.api.dtos;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 public class RedefinirSenhaDto {
+	@NotBlank
 	@NotEmpty(message = "Id do usuário não pode ser vazio.")
 	private String idUsuario;
 

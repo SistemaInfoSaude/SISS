@@ -1,20 +1,24 @@
 package com.siss.api.dtos;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 public class ContatoDto {
 	private String id;
 
+	@NotBlank
 	@NotEmpty(message = "pessoaFisicaId não pode ser vazio.")
 	@Length(min = 1, message = "pessoaFisicaId deve conter ao menos 1 caractere.")
 	private String pessoaFisicaId;
 
+	@NotBlank
 	@NotEmpty(message = "nome não pode ser vazio.")
 	@Length(min = 3, message = "usuarioId deve conter entre 3 a 100 caracteres.")
 	private String nome;
 
+	@NotBlank
 	@NotEmpty(message = "parentesco não pode ser vazio.")
 	private String parentesco;
 

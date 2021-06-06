@@ -12,30 +12,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class PessoaFisicaInfoDto {
 	private String id;
 
-	@NotEmpty(message = "usuarioId não pode ser vazio.")
-	@Length(min = 1, message = "usuarioId deve conter ao menos 1 caractere.")
 	private String usuarioId;
 
-	@NotEmpty(message = "CPF não pode ser vazio.")
-	@CPF(message = "CPF inválido.")
 	private String cpf;
 
-	@NotEmpty(message = "RG não pode ser vazio.")
-	@Length(min = 9, max = 9, message = "RG deve conter 9 caracteres.")
 	private String rg;
 	
-	@NotEmpty(message = "Nome não pode ser vazio.")
 	private String nome;
-
-	@NotEmpty(message = "dataNascimento não pode ser vazio.")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	
 	private String dataNascimento;
-
-	@Length(min = 10, max = 10, message = "telefone deve conter 10 caracteres.")
+	
 	private String telefone;
 
-	@Length(min = 11, max = 11, message = "celular deve conter 11 caracteres.")
 	private String celular;
 
 	private CondicaoClinicaDto condicaoClinica;
