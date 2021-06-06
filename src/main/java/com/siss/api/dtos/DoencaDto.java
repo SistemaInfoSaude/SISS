@@ -19,6 +19,10 @@ public class DoencaDto {
 	@NotEmpty(message = "tipo não pode ser vazio.")
 	@Length(min = 1, message = "tipo deve conter ao menos 1 caractere.")
 	private String tipo;
+	
+	private String dataCadastro;
+	
+	private String dataAtualizacao;
 
 	public String getId() {
 		return id;
@@ -44,6 +48,22 @@ public class DoencaDto {
 		this.tipo = tipo;
 	}
 
+	public String getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(String dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+	
+	public String getDataAtualizacao() {
+		return dataAtualizacao;
+	}
+
+	public void setDataAtualizacao(String dataAtualizacao) {
+		this.dataAtualizacao = dataAtualizacao;
+	}
+	
 	@Override
 	public String toString() {
 		return "Doenca[id=" + id + "," + "condicaoClinicaId=" + condicaoClinicaId + "," + "tipo=" + tipo + "]";

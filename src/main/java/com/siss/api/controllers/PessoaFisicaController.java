@@ -159,13 +159,13 @@ public class PessoaFisicaController {
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/usuarioId/{usuarioId}")
-	public ResponseEntity<Response<UsuarioDto>> buscarPorUsuarioId(@PathVariable("usuarioId") int usuarioId) {
-		Response<UsuarioDto> response = new Response<UsuarioDto>();
+	public ResponseEntity<Response<PessoaFisicaInfoDto>> buscarPorUsuarioId(@PathVariable("usuarioId") int usuarioId) {
+		Response<PessoaFisicaInfoDto> response = new Response<PessoaFisicaInfoDto>();
 		try {
 			log.info("Controller: buscando a PF com usuarioId: {}", usuarioId);
 			Optional<PessoaFisica> pessoaFisica = pessoaFisicaService.buscarPorUsuarioId(usuarioId);
 			
-			response.setDados(ConversaoUtils.ConverterBusca(pessoaFisica.get()));
+			response.setDados(ConversaoUtils.Converter(pessoaFisica.get()));
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());

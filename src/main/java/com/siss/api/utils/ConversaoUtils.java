@@ -171,7 +171,7 @@ public class ConversaoUtils {
 		return pessoaFisica;
 	}
 
-	public static PessoaFisicaInfoDto Converter(PessoaFisica pessoaFisica) {
+	public static PessoaFisicaInfoDto Converter(PessoaFisica pessoaFisica) throws ParseException {
 		PessoaFisicaInfoDto pessoaFisicaDto = new PessoaFisicaInfoDto();
 
 		if (pessoaFisica.getCondicaoClinica() != null && pessoaFisica.getCondicaoClinica().getId() > 0) {
@@ -186,6 +186,7 @@ public class ConversaoUtils {
 				contatoDto.setCelular(pessoaFisica.getContatos().get(i).getCelular());
 				contatoDto.setTelefone(pessoaFisica.getContatos().get(i).getTelefone());
 				contatoDto.setNome(pessoaFisica.getContatos().get(i).getNome());
+				contatoDto.setParentesco(pessoaFisica.getContatos().get(i).getParentesco());
 				pessoaFisicaDto.getContatos().add(contatoDto);
 			}
 		}
@@ -216,9 +217,6 @@ public class ConversaoUtils {
 		return pessoaFisicaDto;
 	}
 
-	public static UsuarioDto ConverterBusca(PessoaFisica pessoaFisica) {
-		return Converter(pessoaFisica.getUsuario());
-	}
 	/* FIM CONVERSÃO PESSOA FÍSICA */
 
 	/* INICIO CONVERSÃO PESSOA JRUDICA */
@@ -354,7 +352,7 @@ public class ConversaoUtils {
 		return condicaoClinica;
 	}
 
-	public static CondicaoClinicaDto Converter(CondicaoClinica condicaoClinica) {
+	public static CondicaoClinicaDto Converter(CondicaoClinica condicaoClinica) throws ParseException {
 		CondicaoClinicaDto condicaoClinicaDto = new CondicaoClinicaDto();
 
 		if (condicaoClinica.getDoencas() != null && condicaoClinica.getDoencas().size() > 0) {
@@ -364,6 +362,8 @@ public class ConversaoUtils {
 				doencaDto.setId(String.valueOf(condicaoClinica.getDoencas().get(i).getId()));
 				doencaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
 				doencaDto.setTipo(condicaoClinica.getDoencas().get(i).getTipo());
+				doencaDto.setDataCadastro(formatDate(condicaoClinica.getDoencas().get(i).getDataCadastro().toString()).toString());
+				doencaDto.setDataAtualizacao(formatDate(condicaoClinica.getDoencas().get(i).getDataAlteracao().toString()).toString());
 				condicaoClinicaDto.getDoencas().add(doencaDto);
 			}
 		}
@@ -375,6 +375,8 @@ public class ConversaoUtils {
 				alergiaDto.setId(String.valueOf(condicaoClinica.getAlergias().get(i).getId()));
 				alergiaDto.setCondicaoClinicaId(String.valueOf(condicaoClinica.getId()));
 				alergiaDto.setTipo(condicaoClinica.getAlergias().get(i).getTipo());
+				alergiaDto.setDataCadastro(formatDate(condicaoClinica.getAlergias().get(i).getDataCadastro().toString()).toString());
+				alergiaDto.setDataAtualizacao(formatDate(condicaoClinica.getAlergias().get(i).getDataAlteracao().toString()).toString());
 				condicaoClinicaDto.getAlergias().add(alergiaDto);
 			}
 		}
@@ -405,7 +407,7 @@ public class ConversaoUtils {
 		return doenca;
 	}
 
-	public static DoencaDto Converter(Doenca doenca) {
+	public static DoencaDto Converter(Doenca doenca) throws ParseException {
 		DoencaDto doencaDto = new DoencaDto();
 
 		doencaDto.setId(Integer.toString(doenca.getId()));
@@ -433,7 +435,7 @@ public class ConversaoUtils {
 		return alergia;
 	}
 
-	public static AlergiaDto Converter(Alergia alergia) {
+	public static AlergiaDto Converter(Alergia alergia) throws ParseException {
 		AlergiaDto alergiaDto = new AlergiaDto();
 
 		alergiaDto.setId(Integer.toString(alergia.getId()));
@@ -446,5 +448,10 @@ public class ConversaoUtils {
 
 	public static Date parseDate(String dateValue) throws ParseException {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(dateValue);
+	}
+	
+	public static String formatDate(String dateValue) throws ParseException {
+		Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateValue);
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(date);
 	}
 }

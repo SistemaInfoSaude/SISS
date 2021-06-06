@@ -19,6 +19,10 @@ public class AlergiaDto {
 	@NotEmpty(message = "tipo não pode ser vazio.")
 	@Length(min = 1, message = "tipo deve conter ao menos 1 caractere.")
 	private String tipo;
+	
+	private String dataCadastro;
+	
+	private String dataAtualizacao;
 
 	public String getId() {
 		return id;
@@ -42,6 +46,22 @@ public class AlergiaDto {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	public String getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(String dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+	
+	public String getDataAtualizacao() {
+		return dataAtualizacao;
+	}
+
+	public void setDataAtualizacao(String dataAtualizacao) {
+		this.dataAtualizacao = dataAtualizacao;
 	}
 
 	@Override
