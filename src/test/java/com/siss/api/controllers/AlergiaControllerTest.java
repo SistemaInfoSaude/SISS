@@ -135,7 +135,7 @@ public class AlergiaControllerTest {
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")
-	public void testSalvarCondicaoClinicaIdInsuficiente() throws Exception {
+	public void testSalvarTipoEmBranco() throws Exception {
 		
 		AlergiaDto objEntrada = new AlergiaDto();
 
