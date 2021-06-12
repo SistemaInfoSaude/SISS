@@ -35,7 +35,10 @@ public class CondicaoClinicaService {
 			log.info("Service: Nenhuma condicaoClinica com id: {} foi encontrada", id);
 			throw new ConsistenciaException("Nenhuma condicaoClinica com id: {} foi encontrada", id);
 		}
-		userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
+		
+		if(condicaoClinica.get().getPessoaFisica() != null && condicaoClinica.get().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
+		}
 		return condicaoClinica;
 	}
 	
@@ -52,7 +55,10 @@ public class CondicaoClinicaService {
 			if (!pf.isPresent()) {
 				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
-			userDetailsService.checkUser(pf.get().getUsuario());
+			
+			if(pf.get() != null && pf.get().getUsuario() != null) {
+				userDetailsService.checkUser(pf.get().getUsuario());
+			}
 			return condicaoClinicaRepository.save(condicaoClinica);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");

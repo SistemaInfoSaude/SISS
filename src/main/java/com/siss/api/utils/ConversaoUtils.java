@@ -326,6 +326,18 @@ public class ConversaoUtils {
 
 		return veiculoDto;
 	}
+	
+	public static List<VeiculoDto> ConverterLista(List<Veiculo> lista) {
+
+		List<VeiculoDto> lst = new ArrayList<VeiculoDto>(lista.size());
+
+		for (Veiculo veiculo: lista) {
+			lst.add(Converter(veiculo));
+		}
+
+		return lst;
+	}
+	
 	/* FIM CONVERSÃO VEICULO */
 
 	/* INICIO CONVERSÃO CONDICAO CLINICA */

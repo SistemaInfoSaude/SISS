@@ -106,7 +106,8 @@ public class VeiculoControllerTest {
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.erros").value("Teste inconsistência"));
 
 	}
-/*	@Test
+	
+	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testBuscarPorPessoaFisicaIdExistente() throws Exception {
 		
@@ -128,6 +129,7 @@ public class VeiculoControllerTest {
 		.andExpect(jsonPath("$.dados.[0].informacoesAdicionais").value(veiculoTeste.getInformacoesAdicionais()))
 		.andExpect(jsonPath("$.erros").isEmpty());
 	}
+	
 	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testBuscarPorPessoaFisicaIdSemSucesso()  throws Exception {
@@ -138,7 +140,8 @@ public class VeiculoControllerTest {
 		mvc.perform(MockMvcRequestBuilders.get("/api/veiculo/pessoaFisicaId/1").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.erros").value("Teste inconsistência"));
 
-	}*/
+	}
+	
 	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testSalvarComSucesso() throws Exception {

@@ -39,7 +39,11 @@ public class DoencaService {
 			log.info("Service: Nenhuma doenca com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma doenca com id: {} foi encontrado", id);
 		}
-		userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+
+		if (doenca.get().getCondicaoClinica() != null && doenca.get().getCondicaoClinica().getPessoaFisica() != null
+				&& doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+		}
 		return doenca;
 	}
 
@@ -48,12 +52,18 @@ public class DoencaService {
 
 		Optional<List<Doenca>> doencas = Optional
 				.ofNullable(doencaRepository.findByCondicaoClinicaId(condicaoClinicaId));
-		
+
 		if (!doencas.isPresent() || doencas.get().size() < 1) {
 			log.info("Service: Nenhuma doenca encontrada para a condicao clinica de id: {}", condicaoClinicaId);
-			throw new ConsistenciaException("Nenhuma doenca encontrada para a condicao clinica de id: {}", condicaoClinicaId);
+			throw new ConsistenciaException("Nenhuma doenca encontrada para a condicao clinica de id: {}",
+					condicaoClinicaId);
 		}
-		userDetailsService.checkUser(doencas.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
+
+		if (doencas.get().get(0).getCondicaoClinica() != null
+				&& doencas.get().get(0).getCondicaoClinica().getPessoaFisica() != null
+				&& doencas.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(doencas.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
+		}
 		return doencas;
 	}
 
@@ -71,25 +81,34 @@ public class DoencaService {
 			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
-			
-			for (Doenca doencaBanco : condicaoClinica.get().getDoencas()) {
-				if(doenca.getTipo().equals(doencaBanco.getTipo())) {
-					throw new ConsistenciaException("Doença '{}' já cadastrada anteriormente.", doenca.getTipo());
+
+			if (condicaoClinica.get() != null && condicaoClinica.get().getDoencas() != null) {
+				for (Doenca doencaBanco : condicaoClinica.get().getDoencas()) {
+					if (doenca.getTipo().equals(doencaBanco.getTipo())) {
+						throw new ConsistenciaException("Doença '{}' já cadastrada anteriormente.", doenca.getTipo());
+					}
 				}
 			}
-			
-			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
+
+			if (condicaoClinica.get() != null && condicaoClinica.get().getPessoaFisica() != null
+					&& condicaoClinica.get().getPessoaFisica().getUsuario() != null) {
+				userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
+			}
 			return doencaRepository.save(doenca);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
 	}
-	
+
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo a doenca de id: {}", id);
 		Optional<Doenca> doenca = buscarPorId(id);
-		userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+
+		if (doenca.get().getCondicaoClinica() != null && doenca.get().getCondicaoClinica().getPessoaFisica() != null
+				&& doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(doenca.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+		}
 		doencaRepository.deleteById(id);
 	}
 }

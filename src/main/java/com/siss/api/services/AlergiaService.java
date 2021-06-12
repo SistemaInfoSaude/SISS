@@ -36,7 +36,14 @@ public class AlergiaService {
 			log.info("Service: Nenhuma alergia com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma alergia com id: {} foi encontrado", id);
 		}
-		userDetailsService.checkUser(alergia.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+
+		CondicaoClinica condicaoClinica = alergia.get().getCondicaoClinica();
+
+		if (condicaoClinica != null && condicaoClinica.getPessoaFisica() != null
+				&& condicaoClinica.getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(condicaoClinica.getPessoaFisica().getUsuario());
+		}
+
 		return alergia;
 	}
 
@@ -51,7 +58,12 @@ public class AlergiaService {
 			throw new ConsistenciaException("Nenhuma alergia encontrada para a condicao clinica de id: {}",
 					condicaoClinicaId);
 		}
-		userDetailsService.checkUser(alergias.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
+
+		CondicaoClinica condicaoClinica = alergias.get().get(0).getCondicaoClinica();
+		if (condicaoClinica != null && condicaoClinica.getPessoaFisica() != null
+				&& condicaoClinica.getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(alergias.get().get(0).getCondicaoClinica().getPessoaFisica().getUsuario());
+		}
 		return alergias;
 	}
 
@@ -69,14 +81,23 @@ public class AlergiaService {
 			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
-			
-			for (Alergia alergiaBanco : condicaoClinica.get().getAlergias()) {
-				if(alergia.getTipo().equals(alergiaBanco.getTipo())) {
-					throw new ConsistenciaException("Alergia '{}' já cadastrada anteriormente.", alergia.getTipo());
+
+			if (condicaoClinica != null && condicaoClinica.get() != null) {
+				if (condicaoClinica.get().getAlergias() != null) {
+					for (Alergia alergiaBanco : condicaoClinica.get().getAlergias()) {
+						if (alergia.getTipo().equals(alergiaBanco.getTipo())) {
+							throw new ConsistenciaException("Alergia '{}' já cadastrada anteriormente.",
+									alergia.getTipo());
+						}
+					}
+				}
+
+				if (condicaoClinica.get().getPessoaFisica() != null
+						&& condicaoClinica.get().getPessoaFisica().getUsuario() != null) {
+					userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
 				}
 			}
-			
-			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
+
 			return alergiaRepository.save(alergia);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
@@ -87,7 +108,12 @@ public class AlergiaService {
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo a alergia de id: {}", id);
 		Optional<Alergia> alergia = buscarPorId(id);
-		userDetailsService.checkUser(alergia.get().getCondicaoClinica().getPessoaFisica().getUsuario());
+		CondicaoClinica condicaoClinica = alergia.get().getCondicaoClinica();
+
+		if (condicaoClinica != null && condicaoClinica.getPessoaFisica() != null
+				&& condicaoClinica.getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(condicaoClinica.getPessoaFisica().getUsuario());
+		}
 		alergiaRepository.deleteById(id);
 	}
 }

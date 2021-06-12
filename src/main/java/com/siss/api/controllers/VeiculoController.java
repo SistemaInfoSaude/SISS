@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.siss.api.dtos.VeiculoDto;
 import com.siss.api.entities.Veiculo;
 import com.siss.api.response.Response;
@@ -70,18 +71,23 @@ public class VeiculoController {
 	 */
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@GetMapping(value = "/pessoaFisicaId/{pessoaFisicaId}")
-	public ResponseEntity<List<Veiculo>> buscarPorPessoaFisicaId(@PathVariable("pessoaFisicaId") int pessoaFisicaId) {
+	public ResponseEntity<Response<List<VeiculoDto>>> buscarPorPessoaFisicaId(@PathVariable("pessoaFisicaId") int pessoaFisicaId) {
+		Response<List<VeiculoDto>> response = new Response<List<VeiculoDto>>();
 		try {
 			log.info("Controller: buscando os veiculos da PF de ID: {}", pessoaFisicaId);
 			Optional<List<Veiculo>> listaVeiculos = veiculoService.buscarPorPessoaFisicaId(pessoaFisicaId);
 			
-			return ResponseEntity.ok(listaVeiculos.get());
+			response.setDados(ConversaoUtils.ConverterLista(listaVeiculos.get()));
+
+			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
 			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
-			return ResponseEntity.badRequest().body(new ArrayList<Veiculo>());
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
 		} catch (Exception e) {
 			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
-			return ResponseEntity.status(500).body(new ArrayList<Veiculo>());
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
+			return ResponseEntity.status(500).body(response);
 		}
 	}
 

@@ -23,7 +23,7 @@ public class PessoaFisicaService {
 
 	@Autowired
 	private UsuarioService usuarioService;
-	
+
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
@@ -35,8 +35,9 @@ public class PessoaFisicaService {
 			log.info("Service: Nenhuma pessoa fisica com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhuma pessoa fisica com id: {} foi encontrado", id);
 		}
-		
-		if(pessoaFisica.get().getUsuario() != null) {
+
+		if (pessoaFisica.get() != null && pessoaFisica.get().getUsuario() != null
+				&& pessoaFisica.get().getUsuario().getId() > 0) {
 			userDetailsService.checkUser(pessoaFisica.get().getUsuario());
 		}
 		return pessoaFisica;
@@ -52,7 +53,7 @@ public class PessoaFisicaService {
 		}
 		return pessoaFisica;
 	}
-	
+
 	public Optional<PessoaFisica> buscarPorRg(String rg) throws ConsistenciaException {
 		log.info("Service: buscando a pessoa fisica com o RG: {}", rg);
 		Optional<PessoaFisica> pessoaFisica = pessoaFisicaRepository.findByRg(rg);
@@ -73,12 +74,12 @@ public class PessoaFisicaService {
 			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 		}
 
-		if(pessoaFisica.get().getUsuario() != null) {
+		if (pessoaFisica.get() != null && pessoaFisica.get().getUsuario() != null) {
 			userDetailsService.checkUser(pessoaFisica.get().getUsuario());
 		}
 		return pessoaFisica;
 	}
-	
+
 	public Optional<List<PessoaFisica>> buscarPorPlacaVeiculo(String placa) throws ConsistenciaException {
 		log.info("Service: buscando a PF que possuir o veiculo com a placa: {}", placa);
 		Optional<List<PessoaFisica>> pessoaFisica = pessoaFisicaRepository.findByVeiculoPlaca(placa);
@@ -93,10 +94,10 @@ public class PessoaFisicaService {
 	public PessoaFisica salvar(PessoaFisica pessoaFisica) throws ConsistenciaException {
 		log.info("Service: salvando a pessoa fisica: {}", pessoaFisica.toString());
 		int usuarioId = pessoaFisica.getUsuario().getId();
-		
+
 		if (pessoaFisica.getId() > 0) {
 			buscarPorId(pessoaFisica.getId());
-		}else {
+		} else {
 			Optional<PessoaFisica> pfExistente = pessoaFisicaRepository.findByUsuarioId(usuarioId);
 			if (pfExistente.isPresent()) {
 				throw new ConsistenciaException("Já existe uma PF cadastrada para o usuario de ID: {}", usuarioId);
@@ -108,8 +109,8 @@ public class PessoaFisicaService {
 			if (!usr.isPresent()) {
 				throw new ConsistenciaException("Nenhum usuario com id: {} encontrado!", usuarioId);
 			}
-			
-			if(usr.get() != null) {
+
+			if (usr.get() != null && usr.get().getId() > 0) {
 				userDetailsService.checkUser(usr.get());
 			}
 			return pessoaFisicaRepository.save(pessoaFisica);

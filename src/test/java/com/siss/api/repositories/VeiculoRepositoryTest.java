@@ -47,6 +47,7 @@ public class VeiculoRepositoryTest {
 		veiculoTeste.setId(1);
 		veiculoTeste.setMarca("BMW");
 		veiculoTeste.setModelo("Algum Modelo ai");
+		veiculoTeste.setCor("preto");
 		veiculoTeste.setPlaca("ABC12345");
 		veiculoTeste.setRenavam("AIQOWE125");
 		veiculoTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));

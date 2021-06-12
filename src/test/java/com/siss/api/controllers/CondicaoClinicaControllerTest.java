@@ -73,8 +73,6 @@ public class CondicaoClinicaControllerTest {
 		doencas.add(doencaTeste);
 		
 		condicaoClinicaTeste.setId(1);
-		
-		condicaoClinicaTeste.setId(1);
 		condicaoClinicaTeste.setAlergias(alergias);
 		condicaoClinicaTeste.setDoencas(doencas);
 		condicaoClinicaTeste.setConvenioMedico("ConvenioMedicoTeste1");
@@ -157,7 +155,7 @@ public class CondicaoClinicaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/condicaoClinica").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros.length()").value(2));
+				.andExpect(jsonPath("$.erros.length()").value(4));
 	}
 	
 	@Test
@@ -173,6 +171,6 @@ public class CondicaoClinicaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/condicaoClinica").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros.length()").value(3));
+				.andExpect(jsonPath("$.erros.length()").value(5));
 	}
 }

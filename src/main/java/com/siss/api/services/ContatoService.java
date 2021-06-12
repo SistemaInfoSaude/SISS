@@ -24,7 +24,7 @@ public class ContatoService {
 
 	@Autowired
 	private PessoaFisicaService pessoaFisicaService;
-	
+
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
@@ -36,19 +36,27 @@ public class ContatoService {
 			log.info("Service: Nenhum contato com id: {} foi encontrado", id);
 			throw new ConsistenciaException("Nenhum contato com id: {} foi encontrado", id);
 		}
-		userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
+
+		if (contato.get() != null && contato.get().getPessoaFisica() != null
+				&& contato.get().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
+		}
 		return contato;
 	}
 
 	public Optional<List<Contato>> buscarPorPessoaFisicaId(int pessoaFisicaId) throws ConsistenciaException {
 		log.info("Service: buscando os contatos do usuario de id: {}", pessoaFisicaId);
-		
+
 		Optional<List<Contato>> contatos = Optional.ofNullable(contatoRepository.findByPessoaFisicaId(pessoaFisicaId));
 		if (!contatos.isPresent() || contatos.get().size() < 1) {
 			log.info("Service: Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
 			throw new ConsistenciaException("Nenhum contato encontrado para o usuario de id: {}", pessoaFisicaId);
 		}
-		userDetailsService.checkUser(contatos.get().get(0).getPessoaFisica().getUsuario());
+
+		if (contatos.get().get(0).getPessoaFisica() != null
+				&& contatos.get().get(0).getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(contatos.get().get(0).getPessoaFisica().getUsuario());
+		}
 		return contatos;
 	}
 
@@ -66,18 +74,24 @@ public class ContatoService {
 			if (!pf.isPresent()) {
 				throw new ConsistenciaException("Nenhuma PF com id: {} encontrado!", pfId);
 			}
-			userDetailsService.checkUser(pf.get().getUsuario());
+
+			if (pf.get() != null && pf.get().getUsuario() != null) {
+				userDetailsService.checkUser(pf.get().getUsuario());
+			}
 			return contatoRepository.save(contato);
 		} catch (DataIntegrityViolationException e) {
 			log.info("Service: Inconsistência de dados.");
 			throw new ConsistenciaException("Inconsistência de dados");
 		}
 	}
-	
+
 	public void excluirPorId(int id) throws ConsistenciaException {
 		log.info("Service: excluíndo o contato de id: {}", id);
 		Optional<Contato> contato = buscarPorId(id);
-		userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
+
+		if (contato.get().getPessoaFisica() != null && contato.get().getPessoaFisica().getUsuario() != null) {
+			userDetailsService.checkUser(contato.get().getPessoaFisica().getUsuario());
+		}
 		contatoRepository.deleteById(id);
 	}
 }

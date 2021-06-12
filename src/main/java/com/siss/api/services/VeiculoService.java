@@ -52,7 +52,7 @@ public class VeiculoService {
 			throw new ConsistenciaException("Nenhum veiculo encontrado para a PF de id: {}", pessoaFisicaId);
 		}
 		
-		if(veiculos.get().get(0).getPessoaFisica() != null) {
+		if(veiculos.get().get(0).getPessoaFisica() != null && veiculos.get().get(0).getPessoaFisica().getUsuario() != null) {
 			userDetailsService.checkUser(veiculos.get().get(0).getPessoaFisica().getUsuario());
 		}
 		return veiculos;

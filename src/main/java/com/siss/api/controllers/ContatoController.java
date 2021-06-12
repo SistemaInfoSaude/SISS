@@ -63,29 +63,6 @@ public class ContatoController {
 	}
 
 	/**
-	 * Retorna os contatos de um usuário
-	 *
-	 * @param Id do Usuario
-	 * @return Lista de Contatos
-	 */
-	@PreAuthorize("hasAnyRole('USUARIO')")
-	@GetMapping(value = "/pessoaFisicaId/{pessoaFisicaId}")
-	public ResponseEntity<List<Contato>> buscarPorPessoaFisicaId(@PathVariable("pessoaFisicaId") int pessoaFisicaId) {
-		try {
-			log.info("Controller: buscando os contatos do usuario de ID: {}", pessoaFisicaId);
-			Optional<List<Contato>> listaContatos = contatoService.buscarPorPessoaFisicaId(pessoaFisicaId);
-			
-			return ResponseEntity.ok(listaContatos.get());
-		} catch (ConsistenciaException e) {
-			log.info("Controller: Inconsistência de dados: {}", e.getMessage());
-			return ResponseEntity.badRequest().body(new ArrayList<Contato>());
-		} catch (Exception e) {
-			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
-			return ResponseEntity.status(500).body(new ArrayList<Contato>());
-		}
-	}
-
-	/**
 	 * Persiste um contato na base.
 	 *
 	 * @param Dados de entrada do contato

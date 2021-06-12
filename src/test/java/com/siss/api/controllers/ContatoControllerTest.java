@@ -96,37 +96,7 @@ public class ContatoControllerTest {
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.erros").value("Teste inconsistência"));
 
 	}
-/*	@Test
-	@WithMockUser(roles = "USUARIO")
-	public void testBuscarPorPessoaFisicaIdExistente() throws Exception {
-		
-		contatoTeste = CriarContatoTestes();
-		List<Contato> contatos = new ArrayList<Contato>();
-		contatos.add(contatoTeste);
-		
-		BDDMockito.given(contatoService.buscarPorPessoaFisicaId(Mockito.anyInt())).willReturn(Optional.of(contatos));
-		
-		mvc.perform(MockMvcRequestBuilders.get("/api/contato/pessoaFisicaId/1").accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk())
-		.andDo(print())
-		.andExpect(jsonPath("$.dados.[0].id").value(contatoTeste.getId()))
-		.andExpect(jsonPath("$.dados.[0].pessoaFisicaId").value(contatoTeste.getPessoaFisica().getId()))
-		.andExpect(jsonPath("$.dados.[0].nome").value(contatoTeste.getNome()))
-		.andExpect(jsonPath("$.dados.[0].telefone").value(contatoTeste.getTelefone()))
-		.andExpect(jsonPath("$.dados.[0].celular").value(contatoTeste.getCelular()))
-		.andExpect(jsonPath("$.erros").isEmpty());
-	}
-	@Test
-	@WithMockUser(roles = "USUARIO")
-	public void testBuscarPorPessoaFisicaIdSemSucesso()  throws Exception {
 	
-		BDDMockito.given(contatoService.buscarPorPessoaFisicaId((Mockito.anyInt())))
-				.willThrow(new ConsistenciaException("Teste inconsistência"));
-
-		mvc.perform(MockMvcRequestBuilders.get("/api/contato/pessoaFisicaId/1").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.erros").value("Teste inconsistência"));
-
-	}*/
 	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testSalvarComSucesso() throws Exception {
