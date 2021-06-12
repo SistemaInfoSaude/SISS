@@ -69,6 +69,13 @@ public class AlergiaService {
 			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
+			
+			for (Alergia alergiaBanco : condicaoClinica.get().getAlergias()) {
+				if(alergia.getTipo().equals(alergiaBanco.getTipo())) {
+					throw new ConsistenciaException("Alergia '{}' já cadastrada anteriormente.", alergia.getTipo());
+				}
+			}
+			
 			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
 			return alergiaRepository.save(alergia);
 		} catch (DataIntegrityViolationException e) {

@@ -71,6 +71,13 @@ public class DoencaService {
 			if (!condicaoClinica.isPresent()) {
 				throw new ConsistenciaException("Nenhuma condicao clinica com id: {} encontrada!", condicaoClinicaId);
 			}
+			
+			for (Doenca doencaBanco : condicaoClinica.get().getDoencas()) {
+				if(doenca.getTipo().equals(doencaBanco.getTipo())) {
+					throw new ConsistenciaException("Doença '{}' já cadastrada anteriormente.", doenca.getTipo());
+				}
+			}
+			
 			userDetailsService.checkUser(condicaoClinica.get().getPessoaFisica().getUsuario());
 			return doencaRepository.save(doenca);
 		} catch (DataIntegrityViolationException e) {
