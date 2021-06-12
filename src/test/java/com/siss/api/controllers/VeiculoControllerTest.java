@@ -217,6 +217,201 @@ public class VeiculoControllerTest {
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")
+	public void testSalvarMarcaEmBranco() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarMarcaInsuficiente() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(2));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarModeloEmBranco() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarPlacaInsuficiente() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarPlacaEmBranco() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarRenavamInsuficiente() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarRenavamEmBranco() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarCorInsuficiente() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Br");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarCorEmBranco() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("BMW");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(1));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
+	public void testSalvarModeloInsuficiente() throws Exception {
+		
+		VeiculoDto objEntrada = new VeiculoDto();
+
+		objEntrada.setId("1");
+		objEntrada.setMarca("");
+		objEntrada.setModelo("BMW 320i");
+		objEntrada.setPlaca("AAA9A99");
+		objEntrada.setRenavam("22015976441");
+		objEntrada.setCor("Branco");
+		objEntrada.setPessoaFisicaId("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros.length()").value(2));
+	}
+	@Test
+	@WithMockUser(roles = "USUARIO")
 	public void testExcluirPorIdComSucesso() throws Exception {
 		
 		Veiculo veiculo = CriarVeiculoTestes();
