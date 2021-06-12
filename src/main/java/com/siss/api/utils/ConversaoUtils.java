@@ -135,6 +135,7 @@ public class ConversaoUtils {
 				veiculo.setModelo(veiculoDto.getModelo());
 				veiculo.setPlaca(veiculoDto.getPlaca());
 				veiculo.setRenavam(veiculoDto.getRenavam());
+				veiculo.setCor(veiculoDto.getCor());
 				veiculo.setInformacoesAdicionais(veiculoDto.getInformacoesAdicionais());
 				pessoaFisica.getVeiculos().add(veiculo);
 			}
@@ -142,9 +143,11 @@ public class ConversaoUtils {
 
 		usuario.setId(Integer.parseInt(pessoaFisicaInfoDto.getUsuarioId()));
 
+		Date dataNascimento = new SimpleDateFormat("yyyy-MM-dd").parse(pessoaFisicaInfoDto.getDataNascimento());
+		
 		pessoaFisica.setUsuario(usuario);
 		pessoaFisica.setNome(pessoaFisicaInfoDto.getNome());
-		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaInfoDto.getDataNascimento()));
+		pessoaFisica.setDataNascimento(dataNascimento);
 		pessoaFisica.setCpf(pessoaFisicaInfoDto.getCpf());
 		pessoaFisica.setRg(pessoaFisicaInfoDto.getRg());
 		pessoaFisica.setCelular(pessoaFisicaInfoDto.getCelular());
@@ -163,9 +166,11 @@ public class ConversaoUtils {
 
 		usuario.setId(Integer.parseInt(pessoaFisicaDto.getUsuarioId()));
 		pessoaFisica.setUsuario(usuario);
+		
+		Date dataNascimento = new SimpleDateFormat("yyyy-MM-dd").parse(pessoaFisicaDto.getDataNascimento());
 
 		pessoaFisica.setNome(pessoaFisicaDto.getNome());
-		pessoaFisica.setDataNascimento(parseDate(pessoaFisicaDto.getDataNascimento()));
+		pessoaFisica.setDataNascimento(dataNascimento);
 		pessoaFisica.setCpf(pessoaFisicaDto.getCpf());
 		pessoaFisica.setRg(pessoaFisicaDto.getRg());
 		pessoaFisica.setCelular(pessoaFisicaDto.getCelular());
@@ -203,6 +208,7 @@ public class ConversaoUtils {
 				veiculoDto.setModelo(pessoaFisica.getVeiculos().get(i).getModelo());
 				veiculoDto.setPlaca(pessoaFisica.getVeiculos().get(i).getPlaca());
 				veiculoDto.setRenavam(pessoaFisica.getVeiculos().get(i).getRenavam());
+				veiculoDto.setCor(pessoaFisica.getVeiculos().get(i).getCor());
 				veiculoDto.setInformacoesAdicionais(pessoaFisica.getVeiculos().get(i).getInformacoesAdicionais());
 				pessoaFisicaDto.getVeiculos().add(veiculoDto);
 			}
@@ -300,6 +306,7 @@ public class ConversaoUtils {
 		veiculo.setModelo(veiculoDto.getModelo());
 		veiculo.setPlaca(veiculoDto.getPlaca());
 		veiculo.setRenavam(veiculoDto.getRenavam());
+		veiculo.setCor(veiculoDto.getCor());
 		veiculo.setInformacoesAdicionais(veiculoDto.getInformacoesAdicionais());
 
 		return veiculo;
@@ -314,6 +321,7 @@ public class ConversaoUtils {
 		veiculoDto.setModelo(veiculo.getModelo());
 		veiculoDto.setPlaca(veiculo.getPlaca());
 		veiculoDto.setRenavam(veiculo.getRenavam());
+		veiculoDto.setCor(veiculo.getCor());
 		veiculoDto.setInformacoesAdicionais(veiculo.getInformacoesAdicionais());
 
 		return veiculoDto;

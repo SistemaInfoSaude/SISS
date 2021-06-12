@@ -20,11 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.siss.api.dtos.PessoaFisicaDto;
 import com.siss.api.dtos.PessoaFisicaInfoDto;
+import com.siss.api.dtos.RegistroValidacaoDto;
 import com.siss.api.dtos.UsuarioDto;
 import com.siss.api.entities.PessoaFisica;
+import com.siss.api.entities.Usuario;
 import com.siss.api.response.Response;
 import com.siss.api.services.PessoaFisicaService;
+import com.siss.api.services.UsuarioService;
 import com.siss.api.exceptions.ConsistenciaException;
+import com.siss.api.repositories.PessoaFisicaRepository;
+import com.siss.api.repositories.UsuarioRepository;
 import com.siss.api.utils.ConversaoUtils;
 
 @RestController
@@ -32,8 +37,15 @@ import com.siss.api.utils.ConversaoUtils;
 @CrossOrigin(origins = "*")
 public class PessoaFisicaController {
 	private static final Logger log = LoggerFactory.getLogger(PessoaFisicaController.class);
+	
 	@Autowired
 	private PessoaFisicaService pessoaFisicaService;
+	
+	@Autowired
+	private PessoaFisicaRepository pessoaFisicaRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	/**
 	 * Retorna os dados de uma pessoa fisica a partir do seu id
@@ -221,6 +233,53 @@ public class PessoaFisicaController {
 			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
 
 			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	
+	@PostMapping(value = "/checkExistente")
+	public ResponseEntity<String> checkExistente(@RequestBody RegistroValidacaoDto registroValidacaoDto) {
+
+		try {
+			Boolean status = true;
+			String message = "";
+			
+			if(!registroValidacaoDto.getUsername().equals("n")) {
+				Usuario usrByUsername = usuarioRepository.findByUsuario(registroValidacaoDto.getUsername());
+				if(usrByUsername != null) {
+					status = false;
+					message += "Nome de usuário existente/";
+				}
+			}
+			if(!registroValidacaoDto.getEmail().equals("n")) {
+				Optional<Usuario> usrByUEmail = usuarioRepository.findByEmail(registroValidacaoDto.getEmail());
+				if(usrByUEmail.isPresent()) {
+					status = false;
+					message += "E-mail existente/";
+				}
+			}
+			if(!registroValidacaoDto.getCpf().equals("n")) {
+				Optional<PessoaFisica> pfByCpf = pessoaFisicaRepository.findByCpf(registroValidacaoDto.getCpf());
+				if(pfByCpf.isPresent()) {
+					status = false;
+					message += "CPF existente/";
+				}
+			}			
+			if(!registroValidacaoDto.getRg().equals("n")) {
+				Optional<PessoaFisica> pfByRg = pessoaFisicaRepository.findByRg(registroValidacaoDto.getRg());
+				if(pfByRg.isPresent()) {
+					status = false;
+					message += "RG existente/";
+				}
+			}
+			
+			if(status == false) {
+				return ResponseEntity.ok(message);
+			}
+			return ResponseEntity.ok("ok");
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(500).body(e.getMessage());
 		}
 	}
 }

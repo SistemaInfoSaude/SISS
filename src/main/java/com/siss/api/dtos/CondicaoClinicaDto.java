@@ -21,6 +21,8 @@ public class CondicaoClinicaDto {
 
 	private String convenioMedico;
 
+	@NotBlank
+	@NotEmpty(message = "tipoSanguineo não pode ser vazio.")
 	private String tipoSanguineo;
 
 	private List<DoencaDto> doencas;

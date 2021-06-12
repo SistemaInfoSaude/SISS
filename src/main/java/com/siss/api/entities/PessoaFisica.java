@@ -58,8 +58,8 @@ public class PessoaFisica implements Serializable {
 	@OneToMany(mappedBy = "pessoaFisica", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Veiculo> veiculos;
 
-	@JsonBackReference
-	@OneToOne(mappedBy = "pessoaFisica", fetch = FetchType.EAGER)
+	@JsonManagedReference
+	@OneToOne(mappedBy = "pessoaFisica", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private CondicaoClinica condicaoClinica;
 
 	public int getId() {

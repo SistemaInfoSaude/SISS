@@ -73,9 +73,9 @@ public class UsuarioService {
 		log.info("Service: buscando um usuário com o username: {}", username);
 		Usuario usuario = usuarioRepository.findByUsuario(username);
 
-		if (usuario.equals(null)) {
+		if (usuario == null || usuario.equals(null)) {
 			log.info("Service: Nenhum usuário com username: {} foi encontrado", username);
-			throw new ConsistenciaException("Nenhum usuário com email: {} foi encontrado", username);
+			throw new ConsistenciaException("Nenhum usuário com username: {} foi encontrado", username);
 		}
 
 		return usuario;
@@ -212,6 +212,11 @@ public class UsuarioService {
 	public void redefinirSenhaUsuario(String codigo, String novaSenha, int id)
 			throws ConsistenciaException {
 		Optional<Usuario> usr = buscarPorId(id);
+		
+		if(!usr.isPresent()) {
+			log.info("Service: Usuário não encontrado");
+			throw new ConsistenciaException("Usuário não encontrado.");
+		}
 		
 		// Verificar se o código de confirmação é igual ao enviado no email do usuário
 		if (!usr.get().getHashCode().equals(codigo)) {

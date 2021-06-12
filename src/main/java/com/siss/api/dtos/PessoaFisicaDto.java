@@ -33,10 +33,10 @@ public class PessoaFisicaDto {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private String dataNascimento;
 
-	@Length(min = 10, max = 10, message = "telefone deve conter 10 caracteres.")
+	@Length(min = 14, max = 14, message = "telefone deve conter 15 caracteres.")
 	private String telefone;
 
-	@Length(min = 11, max = 11, message = "celular deve conter 11 caracteres.")
+	@Length(min = 14, max = 15, message = "celular deve conter 14-15 caracteres.")
 	private String celular;
 
 	

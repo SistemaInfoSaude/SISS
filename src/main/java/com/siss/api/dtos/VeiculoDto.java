@@ -28,12 +28,16 @@ public class VeiculoDto {
 	private String modelo;
 
 	@NotEmpty(message = "placa não pode ser vazio.")
-	@Length(min = 8, max = 8, message = "placa deve conter 8 caracteres.")
+	@Length(min = 7, max = 8, message = "placa deve conter 7 caracteres para novos modelos (AAA9A99) ou 8 caracteres para modelos antigos (AAA-9999).")
 	private String placa;
 
 	@NotEmpty(message = "renavam não pode ser vazio.")
 	@Length(min = 11, max = 11, message = "renavam deve conter 11 caracteres.")
 	private String renavam;
+
+	@NotEmpty(message = "cor não pode ser vazio.")
+	@Length(min = 3, max = 50, message = "cor deve conter de 3 a 50 caracteres.")
+	private String cor;
 
 	private String informacoesAdicionais;
 
@@ -83,6 +87,14 @@ public class VeiculoDto {
 
 	public void setRenavam(String renavam) {
 		this.renavam = renavam;
+	}
+	
+	public String getCor() {
+		return cor;
+	}
+
+	public void setCor(String cor) {
+		this.cor = cor;
 	}
 
 	public String getInformacoesAdicionais() {

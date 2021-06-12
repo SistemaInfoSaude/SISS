@@ -46,6 +46,9 @@ public class Veiculo implements Serializable {
 
 	@Column(name = "renavam", nullable = false, length = 11)
 	private String renavam;
+	
+	@Column(name = "cor", nullable = false, length = 45)
+	private String cor;
 
 	@Column(name = "informacoes_Adicionais", nullable = true)
 	private String informacoesAdicionais;
@@ -102,6 +105,14 @@ public class Veiculo implements Serializable {
 
 	public void setRenavam(String renavam) {
 		this.renavam = renavam;
+	}
+	
+	public String getCor() {
+		return cor;
+	}
+
+	public void setCor(String cor) {
+		this.cor = cor;
 	}
 
 	public String getInformacoesAdicionais() {
