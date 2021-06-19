@@ -131,7 +131,12 @@ public class AuthenticationController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-			response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
+			
+			if(!usr.equals(null)) {
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr.get()));
+			}else {
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
+			}
 
 			return ResponseEntity.ok(response);
 		} catch (ConsistenciaException e) {
