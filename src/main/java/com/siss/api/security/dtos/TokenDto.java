@@ -20,7 +20,7 @@ public class TokenDto {
 		this.token = token;
 		this.usuarioId = Integer.toString(usr.getId());
 		
-		if(usr.getRegras().get(0).getId() == 1) {
+		if(usr.getRegras().get(0).getNome().equals("ROLE_EXEC_USUARIO")) {
 			this.executante = "1";
 		}else {
 			this.executante = "0";

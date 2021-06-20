@@ -14,7 +14,7 @@ public class SenhaDto {
 	private String senhaAtual;
 
 	@NotEmpty(message = "Nova senha não pode ser vazio.")
-	@Length(min = 8, max = 25, message = "Nome deve conter entre 8 e 25 caracteres.")
+	@Length(min = 8, max = 25, message = "Nova senha deve conter entre 8 e 25 caracteres.")
 	private String novaSenha;
 
 	public String getIdUsuario() {
