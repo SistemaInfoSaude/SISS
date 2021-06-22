@@ -194,7 +194,7 @@ public class UsuarioService {
 
 			emailUtils.enviar(
 				usuario.get().getEmail(), 
-				"SISS - Alteração senha", 
+				"SIS - Alteração senha", 
 				"Código: " + hashCode
 			);
 			

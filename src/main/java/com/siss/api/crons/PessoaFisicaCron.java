@@ -29,18 +29,14 @@ public class PessoaFisicaCron {
 
 	@Scheduled(cron = "0 0 0 6 * *", zone = TIME_ZONE)
 	public void enviarEmailAtualizacao() {
-		log.info("Cron: teste teste teste");
-		
 		List<PessoaFisica> pfList = pessoaFisicaRepository.findAll();
-		
-		log.info("Size: {}", pfList.size());
 
 		if (pfList != null && pfList.size() > 0) {
 			for (PessoaFisica pf : pfList) {
 				emailUtils.enviar(
 					pf.getUsuario().getEmail(),
-					"SISS - Atualização de Dados",
-					"Olá humano, poderia atualizar suas informações, por favor?"
+					"SIS - Atualização de Dados",
+					"Olá, lembre-se de manter seus dados cadastrados no SIS sempre atualizados. :)"
 				);
 			}
 		}
