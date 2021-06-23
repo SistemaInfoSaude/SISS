@@ -36,7 +36,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Pessoa_Juridica` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cnpj` VARCHAR(14) NOT NULL,
+  `razao_Social` VARCHAR(255) NOT NULL,
+  `nome_Fantasia` VARCHAR(255) NOT NULL,
   `usuario_id` INT NOT NULL,
+  UNIQUE INDEX `cpf_UNIQUE` (`cnpj` ASC),
   PRIMARY KEY (`id`),
   INDEX `fk_Pessoa_Juridica_Usuario_idx` (`usuario_id` ASC),
   CONSTRAINT `fk_Pessoa_Juridica_Usuario`
@@ -163,20 +166,24 @@ CREATE TABLE IF NOT EXISTS `Usuario_Regra` (
 ENGINE = InnoDB;
 
 INSERT INTO `Usuario` (`id`, `usuario`, `email`, `senha`) VALUES
-(DEFAULT, 'usuario_comum', 'email_teste_1@email.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
+(DEFAULT, 'usuario_executante_sis', 'email_teste@email.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
+
 INSERT INTO `Usuario` (`id`, `usuario`, `email`, `senha`) VALUES
-(DEFAULT, 'usuario_executante', 'email_teste_2@email.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
+(DEFAULT, 'usuario_admin_sis', 'sistemainfosaude@gmail.com', '$2a$10$FHayM6spzm5LGUa//VKYKe9iWLPlSnYpdwGEkvHMlCEZUIsr4EEIG');
 
 INSERT INTO `Regra` (`id`, `nome`, `descricao`, `ativo`) VALUES
 (DEFAULT, 'ROLE_EXEC_USUARIO', 'Permite acesso aos serviços de executante', TRUE);
 INSERT INTO `Regra` (`id`, `nome`, `descricao`, `ativo`) VALUES
 (DEFAULT, 'ROLE_USUARIO', 'Permite acesso aos serviços padrões', TRUE);
+INSERT INTO `Regra` (`id`, `nome`, `descricao`, `ativo`) VALUES
+(DEFAULT, 'ROLE_ADMIN', 'Permite acesso ao cadastro de PJ', TRUE);
 
 INSERT INTO `Usuario_Regra` (`usuario_id`, `regra_id`) VALUES (
-(SELECT `id` FROM usuario WHERE usuario = 'usuario_comum'),
-(SELECT `id` FROM regra WHERE nome = 'ROLE_USUARIO')
-);
-INSERT INTO `Usuario_Regra` (`usuario_id`, `regra_id`) VALUES (
-(SELECT `id` FROM usuario WHERE usuario = 'usuario_executante'),
+(SELECT `id` FROM usuario WHERE usuario = 'usuario_executante_sis'),
 (SELECT `id` FROM regra WHERE nome = 'ROLE_EXEC_USUARIO')
+);
+
+INSERT INTO `Usuario_Regra` (`usuario_id`, `regra_id`) VALUES (
+(SELECT `id` FROM usuario WHERE usuario = 'usuario_admin_sis'),
+(SELECT `id` FROM regra WHERE nome = 'ROLE_ADMIN')
 );

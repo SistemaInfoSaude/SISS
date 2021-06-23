@@ -22,6 +22,14 @@ public class PessoaJuridicaDto {
 	@CNPJ(message = "CNPJ inválido.")
 	private String cnpj;
 
+	@NotBlank
+	@NotEmpty(message = "Razao Social não pode ser vazio.")
+	private String razaoSocial;
+	
+	@NotBlank
+	@NotEmpty(message = "Nome Fantasia não pode ser vazio.")
+	private String nomeFantasia;
+
 	public String getId() {
 		return id;
 	}
@@ -44,6 +52,22 @@ public class PessoaJuridicaDto {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+	
+	public String getRazaoSocial() {
+		return razaoSocial;
+	}
+
+	public void setRazaoSocial(String razaoSocial) {
+		this.razaoSocial = razaoSocial;
+	}
+	
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
 	}
 
 	@Override

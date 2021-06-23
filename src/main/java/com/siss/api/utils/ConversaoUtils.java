@@ -96,6 +96,8 @@ public class ConversaoUtils {
 
 		if (regraExecutante) {
 			usuarioDto.setExecutante("1");
+		}else {
+			usuarioDto.setExecutante("0");
 		}
 
 		return usuarioDto;
@@ -241,6 +243,8 @@ public class ConversaoUtils {
 
 		pessoaJuridica.setUsuario(usuario);
 		pessoaJuridica.setCnpj(pessoaJuridicaDto.getCnpj());
+		pessoaJuridica.setRazaoSocial(pessoaJuridicaDto.getRazaoSocial());
+		pessoaJuridica.setNomeFantasia(pessoaJuridicaDto.getNomeFantasia());
 
 		return pessoaJuridica;
 	}
@@ -251,6 +255,8 @@ public class ConversaoUtils {
 		pessoaJuridicaDto.setId(Integer.toString(pessoaJuridica.getId()));
 		pessoaJuridicaDto.setUsuarioId(Integer.toString(pessoaJuridica.getUsuario().getId()));
 		pessoaJuridicaDto.setCnpj(pessoaJuridica.getCnpj());
+		pessoaJuridicaDto.setRazaoSocial(pessoaJuridica.getRazaoSocial());
+		pessoaJuridicaDto.setNomeFantasia(pessoaJuridica.getNomeFantasia());
 
 		return pessoaJuridicaDto;
 	}

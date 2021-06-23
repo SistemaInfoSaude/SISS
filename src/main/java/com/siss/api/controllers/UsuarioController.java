@@ -86,6 +86,10 @@ public class UsuarioController {
 				log.info("Controller: Os campos obrigatórios não foram preenchidos");
 				return ResponseEntity.badRequest().body(response);
 			}
+			
+			if(usuarioDto.getExecutante() == null || usuarioDto.getExecutante().equals("1")) {
+				throw new ConsistenciaException("Você não possuí permissão para executante igual a 1");
+			}
 
 			// Converte o objeto usuarioDto para um objeto do tipo Usuario (entidade)
 			Usuario usuario = ConversaoUtils.Converter(usuarioDto);
@@ -103,6 +107,38 @@ public class UsuarioController {
 			log.error("Controller: Ocorreu um erro na aplicação: {}", e.getMessage());
 			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
 
+			return ResponseEntity.status(500).body(response);
+		}
+	}
+	
+	@PostMapping(value = "/registrarPj")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	public ResponseEntity<Response<UsuarioDto>> salvarPj(@Valid @RequestBody UsuarioDto usuarioDto,
+			BindingResult result) {
+		
+		Response<UsuarioDto> response = new Response<UsuarioDto>();
+		
+		try {
+			if (result.hasErrors()) {
+				for (int i = 0; i < result.getErrorCount(); i++) {
+					response.adicionarErro(result.getAllErrors().get(i).getDefaultMessage());
+				}
+				return ResponseEntity.badRequest().body(response);
+			}
+			
+			if(usuarioDto.getExecutante() == null || !usuarioDto.getExecutante().equals("1")) {
+				throw new ConsistenciaException("Necessário executante igual 1");
+			}
+
+			Usuario usuario = ConversaoUtils.Converter(usuarioDto);
+			response.setDados(ConversaoUtils.Converter(this.usuarioService.salvar(usuario)));
+
+			return ResponseEntity.ok(response);
+		} catch (ConsistenciaException e) {
+			response.adicionarErro(e.getMensagem());
+			return ResponseEntity.badRequest().body(response);
+		} catch (Exception e) {
+			response.adicionarErro("Ocorreu um erro na aplicação: {}", e.getMessage());
 			return ResponseEntity.status(500).body(response);
 		}
 	}

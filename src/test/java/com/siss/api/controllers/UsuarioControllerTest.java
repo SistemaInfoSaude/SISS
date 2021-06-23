@@ -58,6 +58,7 @@ public class UsuarioControllerTest {
 		usuarioTeste.setSenha("SenhaLegal");
 		usuarioTeste.setDataCadastro(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
 		usuarioTeste.setDataAlteracao(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2020"));
+		usuarioTeste.setExecutante(false);
 
 		return usuarioTeste;
 	}
@@ -89,6 +90,7 @@ public class UsuarioControllerTest {
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.erros").value("Teste inconsistência"));
 
 	}
+	
 	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testSalvarComSucesso() throws Exception {
@@ -122,6 +124,43 @@ public class UsuarioControllerTest {
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.erros").value("Teste inconsistência."));
 	}
+	
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void testSalvarPjComSucesso() throws Exception {
+		Usuario usuario = CriarUsuarioTestes();
+		UsuarioDto objEntrada = ConversaoUtils.Converter(usuario);
+		objEntrada.setExecutante("1");
+		
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		BDDMockito.given(usuarioService.salvar(Mockito.any(Usuario.class))).willReturn(usuario);
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/usuario/registrarPj").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.dados.id").value(usuario.getId()))
+				.andExpect(jsonPath("$.dados.usuario").value(usuario.getUsuario()))
+				.andExpect(jsonPath("$.dados.email").value(usuario.getEmail()))
+				.andExpect(jsonPath("$.erros").isEmpty());
+	}
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void testSalvarPjSemSucesso() throws Exception {
+
+		Usuario usuario = CriarUsuarioTestes();
+		UsuarioDto objEntrada = ConversaoUtils.Converter(usuario);
+		objEntrada.setExecutante("1");
+
+		String json = new ObjectMapper().writeValueAsString(objEntrada);
+
+		BDDMockito.given(usuarioService.salvar(Mockito.any(Usuario.class)))
+				.willThrow(new ConsistenciaException("Teste inconsistência."));
+
+		mvc.perform(MockMvcRequestBuilders.post("/api/usuario/registrarPj").content(json).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.erros").value("Teste inconsistência."));
+	}
+	
 	@Test
 	@WithMockUser(roles = "USUARIO")
 	public void testAlterarSenhaUsuarioComSucesso() throws Exception {

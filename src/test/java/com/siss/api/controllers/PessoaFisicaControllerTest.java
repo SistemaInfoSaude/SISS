@@ -443,7 +443,7 @@ public class PessoaFisicaControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/api/pessoaFisica").content(json).contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros").value("telefone deve conter 15 caracteres."));
+				.andExpect(jsonPath("$.erros").value("telefone deve conter 14 caracteres."));
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")

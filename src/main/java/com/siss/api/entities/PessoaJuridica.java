@@ -33,6 +33,12 @@ public class PessoaJuridica implements Serializable {
 
 	@Column(name = "cnpj", nullable = false, length = 14)
 	private String cnpj;
+
+	@Column(name = "razao_Social", nullable = false, length = 255)
+	private String razaoSocial;
+	
+	@Column(name = "nome_Fantasia", nullable = false, length = 255)
+	private String nomeFantasia;
 	
 	public int getId() {
 		return id;
@@ -56,6 +62,22 @@ public class PessoaJuridica implements Serializable {
 
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
+	}
+	
+	public String getRazaoSocial() {
+		return razaoSocial;
+	}
+
+	public void setRazaoSocial(String razaoSocial) {
+		this.razaoSocial = razaoSocial;
+	}
+	
+	public String getNomeFantasia() {
+		return nomeFantasia;
+	}
+
+	public void setNomeFantasia(String nomeFantasia) {
+		this.nomeFantasia = nomeFantasia;
 	}
 
 	@Override
