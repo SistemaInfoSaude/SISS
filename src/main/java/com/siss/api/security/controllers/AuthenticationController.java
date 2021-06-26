@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.siss.api.security.utils.JwtTokenUtil;
+import com.siss.api.services.PessoaFisicaService;
 import com.siss.api.services.UsuarioService;
+import com.siss.api.entities.PessoaFisica;
 import com.siss.api.entities.Usuario;
 import com.siss.api.exceptions.ConsistenciaException;
 import com.siss.api.response.Response;
@@ -48,6 +50,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+
+	@Autowired
+	private PessoaFisicaService pessoaFisicaService;
 
 	/**
 	 * Retorna uma novo token válido caso o login (usuario) e senha sejam válidos
@@ -80,7 +85,17 @@ public class AuthenticationController {
 			Usuario usr = usuarioService.buscarPorUsername(authenticationDto.getUsuario());
 			
 			if(!usr.equals(null)) {
-				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr));
+				Boolean pfExists = false;
+				try {
+					Optional<PessoaFisica> pf = pessoaFisicaService.buscarPorUsuarioId(usr.getId());
+					if(pf != null && pf.isPresent() && pf.get().getId() > 0) {
+						pfExists = true;
+					}
+				}catch (ConsistenciaException e) {
+					pfExists = false;
+				}
+				
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr, pfExists));
 			}else {
 				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
 			}
@@ -133,7 +148,16 @@ public class AuthenticationController {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			
 			if(!usr.equals(null)) {
-				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr.get()));
+				Boolean pfExists = false;
+				try {
+					Optional<PessoaFisica> pf = pessoaFisicaService.buscarPorUsuarioId(usr.get().getId());
+					if(pf != null && pf.isPresent() && pf.get().getId() > 0) {
+						pfExists = true;
+					}
+				}catch (ConsistenciaException e) {
+					pfExists = false;
+				}
+				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails), usr.get(), pfExists));
 			}else {
 				response.setDados(new TokenDto(jwtTokenUtil.obterToken(userDetails)));
 			}

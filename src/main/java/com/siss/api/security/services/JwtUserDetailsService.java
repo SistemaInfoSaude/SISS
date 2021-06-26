@@ -51,7 +51,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		}
 		String username = jwtTokenUtil.getUsernameFromToken(token);
 		
-		if (!usr.getUsuario().equals(username)) {
+		if (token != null && !usr.getUsuario().equals(username)) {
 			throw new ConsistenciaException("Você não tem permissão para realizar essa requisição.");
 		}
 	}

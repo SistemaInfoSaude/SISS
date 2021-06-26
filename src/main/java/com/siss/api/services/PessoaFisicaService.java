@@ -74,7 +74,7 @@ public class PessoaFisicaService {
 			throw new ConsistenciaException("Nenhuma pessoa fisica com usuarioId: {} foi encontrado", usuarioId);
 		}
 
-		if (pessoaFisica.get() != null && pessoaFisica.get().getUsuario() != null) {
+		if (pessoaFisica != null && pessoaFisica.get() != null && pessoaFisica.get().getUsuario() != null) {
 			userDetailsService.checkUser(pessoaFisica.get().getUsuario());
 		}
 		return pessoaFisica;
