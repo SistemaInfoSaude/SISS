@@ -337,25 +337,6 @@ public class VeiculoControllerTest {
 	}
 	@Test
 	@WithMockUser(roles = "USUARIO")
-	public void testSalvarRenavamEmBranco() throws Exception {
-		
-		VeiculoDto objEntrada = new VeiculoDto();
-
-		objEntrada.setId("1");
-		objEntrada.setMarca("BMW");
-		objEntrada.setModelo("BMW 320i");
-		objEntrada.setPlaca("AAA9A99");
-		objEntrada.setCor("Branco");
-		objEntrada.setPessoaFisicaId("1");
-
-		String json = new ObjectMapper().writeValueAsString(objEntrada);
-
-		mvc.perform(MockMvcRequestBuilders.post("/api/veiculo").content(json).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.erros.length()").value(1));
-	}
-	@Test
-	@WithMockUser(roles = "USUARIO")
 	public void testSalvarCorInsuficiente() throws Exception {
 		
 		VeiculoDto objEntrada = new VeiculoDto();

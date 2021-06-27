@@ -31,7 +31,6 @@ public class VeiculoDto {
 	@Length(min = 7, max = 8, message = "placa deve conter 7 caracteres para novos modelos (AAA9A99) ou 8 caracteres para modelos antigos (AAA-9999).")
 	private String placa;
 
-	@NotEmpty(message = "renavam não pode ser vazio.")
 	@Length(min = 11, max = 11, message = "renavam deve conter 11 caracteres.")
 	private String renavam;
 
