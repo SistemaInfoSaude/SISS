@@ -27,7 +27,12 @@ public class PessoaFisicaCron {
 	@Autowired
 	EmailUtils emailUtils;
 
-	@Scheduled(cron = "0 0 0 6 * *", zone = TIME_ZONE)
+	/*
+	 * Às 10:00 PM, no dia 1 do mês, a cada 6 meses
+	 * 
+	 * Testar em: https://bradymholt.github.io/cron-expression-descriptor/
+	**/
+	@Scheduled(cron = "0 0 16 1 1/6 *", zone = TIME_ZONE)
 	public void enviarEmailAtualizacao() {
 		List<PessoaFisica> pfList = pessoaFisicaRepository.findAll();
 
